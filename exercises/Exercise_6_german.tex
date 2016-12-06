@@ -1,0 +1,418 @@
+
+\begin{exercise}\label{infloop}
+%changed the condition on the loop so that it will terminate
+%(was this *supposed* to be an infinite loop?)
+\begin{verbatim}
+    void Loop(int n) 
+    {
+        int i = n;
+        while (i > 1) 
+        {
+            printf ("%i\n",i);
+            if (i%2 == 0) 
+            {
+                i = i/2;
+            } 
+            else 
+            {
+                i = i+1;
+            }
+        }
+    }
+
+    int main (void) 
+    {
+        Loop(10);
+        return EXIT_SUCCESS;
+    }
+\end{verbatim}
+%
+\begin{enumerate}
+
+\item Zeichnen Sie eine Tabelle welche die Werte der Variablen {\tt i}
+und {\tt n} während der Ausführung der Funktion {\tt Loop()} zeigen. 
+Die Tabelle sollte eine Spalte für jede Variable und eine Zeile für
+jede Iteration der {\tt while}-Schleife enthalten.
+
+\item Was gibt dieses Programm aus?  
+
+\end{enumerate}
+\end{exercise}
+
+%String Beispiel
+
+%\begin{exercise}
+%\begin{enumerate}
+
+%\item Encapsulate the following code fragment, transforming it
+%into a function that takes a String as an argument and that
+%returns (and doesn't print) the final value of {\tt count}.
+
+%\item In a sentence, describe abstractly what the resulting
+%function does.
+
+%\item Assuming that you have already generalized this
+%function so that it works on any String, what else could you do to
+%generalize it more?
+
+%\end{enumerate}
+
+%\begin{verbatim}
+%    char s[] = "((3 + 7) * 2)";
+%    int len = strlen(s);
+
+%    int i = 0;
+%    int count = 0;
+
+%    while (i < len) 
+%    {
+%        char c = s[i]);
+
+%        if (c == '(') 
+%        {
+%           count = count + 1;
+%        } 
+%        else if (c == ')') 
+%        {
+%           count = count - 1;
+%        }
+%        i = i + 1;
+%    }
+
+%    printf ("%i\n", count);
+%\end{verbatim}
+%\end{exercise}
+
+
+\begin{exercise}
+
+C stellt in der mathematischen Bibliothek die Funktion {\tt pow()} 
+zur Verfügung, welche die Potenz einer reellen Zahl berechnet. 
+
+Schreiben Sie Ihre eigene Version {\tt Power()} dieser Funktion welche zwei
+Parameter:  double {\tt x} und integer {\tt n} übernimmt und das
+Resultat der Berechnung $x^n$ zurückliefert.  
+Ihre Funktion soll die Berechnung iterativ (mit Hilfe einer Schleife) durchführen.
+\end{exercise}
+
+\begin{exercise} 
+%\textbf{Zusatzaufgabe!}
+
+Angenommen Sie haben eine Zahl  $a$, und Sie wollen die 
+Quadratwurzel dieser Zahl ermitteln. 
+
+Eine mögliche Vorgehensweise besteht darin, dass Sie mit
+einer ersten groben Schätzung, $x_0$, der Antwort beginnen
+und diese Schätzung mit Hilfe der folgenden Formel verbessern:
+
+\begin{equation}
+x_1 = (x_0 + a/x_0) / 2
+\end{equation}
+
+Zum Beispiel, suchen wir die Quadratwurzel von 9. Wir beginnen
+mit $x_0 = 6$, dann ergibt sich für $x_1 = (6 + 9/6) /2 = 15/4 = 3.75$,
+welches näher an der gesuchten Lösung liegt.
+
+Wir können das Verfahren wiederholen indem wir $x_1$ benutzen um $x_2$
+zu berechnen und so weiter...
+In diesem Fall ergibt sich $x_2 = 3.075$ und $x_3 = 3.00091$.
+Unsere Berechnung konvergiert sehr schnell hin zu der richtigen Antwort (3).
+
+Schreiben Sie eine Funktion {\tt SquareRoot} welche ein {\tt double}
+als Parameter übernimmt und eine Näherung der Quadratwurzel des 
+Parameters zurückliefert. 
+Die Funktion soll dabei den oben beschriebenen Algorithmus benutzen 
+und darf nicht die {\tt sqrt()} Funktion der {\tt math.h} Bibliothek verwenden.
+
+Als erste, initiale Näherung sollten Sie $a/2$ verwenden.  
+Ihre Funktion soll die Berechnung wiederholen, bis Sie zwei aufeinanderfolgende
+Näherungen erhalten, welche um weniger als 0.0001 voneinander abweichen:
+mit anderen Worten, bis der Absolutbetrag von $x_n - x_{n-1}$ geringer ist als
+0.0001.  Für die Berechnung des Absolutbetrags können Sie die 
+{\tt abs()} Funktion der {\tt math.h} Bibliothek verwenden.
+\end{exercise}
+
+
+%\begin{exercise}
+%Section~\ref{factorial} presents a recursive function
+%that computes the factorial function.
+%Write an iterative version of {\tt factorial}.
+%\end{exercise}
+
+%\begin{exercise}
+%One way to calculate $e^x$ is to use the infinite series expansion
+
+%\begin{equation}
+%e^x = 1 + x + x^2 / 2! + x^3 / 3! + x^4 / 4! + ...
+%\end{equation}
+
+%If the loop variable is named {\tt i}, then the $i$th term is equal to
+%$x^i / i!$.
+
+%\begin{enumerate}
+
+%\item Write a function called {\tt myexp} that adds up the first {\tt n}
+%terms of the series shown above.  You can use the {\tt factorial}
+%function from Section~\ref{factorial} or your iterative version.
+
+%\item You can make this function much more efficient if you realize that
+%in each iteration the numerator of the term is the same as its
+%predecessor multiplied by {\tt x} and the denominator is the same as
+%its predecessor multiplied by {\tt i}.  Use this observation to
+%eliminate the use of {\tt Math.pow} and {\tt factorial}, and check
+%that you still get the same result.
+
+%\item Write a function called {\tt check} that takes a single parameter,
+%{\tt x}, and that prints the values of {\tt x}, {\tt Math.exp(x)} and
+%{\tt myexp(x)} for various values of {\tt x}.  The output should look
+%something like:
+
+%\begin{verbatim}
+%1.0     2.708333333333333       2.718281828459045
+%\end{verbatim}
+
+
+%the next line used to use \\ in an attempt to escape the backslash character
+%but this doesn't work: \\ produces a newline
+%according to the LaTeX symbol list
+%http://www.tex.ac.uk/tex-archive/info/symbols/comprehensive/symbols-letter.pdf
+%\textbackslash is the actual way to escape a backslash
+%(but it seems not to respect the \tt font)
+
+
+%HINT: you can use the String {\tt "\textbackslash t"} to print a tab character
+%between columns of a table.
+
+%\item Vary the number of terms in the series (the second argument
+%that {\tt check} sends to {\tt myexp}) and see the effect on
+%the accuracy of the result.  Adjust this value until the estimated
+%value agrees with the ``correct'' answer when {\tt x} is 1.
+
+%\item Write a loop in {\tt main} that invokes {\tt check} with the
+%values 0.1, 1.0, 10.0, and 100.0.  How does the accuracy of the
+%result vary as {\tt x} varies?  Compare the number of digits of
+%agreement rather than the difference between the actual and
+%estimated values.
+
+%\item Add a loop in {\tt main} that checks {\tt myexp} with the values
+%-0.1, -1.0, -10.0, and -100.0.  Comment on the accuracy.
+
+%\end{enumerate}
+%\end{exercise}
+
+%
+%\begin{exercise}
+%One way to evaluate $e^{-x^2}$ is to use the infinite series expansion
+
+%\begin{equation}
+%e^{-x^2} = 1 - 2x + 3x^2/2! - 4x^3/3! + 5x^4/4! - ...
+%\end{equation}
+
+%In other words, we need to add up a series of terms where the $i$th
+%term is equal to $(-1)^i(i+1) x^i / i!$.  Write a function named {\tt gauss}
+%that takes {\tt x} and {\tt n} as arguments and that returns the sum
+%of the first {\tt n} terms of the series.  You should not use {\tt
+%factorial} or {\tt pow}.
+
+
+
+%%changed the condition on the loop so that it will terminate
+%%(was this *supposed* to be an infinite loop?)
+%\begin{verbatim}
+%    void loop (int n) 
+%    {
+%        int i = n;
+%        while (i > 1) 
+%        {
+%            printf ("%i\n",i);
+%            if (i%2 == 0) 
+%            {
+%                i = i/2;
+%            } 
+%            else 
+%            {
+%                i = i+1;
+%            }
+%        }
+%    }
+
+%    int main (void) 
+%    {
+%        Loop (10);
+%    }
+%\end{verbatim}
+%%
+%\begin{enumerate}
+
+%\item Draw a table that shows the value of the variables {\tt i}
+%and {\tt n} during the execution of {\tt loop}.  The table should
+%contain one column for each variable and one line for each
+%iteration.
+
+%\item What is the output of this program?  
+
+%\end{enumerate}
+%\end{exercise}
+
+%
+%\begin{exercise}
+%\begin{enumerate}
+
+%\item Encapsulate the following code fragment, transforming it
+%into a function that takes a String as an argument and that
+%returns (and doesn't print) the final value of {\tt count}.
+
+%\item In a sentence, describe abstractly what the resulting
+%function does.
+
+%\item Assuming that you have already generalized this
+%function so that it works on any String, what else could you do to
+%generalize it more?
+
+%\end{enumerate}
+
+%\begin{verbatim}
+%    char s[] = "((3 + 7) * 2)";
+%    int len = strlen(s);
+
+%    int i = 0;
+%    int count = 0;
+
+%    while (i < len) 
+%    {
+%        char c = s[i]);
+
+%        if (c == '(') 
+%        {
+%           count = count + 1;
+%        } 
+%        else if (c == ')') 
+%        {
+%           count = count - 1;
+%        }
+%        i = i + 1;
+%    }
+
+%    printf ("%i\n", count);
+%\end{verbatim}
+%\end{exercise}
+
+%
+%\begin{exercise}
+%Let's say you are given a number, $a$, and you want to find
+%its square root.  One way to do that is to start with a very
+%rough guess about the answer, $x_0$, and then improve
+%the guess using the following formula:
+
+%\begin{equation}
+%x_1 = (x_0 + a/x_0) / 2
+%\end{equation}
+
+%For example, if we want to find the square root of 9, and
+%we start with $x_0 = 6$, then $x_1 = (6 + 9/6) /2 = 15/4 = 3.75$,
+%which is closer.
+
+%We can repeat the procedure, using $x_1$ to calculate $x_2$,
+%and so on.  In this case, $x_2 = 3.075$ and $x_3 = 3.00091$.
+%So that is converging very quickly on the right answer (which
+%is 3).
+
+%Write a function called {\tt squareRoot} that takes a {\tt double}
+%as a parameter and that returns an approximation of the square
+%root of the parameter, using this algorithm.  You may not use
+%the {\tt sqrt()} function from the {\tt math.h} library.
+
+%As your initial guess, you should use $a/2$.  Your function should
+%iterate until it gets two consecutive estimates that differ by
+%less than 0.0001; in other words, until the absolute value of
+%$x_n - x_{n-1}$ is less than 0.0001.  You can use the built-in
+%{\tt abs()} function to calculate the absolute value.
+%\end{exercise}
+
+%
+%\begin{exercise}
+%In Exercise~\ref{ex.power} we wrote a recursive version of {\tt
+%power}, which takes a double {\tt x} and an integer {\tt n} and
+%returns $x^n$.  Now write an iterative function to perform the same
+%calculation.
+%\end{exercise}
+
+%\begin{exercise}
+%Section~\ref{factorial} presents a recursive function
+%that computes the factorial function.
+%Write an iterative version of {\tt factorial}.
+%\end{exercise}
+
+%\begin{exercise}
+%One way to calculate $e^x$ is to use the infinite series expansion
+
+%\begin{equation}
+%e^x = 1 + x + x^2 / 2! + x^3 / 3! + x^4 / 4! + ...
+%\end{equation}
+
+%If the loop variable is named {\tt i}, then the $i$th term is equal to
+%$x^i / i!$.
+
+%\begin{enumerate}
+
+%\item Write a function called {\tt myexp} that adds up the first {\tt n}
+%terms of the series shown above.  You can use the {\tt factorial}
+%function from Section~\ref{factorial} or your iterative version.
+
+%\item You can make this function much more efficient if you realize that
+%in each iteration the numerator of the term is the same as its
+%predecessor multiplied by {\tt x} and the denominator is the same as
+%its predecessor multiplied by {\tt i}.  Use this observation to
+%eliminate the use of {\tt Math.pow} and {\tt factorial}, and check
+%that you still get the same result.
+
+%\item Write a function called {\tt check} that takes a single parameter,
+%{\tt x}, and that prints the values of {\tt x}, {\tt Math.exp(x)} and
+%{\tt myexp(x)} for various values of {\tt x}.  The output should look
+%something like:
+
+%\begin{verbatim}
+%1.0     2.708333333333333       2.718281828459045
+%\end{verbatim}
+
+%%the next line used to use \\ in an attempt to escape the backslash character
+%%but this doesn't work: \\ produces a newline
+%%according to the LaTeX symbol list
+%%http://www.tex.ac.uk/tex-archive/info/symbols/comprehensive/symbols-letter.pdf
+%%\textbackslash is the actual way to escape a backslash
+%%(but it seems not to respect the \tt font)
+%HINT: you can use the String {\tt "\textbackslash t"} to print a tab character
+%between columns of a table.
+
+%\item Vary the number of terms in the series (the second argument
+%that {\tt check} sends to {\tt myexp}) and see the effect on
+%the accuracy of the result.  Adjust this value until the estimated
+%value agrees with the ``correct'' answer when {\tt x} is 1.
+
+%\item Write a loop in {\tt main} that invokes {\tt check} with the
+%values 0.1, 1.0, 10.0, and 100.0.  How does the accuracy of the
+%result vary as {\tt x} varies?  Compare the number of digits of
+%agreement rather than the difference between the actual and
+%estimated values.
+
+%\item Add a loop in {\tt main} that checks {\tt myexp} with the values
+%-0.1, -1.0, -10.0, and -100.0.  Comment on the accuracy.
+
+%\end{enumerate}
+%\end{exercise}
+
+%
+%\begin{exercise}
+%One way to evaluate $e^{-x^2}$ is to use the infinite series expansion
+
+%\begin{equation}
+%e^{-x^2} = 1 - 2x + 3x^2/2! - 4x^3/3! + 5x^4/4! - ...
+%\end{equation}
+
+%In other words, we need to add up a series of terms where the $i$th
+%term is equal to $(-1)^i(i+1) x^i / i!$.  Write a function named {\tt gauss}
+%that takes {\tt x} and {\tt n} as arguments and that returns the sum
+%of the first {\tt n} terms of the series.  You should not use {\tt
+%factorial} or {\tt pow}.
+
+%\end{exercise}

@@ -1,0 +1,52 @@
+\begin{exercise}
+%
+Im Abschnitt~\ref{Structures as parameters} wird die Funktion {\tt PrintPoint()}
+definiert. Der Parameter dieser Funktion wird als Wert (Call-by-value) übergeben.
+
+Ändern Sie die Definition dieser Funktion, so dass nur eine Referenz auf die
+auszugebende Variable übergeben wird (Call-by-reference).
+Testen Sie die neu geschriebene Funktion. 
+
+\end{exercise}
+
+\begin{exercise}
+Computerspiele werden erst dadurch interessant, dass die Aktionen ihres
+Gegenspielers nicht vorhersagbar sind.
+Im Kapitel~\ref{Random numbers} haben wir gesehen wie sich Zufallszahlen
+in C erzeugen lassen. 
+
+
+Schreiben Sie ein kleines Spiel, in dem der Computer eine
+beliebige Zahl im Bereich von 1 - 20 auswählt und Sie auffordert die gewählte
+Zahl zu erraten.
+
+Falls ihre Eingabe kleiner ist als der Zufallswert soll der Computer ausgeben:
+'Meine Zahl ist größer!' und Sie zu einer erneuten Eingabe auffordern.
+Für den Fall, dass ihre Eingabe größer ist soll die Ausgabe 'Meine Zahl ist kleiner!'
+lauten.
+
+Damit das Programm bei jedem Versuch mit einem neuen Wert startet, muss der
+Zufallszahlengenerator am Anfang des Programms neu initialisiert werden 
+(siehe Kapitel~\ref{Random seeds}).
+Sie können dazu die Funktion {\tt time()} verwenden, welche bei jedem Aufruf eine
+aktualisierte Anzahl eines Sekundenwerts zurückgibt.
+
+
+\begin{verbatim}
+    srand(time(NULL));   /*Initialisierung des Zufallszahlengenerators*/
+\end{verbatim}
+
+Haben Sie die Zahl richtig erraten soll der Computer ihnen gratulieren
+und die Anzahl der benötigten Versuche und den aktuellen 'High-Score' ausgeben.
+
+Der Computer speichert dazu den High-Score (die Anzahl der minimal benötigen Versuche)
+ in einem {\tt struct} zusammen mit ihrem Namen.
+
+Ist der aktuelle High-Score Wert größer als die Anzahl ihrer Versuche 
+soll ihr Spielergebnis zusammen mit ihrem Namen als High-Score Wert gespeichert werden. 
+Dazu fragt die High-Score Funktion Sie nach ihrem Namen. 
+
+Durch Drücken der Taste 'q' soll das Programm beendet werden.
+
+
+\end{exercise}

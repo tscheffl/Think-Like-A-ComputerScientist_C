@@ -1,0 +1,108 @@
+\begin{exercise}
+\label{ex.date}
+
+
+%\paragraph*{Deutsche Übersetzung der Aufgabe:}
+
+\begin{enumerate}
+
+\item 
+Erstellen Sie ein neues Programm mit dem Namen {\tt MyDate.c}.
+Kopieren Sie dazu die Struktur des "Hello, World"-Programms 
+und stellen Sie sicher, dass Sie dieses kompilieren und ausführen können. 
+
+\item
+Folgen Sie dem Beispiel in Abschnitt ~\ref{output variables} und definieren 
+Sie in dem Programm die folgenden Variablen: {\tt day}, {\tt month}
+und {\tt year}.
+{\tt day} enthält den Tag des Monats, {\tt month} den Monat und {\tt year} das Jahr.
+Von welchem Typ sind diese Variablen? 
+
+Weisen Sie den Variablen
+Werte zu, welche dem heutigen Datum entsprechen. 
+
+\item
+Geben Sie die Werte auf dem Bildschirm aus. Stellen Sie jeden Wert auf einer
+eigenen Bildschirmzeile dar. Das ist ein Zwischenschritt, der ihnen dabei hilft
+zu überprüfen, ob das Programm funktionsfähig ist.
+
+\item
+Modifizieren Sie das Programm dahingehend, dass es das Datum im amerikanischen
+Standardformat darstellt: {\tt mm/dd/yyyy}.
+
+\item
+Modifizieren Sie das Programm erneut, um eine Ausgabe nach folgendem Muster 
+zu erzeugen:
+\begin{verbatim}
+American format:
+3/18/2009
+European format:
+18.3.2009
+\end{verbatim}
+
+\end{enumerate}
+
+Diese Übung soll Ihnen dabei helfen, formatierte Ausgaben von 
+Werten unterschiedlicher Datentypen mittels der  {\tt printf} Funktion zu
+erzeugen. Weiterhin sollen Sie die kontinuierliche Entwicklung von komplexen
+Programmen durch das schrittweise Hinzufügen von einigen, wenigen 
+Anweisungen erlernen.
+
+\end{exercise}
+
+
+\begin{exercise}
+
+
+%\paragraph*{Deutsche Übersetzung der Aufgabe:}
+\begin{enumerate}
+
+\item 
+Erstellen Sie ein neues Programm mit dem Namen {\tt MyTime.c}. 
+In den nachfolgenden Aufgaben werde ich Sie nicht mehr daran
+erinnern mit einem kleinen, funktionsfähigen Programm zu beginnen.
+Allerdings sollten Sie dieses auch weiterhin tun.
+
+\item 
+Folgen Sie dem Beispiel im Abschnitt~\ref{operators} und erstellen
+Sie Variablen mit dem Namen {\tt hour}, {\tt minute} und {\tt second}.
+Weisen Sie den Variablen Werte zu, welche in etwa der 
+aktuellen Zeit entsprechen. 
+Benutzen Sie dazu das 24-Stunden Zeitformat.
+
+\item 
+Das Programm soll die Anzahl der Sekunden seit Mitternacht berechnen.
+
+\item 
+Das Programm soll die Anzahl der noch verbleibenden Sekunden
+des Tages berechnen und ausgeben.
+
+\item 
+Das Programm soll berechnen, wieviel Prozent des Tages bereits verstrichen
+sind und diesen Wert ausgeben.
+
+\item 
+Verändern Sie die Werte von  {\tt hour}, {\tt minute} und {\tt second},
+um die aktuelle Zeit wiederzugeben. 
+Überprüfen Sie, ob das Programm mit unterschiedlichen Werten korrekt
+arbeitet.
+
+\end{enumerate}
+
+In dieser Übung führen Sie arithmetische Operationen
+durch und beginnen darüber nachzudenken, wie 
+komplexere Datenobjekte, wie z.B. die Uhrzeit,
+als Zusammensetzung von mehreren Werten dargestellt werden
+können.
+Weiterhin entdecken Sie möglicherweise Probleme, die sich aus der Darstellung
+und Berechnung mit dem ganzzahligen Datentypen {\tt int} ergeben (Prozentberechnung).
+Diese Probleme können mit der Verwendung von Fließkommazahlen
+umgangen werden (siehe nächstes Kapitel).  
+
+
+HINWEIS: Sie können weitere Variablen benutzen, um
+Zwischenergebnisse der Berechnung abzulegen.
+Diese Variablen, welche in einer Berechnung genutzt, aber niemals
+ausgegeben werden, bezeichnet man auch als temporäre Variablen.
+
+\end{exercise}

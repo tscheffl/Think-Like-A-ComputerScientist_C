@@ -1,0 +1,102 @@
+
+\begin{exercise}
+Der erste Vers des Lieds ``99 Bottles of Beer'' lautet:
+
+\begin{quote}
+99 bottles of beer on the wall,
+99 bottles of beer,
+ya' take one down, ya' pass it around,
+98 bottles of beer on the wall.
+\end{quote}
+
+Die nachfolgenden Verse sind identisch bis auf die Anzahl
+der Flaschen. Deren Anzahl nimmt in jedem Vers um eine Flasche
+ab, bis schließlich der letzte Vers lautet:
+
+\begin{quote}
+No bottles of beer on the wall,
+no bottles of beer,
+ya' can't take one down, ya' can't pass it around,
+'cause there are no more bottles of beer on the wall!
+\end{quote}
+%
+Und dann ist diese Lied schließlich zu Ende.
+
+Schreiben Sie ein Programm, welches den gesamten Text 
+des Lieds ``99 Bottles of Beer'' ausgibt.
+Ihr Programm sollte eine rekursive Funktion für die Ausgabe
+des Liedtextes verwenden.
+Sie können weitere Funktionen verwenden um ihr Programm
+zu strukturieren.
+
+Während Sie den Programmcode schreiben und testen sollten
+Sie mit einer kleineren Anzahl von Versen beginnen, z.B. 
+``3 Bottles of Beer.''
+
+Der Sinn dieser Übung besteht darin ein Problem zu analysieren und
+in kleinere, lösbare Bestandteile zu zerlegen.
+Diese kleineren Einheiten lassen sich unabhängig und nacheinander
+entwickeln und testen und führen im Ergebnis zu einer schnelleren
+und robusteren Lösung.
+\end{exercise}
+
+\begin{exercise}
+In C können Sie die {\tt getchar()} Funktion benutzen um Zeichen von
+der Tastatur einzulesen. Diese Funktion stoppt die Ausführung des
+Programms und wartet auf eine Eingabe des Benutzers. Die 
+{\tt getchar()} Funktion ist vom Typ {\tt int} und
+erfordert kein Argument. Sie liefert den ASCII-Code des eingegeben
+Zeichens von der Tastatur zurück.
+
+Schreiben Sie ein Programm, welches den Benutzer auffordert eine 
+Ziffer von 0-9 einzugeben. 
+
+Überprüfen Sie die Eingabe des Benutzers und geben Sie 
+einen Hinweis aus, falls es sich bei dem eingegeben Wert nicht
+um eine Zahl handeln sollte. Geben Sie nach erfolgreicher Prüfung die
+Zahl aus.
+
+% Kapitel 5 (Return)
+%Schreiben Sie dazu eine Funktion {\tt AsciiToNumber()} welche ein
+%{\tt int} als Typ und als Argument besitzt. Übergeben Sie der Funktion
+%den eingelesenen Wert und 
+
+\end{exercise}
+
+
+
+
+\begin{exercise}
+Fermat's "Letzter Satz" besagt, dass es keine ganzen Zahlen
+$a$, $b$ und $c$ gibt, für die gilt
+
+\[a^n + b^n = c^n \]
+%
+außer für den Fall, dass $n=2$.
+
+Schreiben Sie eine Funktion mit dem Namen {\tt CheckFermat()} 
+welche vier {\tt int} als Parameter hat ---{\tt a}, {\tt b}, {\tt c} and {\tt n}--- und
+welche überprüft, ob Fermats Satz Bestand hat. Sollte sich für
+$n$ größer als 2 herausstellen, dass $a^n + b^n = c^n$,
+dann sollte ihr Programm ausgeben: ``Holy smokes, Fermat was wrong!''
+In allen anderen Fällen sollte das Programm ausgeben: ``No, that doesn't work.''
+
+Verwenden Sie für die Berechnung der Potenzen die Funktion {\tt pow()} aus der 
+mathematischen Bibliothek. Diese Funktion übernimmt zwei {\tt double} als 
+Argument. Das erste Argument stellt dabei die Basis und das zweite Argument den
+Exponenten der Potenz dar. Die Funktion liefert als Ergebnis wiederum ein {\tt double}.
+
+Um die Funktion in unserem Programm nutzen zu können müssen die Datentypen
+angepasst werden (siehe Abschnitt \ref{typecasting}). Dabei wandelt C den Datentyp
+ {\tt int}  automatisch in  {\tt double} um. Um einen  {\tt double}  Wert in  {\tt int} zu wandeln
+ muss  der Typecast-Operator  {\tt (int)} verwendet werden.  
+
+Zum Beispiel:
+
+\begin{verbatim}
+    int x = (int) pow(2, 3);
+\end{verbatim}
+%
+weist  {\tt x} den Wert {\tt 8} zu, weil $2^3 = 8$.
+\end{exercise}
+

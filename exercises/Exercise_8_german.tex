@@ -1,0 +1,66 @@
+
+
+\begin{exercise}
+
+Schreiben Sie eine Funktion {\tt LetterHist()}, welche einen String
+als Parameter übernimmt und Ihnen ein Histogramm der Buchstaben in diesem
+String liefert.
+
+Das 'nullte' Element des Histogramms soll die Anzahl der {\tt a}'s 
+(gemeinsam für Groß- und Kleinschreibung) in dem String enthalten. Das 25. Element
+die Anzahl der {\tt z}'s 
+
+{\bf Zusatzaufgabe:}
+Ihre Lösung soll den String nur genau einmal durchsuchen.
+\end{exercise}
+
+
+\begin{exercise}
+Es existiert eine bestimmte Anzahl Worte bei denen jeder Buchstabe
+genau zwei Mal im Wort vorkommt.
+
+Beispiele aus einem Englisch-Wörterbuch enthalten:
+\begin {quote}
+Abba, Anna, appall, appearer, appeases, arraigning, beriberi,
+bilabial, boob, Caucasus, coco, Dada, deed, Emmett, Hannah,
+horseshoer, intestines, Isis, mama, Mimi, murmur, noon, Otto, papa,
+peep, reappear, redder, sees, Shanghaiings, Toto
+\end{quote}
+
+Schreiben Sie eine Funktion {\tt IsDoubleLetterWord()} welche {\tt TRUE}
+zurück liefert wenn das übergebene Wort die oben beschriebene Eigenschaft 
+aufweist, ansonsten soll {\tt FALSE} zurückgegeben werden.
+\end{exercise}
+
+\begin{exercise}
+
+Der Römische Kaiser Julius Cäsar soll seine geheimen Botschaften
+mit einem einfachen Verschlüsselungsverfahren gesichert haben.
+Dazu hat er in seiner Botschaft jeden Buchstaben durch den Buchstaben
+ersetzt, der 3 Positionen weiter hinten im Alphabet zu finden ist.
+
+So wurde zum Beispiel aus {\tt a} ein {\tt d} und aus {\tt b} ein {\tt e}.
+Die Buchstaben am Ende des Alphabets werden wieder auf den Anfang
+abgebildet. So wird aus {\tt z} dann ein {\tt c}.
+
+\begin{enumerate}
+\item Schreiben Sie eine Funktion, welche zwei Strings übernimmt. Einer
+der Strings enthält die originale Botschaft, in dem anderen String soll
+die verschlüsselte Geheimnachricht gespeichert werden.
+
+Der String kann Groß- und Kleinschreibung sowie Leerzeichen enthalten.
+Andere Satzzeichen (Punkt, Komma, etc.) sollen nicht vorkommen.
+Die Funktion soll die Buchstaben vor der Verschlüsselung in eine einheitliche
+Darstellung umwandeln (Groß- oder Kleinschreibung). Leerzeichen werden
+nicht verschlüsselt.
+
+
+\item Generalisieren Sie die Verschlüsselungsfunktion, so dass anstelle
+der festen Verschiebung um 3 Positionen, Sie die Verschiebung frei
+wählen können.
+
+Sie sollten damit in der Lage sein die Nachrichten auch wieder zu entschlüsseln,
+indem Sie z.B. mit dem Wert 13 verschlüsseln und mit -13 wieder entschlüsseln.
+
+\end{enumerate}
+\end{exercise}

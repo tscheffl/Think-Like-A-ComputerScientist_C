@@ -1,0 +1,709 @@
+\begin{exercise}
+
+Sie haben 3 Stöcke erhalten und stehen vor der Aufgabe daraus ein
+Dreieck zu formen. Diese Aufgabe kann lösbar oder unlösbar sein,
+je nachdem wie lang die zur Verfügung stehenden Stöcke sind.
+
+Wenn zum Beispiel einer der Stöcke 12cm lang ist und die anderen 
+Beiden je nur 2cm, so ist klar, dass diese sich nicht in der Mitte treffen
+werden.
+Es gibt einen einfachen Test, der für drei beliebige Längen ermittelt,
+ob sich ein Dreieck formen lässt oder nicht: 
+
+
+\begin{quotation}
+``Wenn eine der drei Längen größer ist als die Summe der
+anderen beiden, dann lässt sich kein Dreieck formen. Ansonsten
+ist es möglich ein Dreieck zu formen.''
+\end{quotation}
+
+Schreiben Sie eine Funktion mit dem Namen {\tt IsTriangle}, welche
+drei {\tt integer} als Argumente hat und entweder {\tt TRUE} or {\tt FALSE}
+zurückgibt, abhängig davon, ob sich aus Stöcken mit der gegebenen Länge
+ein Dreieck formen lässt oder nicht. 
+
+Der Sinn dieser Übung bestehet darin eine Funktion mit bedingten Abfragen
+zu schreiben, welche als Ergebnis einen Wert zurückgibt. 
+\end{exercise}
+
+\begin{exercise}
+\label{ex.isdiv}
+Schreiben Sie eine Funktion {\tt IsDivisible} welche zwei {\tt integer},  {\tt n} and {\tt m} als 
+Argumente hat und {\tt TRUE} zurückgibt, wenn {\tt n} durch {\tt m} teilbar ist. 
+Ansonsten soll die Funktion {\tt FALSE} zurückgeben.
+\end{exercise}
+
+\begin{exercise}
+Der Sinn der folgenden Übung besteht darin
+das Verständnis für die Ausführung logischer Operatoren zu schärfen und
+den Programmablauf in Funktionen mit Rückgabewerten nachvollziehbar zu machen.
+Wie lautet die Ausgabe des folgenden Programms?
+
+\begin{verbatim}
+#define TRUE 1
+#define FALSE 0
+
+  short IsHoopy (int x)
+   {
+      short hoopyFlag;
+      if (x%2 == 0) 
+      {
+          hoopyFlag = TRUE;
+      } 
+      else 
+      {
+          hoopyFlag = FALSE;
+      }
+      return hoopyFlag;
+  }
+
+  short IsFrabjuous (int x) 
+  {
+      short frabjuousFlag;
+      if (x > 0) 
+      {
+          frabjuousFlag = TRUE;
+      }
+      else 
+      {
+          frabjuousFlag = FALSE;
+      }
+      return frabjuousFlag;
+  }
+
+  int main (void) 
+  {
+      short flag1 = IsHoopy (202);
+      short flag2 = IsFrabjuous (202);
+      printf ("%i\n", flag1);
+      printf ("%i\n", flag2);
+      if (flag1 && flag2) 
+      {
+          printf ("ping!\n");
+      }
+      if (flag1 || flag2) 
+      {
+          printf ("pong!\n");
+      }
+      return EXIT_SUCCESS;
+  }
+\end{verbatim}
+\end{exercise}
+
+
+
+\begin{exercise}
+Die Entfernung zwischen zwei Punkten  $(x_1, y_1)$ und $(x_2, y_2)$
+ist
+
+\[Distance = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2} \]
+
+Schreiben Sie bitte eine Funktion {\tt Distance} welche vier
+{\tt double} als Argumente erhält---{\tt x1}, {\tt y1}, {\tt x2} und {\tt
+y2}---und welche die Entfernung zwischen den Punkten  $(x_1, y_1)$ und $(x_2, y_2)$ zurückgibt.
+
+Sie sollen annehmen, dass bereits eine Funktion mit dem Namen {\tt SumSquares}
+existiert, welche die Quadrate der Summen berechnet und zurückgibt.
+
+Zum Beispiel:
+
+\begin{verbatim}
+    double x = SumSquares (3.0, 4.0);
+\end{verbatim}
+%
+würde {\tt x} den Wert {\tt 25.0} zuweisen.
+
+Der Sinn dieser Übung besteht darin eine neue Funktion zu schreiben,
+welche eine bereits bestehende Funktion aufruft.
+Sie sollen nur die eine Funktion {\tt Distance} schreiben.
+Lassen Sie die Funktionen {\tt SumSquares} und {\tt main} weg und rufen
+Sie {\tt Distance} auch nicht auf!
+\end{exercise}
+
+%\begin{exercise}
+%The point of this exercise is to practice the syntax of fruitful
+%functions.
+
+%\begin{enumerate}
+
+%\item Use your existing solution to Exercise~\ref{ex.multadd} and make sure
+%you can still compile and run it.
+
+%\item Transform {\tt multadd} into a fruitful function, so
+%that instead of printing a result, it returns it.
+
+%\item Everywhere in the program that {\tt multadd} gets
+%invoked, change the invocation so that it stores the
+%result in a variable and/or prints the result.
+
+%\item Transform {\tt yikes} in the same way.
+
+%\end{enumerate}
+%\end{exercise}
+
+
+%\begin{exercise}
+%The point of this exercise is to use a stack diagram to understand
+%the execution of a recursive program.
+
+%\begin{verbatim}
+
+%    int main (void) 
+%    {
+%        printf (Prod (1, 4));
+%    }
+
+%    int Prod (int m, int n) 
+%    {
+%        if (m == n) 
+%        {
+%            return n;
+%        } 
+%        else 
+%        {
+%            int recurse = Prod (m, n-1);
+%            int result = n * recurse;
+%            return result;
+%        }
+%    }
+
+%\end{verbatim}
+%%
+%\begin{enumerate}
+
+%\item Draw a stack diagram showing the state of the program just
+%before the last instance of {\tt prod} completes.
+%What is the output of this program?
+
+%\item Explain in a few words what {\tt Prod} does.
+
+%\item Rewrite {\tt prod} without using the temporary variables
+%{\tt recurse} and {\tt result}.
+
+%\end{enumerate}
+%\end{exercise}
+
+
+%\begin{exercise}
+%The purpose of this exercise is to translate a recursive definition
+%into a C function.  The Ackerman function is defined for non-negative
+%integers as follows:
+
+%\begin{eqnarray*}
+%A(m,n) = \left\{
+%\begin{array}{l@{\quad \mathbf{if} \quad }l}
+%n+1 & m=0 \\
+%A(m-1, 1) & m>0, n=0 \\
+%A(m-1, A(m, n-1)) & m>0, n>0 \\
+%\end{array} \right.
+%\end{eqnarray*}
+%%
+%Write a function called {\tt ack} that takes two {\tt int}s as
+%parameters and that computes and returns the value
+%of the Ackerman function.
+
+%Test your implementation of Ackerman by invoking it
+%from {\tt main} and printing the return value.  
+
+%WARNING: the return value gets very big very quickly.  You should try it
+%only for small values of $m$ and $n$ (not bigger than 2).
+
+%\end{exercise}
+
+%
+%\begin{exercise}
+%\begin{enumerate}
+
+%\item Create a program called {\tt Recurse.c} and
+%type in the following functions:
+
+%\begin{verbatim}
+%    /* First: returns the first character of the given String */
+%    char First (String s) 
+%    {
+%        return s.charAt (0);
+%    }
+
+%    /* Rest: returns a new String that contains all but the */
+%    /* first letter of the given String */
+%    String Rest (String s) 
+%    {
+%        return s.substring (1, s.length());
+%    }
+
+%    /* Length: returns the length of the given String */
+%    int Length (String s) 
+%    {
+%        return s.length();
+%    }
+%\end{verbatim}
+%
+%\item Write some code in {\tt main} that tests each of these
+%functions.  Make sure they work, and make sure you understand
+%what they do.
+
+%\item Write a function called {\tt printString} that takes a
+%String as a parameter and that prints the letters of the
+%String, one on each line.  It should be a {\tt void} function.
+
+%\item Write a function called {\tt printBackward} that does
+%the same thing as {\tt printString} but that prints the String
+%backwards (one character per line).
+
+%\item Write a function called {\tt reverseString} that takes
+%a String as a parameter and that returns a new String as a
+%return value.  The new String should contain the same letters
+%as the parameter, but in reverse order.  For example, the
+%output of the following code
+
+%\begin{verbatim}
+%	String backwards = reverseString ("Allen Downey");
+%	System.out.println (backwards);
+%\end{verbatim}
+%%
+%should be
+
+%\begin{verbatim}
+%yenwoD nellA
+%\end{verbatim}
+
+%
+%\end{enumerate}
+%\end{exercise}
+
+\begin{exercise}
+%\textbf{!! 1. ZUSATZAUFGABE !!}
+\begin{enumerate}
+
+
+\item Create a new program called {\tt Sum.c},
+and type in the following two functions.
+
+\begin{verbatim}
+  int FunctionOne (int m, int n) 
+  {
+      if (m == n) 
+      {
+          return n;
+      } 
+      else 
+      {
+          return m + FunctionOne (m+1, n);
+      }
+  }
+
+  int FunctionTwo (int m, int n) 
+  {
+      if (m == n) 
+      {
+          return n;
+      } 
+      else 
+      {
+          return n * FunctionTwo (m, n-1);
+      }
+  }
+\end{verbatim}
+%
+\item Write a few lines in {\tt main} to test these functions.
+Invoke them a couple of times, with a few different values,
+and see what you get.  By some combination of testing and
+examination of the code, figure out what these functions do,
+and give them more meaningful names.  Add comments that
+describe their function abstractly.
+
+\item Add a {\tt prinf} statement to the beginning of both
+functions so that they print their arguments each time they are
+invoked.  This is a useful technique for debugging recursive
+programs, since it demonstrates the flow of execution.
+
+\end{enumerate}
+\end{exercise}
+
+%\begin{exercise}
+%\label{ex.power}
+%Write a recursive function called {\tt Power} that
+%takes a double {\tt x} and an integer {\tt n} and that
+%returns $x^n$.  Hint: a recursive definition of this
+%operation is {\tt Power (x, n) = x * Power (x, n-1)}.
+%Also, remember that anything raised to the zeroeth power
+%is 1.
+%\end{exercise}
+
+
+\begin{exercise}
+%\textbf{!! 2. ZUSATZAUFGABE !!}
+
+\label{gcd}
+(This exercise is based on page 44 of Ableson and Sussman's
+{\em Structure and Interpretation of Computer Programs}.)
+
+The following algorithm is known as Euclid's Algorithm because
+it appears in Euclid's {\em Elements} (Book 7, ca. 300 B.C.).
+It may be the oldest nontrivial algorithm.
+
+The algorithm is based on the observation that, if $r$ is the
+remainder when $a$ is divided by $b$, then the common divisors
+of $a$ and $b$ are the same as the common divisors of $b$ and $r$.
+Thus we can use the equation
+
+\[ gcd (a, b) = gcd (b, r) \]
+
+to successively reduce the problem of computing a GCD to the
+problem of computing the GCD of smaller and smaller pairs of integers.
+For example,
+
+\[ gcd (36, 20) = gcd (20, 16) = gcd (16, 4) = gcd (4, 0) = 4\]
+
+implies that the GCD of 36 and 20 is 4.  It can be shown
+that for any two starting numbers, this repeated reduction eventually
+produces a pair where the second number is 0.  Then the GCD is the
+other number in the pair.
+
+Write a function called {\tt gcd} that takes two integer parameters and
+that uses Euclid's algorithm to compute and return the greatest
+common divisor of the two numbers.
+\end{exercise}
+
+
+%\begin{exercise}
+%If you are given three sticks, you may or may not be able to arrange
+%them in a triangle.  For example, if one of the sticks is 12 inches
+%long and the other two are one inch long, it is clear that you will
+%not be able to get the short sticks to meet in the middle.  For any
+%three lengths, there is a simple test to see if it is possible to form
+%a triangle:
+
+%\begin{quotation}
+%``If any of the three lengths is greater than the sum of the other two,
+%then you cannot form a triangle.  Otherwise, you can.''
+%\end{quotation}
+
+%Write a function named {\tt IsTriangle} that it takes three integers as
+%arguments, and that returns either {\tt true} or {\tt false},
+%depending on whether you can or cannot form a triangle from sticks
+%with the given lengths.
+
+%%return values only at next chapter!!!
+%The point of this exercise is to use conditional statements to
+%write a function that returns a value.
+%\end{exercise}
+
+%\begin{exercise}
+%\label{ex.isdiv}
+%Write a function named {\tt isDivisible} that takes
+%two integers, {\tt n} and {\tt m} and that returns {\tt true}
+%if {\tt n} is divisible by {\tt m} and {\tt false} otherwise.
+%\end{exercise}
+
+%\begin{exercise}
+%What is the output of the following program?  The purpose of
+%this exercise is to make sure you understand logical operators
+%and the flow of execution through fruitful functions.
+
+%\begin{verbatim}
+%  int main (void) 
+%  {
+%      short flag1 = isHoopy (202);
+%      short flag2 = isFrabjuous (202);
+%      printf ("%i\n", flag1);
+%      printf ("%i\n", flag2);
+%      if (flag1 && flag2) {
+%          printf ("ping!");
+%      }
+%      if (flag1 || flag2) {
+%          printf ("pong!");
+%      }
+%  }
+
+%  public static boolean isHoopy (int x) {
+%      boolean hoopyFlag;
+%      if (x%2 == 0) {
+%          hoopyFlag = true;
+%      } else {
+%          hoopyFlag = false;
+%      }
+%      return hoopyFlag;
+%  }
+
+%  public static boolean isFrabjuous (int x) {
+%      boolean frabjuousFlag;
+%      if (x > 0) {
+%          frabjuousFlag = true;
+%      } else {
+%          frabjuousFlag = false;
+%      }
+%      return frabjuousFlag;
+%  }
+%\end{verbatim}
+
+%\end{exercise}
+
+%
+
+%\begin{exercise}
+%The distance between two points $(x_1, y_1)$ and $(x_2, y_2)$
+%is
+
+%\[Distance = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2} \]
+
+%Please write a function named {\tt Distance} that takes four
+%doubles as parameters---{\tt x1}, {\tt y1}, {\tt x2} and {\tt
+%y2}---and that prints the distance between the points.
+
+%You should assume that there is a function named {\tt sumSquares}
+%that calculates and returns the sum of the squares of its arguments.
+%For example:
+
+%\begin{verbatim}
+%    double x = SumSquares (3.0, 4.0);
+%\end{verbatim}
+%%
+%would assign the value {\tt 25.0} to {\tt x}.
+
+%The point of this exercise is to write a new function that uses an
+%existing one.  You should write only one function: {\tt Distance}.  You
+%should not write {\tt SumSquares} or {\tt main} and you should not
+%invoke {\tt Distance}.
+%\end{exercise}
+
+%\begin{exercise}
+%The point of this exercise is to practice the syntax of fruitful
+%functions.
+
+%\begin{enumerate}
+
+%\item Use your existing solution to Exercise~\ref{ex.multadd} and make sure
+%you can still compile and run it.
+
+%\item Transform {\tt multadd} into a fruitful function, so
+%that instead of printing a result, it returns it.
+
+%\item Everywhere in the program that {\tt multadd} gets
+%invoked, change the invocation so that it stores the
+%result in a variable and/or prints the result.
+
+%\item Transform {\tt yikes} in the same way.
+
+%\end{enumerate}
+%\end{exercise}
+
+%
+%\begin{exercise}
+%The point of this exercise is to use a stack diagram to understand
+%the execution of a recursive program.
+
+%\begin{verbatim}
+
+%    int main (void) 
+%    {
+%        printf (Prod (1, 4));
+%    }
+
+%    int Prod (int m, int n) 
+%    {
+%        if (m == n) 
+%        {
+%            return n;
+%        } 
+%        else 
+%        {
+%            int recurse = Prod (m, n-1);
+%            int result = n * recurse;
+%            return result;
+%        }
+%    }
+
+%\end{verbatim}
+%%
+%\begin{enumerate}
+
+%\item Draw a stack diagram showing the state of the program just
+%before the last instance of {\tt prod} completes.
+%What is the output of this program?
+
+%\item Explain in a few words what {\tt Prod} does.
+
+%\item Rewrite {\tt prod} without using the temporary variables
+%{\tt recurse} and {\tt result}.
+
+%\end{enumerate}
+%\end{exercise}
+
+%
+%\begin{exercise}
+%The purpose of this exercise is to translate a recursive definition
+%into a C function.  The Ackerman function is defined for non-negative
+%integers as follows:
+
+%\begin{eqnarray*}
+%A(m,n) = \left\{
+%\begin{array}{l@{\quad \mathbf{if} \quad }l}
+%n+1 & m=0 \\
+%A(m-1, 1) & m>0, n=0 \\
+%A(m-1, A(m, n-1)) & m>0, n>0 \\
+%\end{array} \right.
+%\end{eqnarray*}
+%%
+%Write a function called {\tt ack} that takes two {\tt int}s as
+%parameters and that computes and returns the value
+%of the Ackerman function.
+
+%Test your implementation of Ackerman by invoking it
+%from {\tt main} and printing the return value.  
+
+%WARNING: the return value gets very big very quickly.  You should try it
+%only for small values of $m$ and $n$ (not bigger than 2).
+
+%\end{exercise}
+
+%
+%\begin{exercise}
+%\begin{enumerate}
+
+%\item Create a program called {\tt Recurse.c} and
+%type in the following functions:
+
+%\begin{verbatim}
+%    /* First: returns the first character of the given String */
+%    char First (String s) 
+%    {
+%        return s.charAt (0);
+%    }
+
+%    /* Rest: returns a new String that contains all but the */
+%    /* first letter of the given String */
+%    String Rest (String s) 
+%    {
+%        return s.substring (1, s.length());
+%    }
+
+%    /* Length: returns the length of the given String */
+%    int Length (String s) 
+%    {
+%        return s.length();
+%    }
+%\end{verbatim}
+
+%\item Write some code in {\tt main} that tests each of these
+%functions.  Make sure they work, and make sure you understand
+%what they do.
+
+%\item Write a function called {\tt printString} that takes a
+%String as a parameter and that prints the letters of the
+%String, one on each line.  It should be a {\tt void} function.
+
+%\item Write a function called {\tt printBackward} that does
+%the same thing as {\tt printString} but that prints the String
+%backwards (one character per line).
+
+%\item Write a function called {\tt reverseString} that takes
+%a String as a parameter and that returns a new String as a
+%return value.  The new String should contain the same letters
+%as the parameter, but in reverse order.  For example, the
+%output of the following code
+
+%\begin{verbatim}
+%	String backwards = reverseString ("Allen Downey");
+%	System.out.println (backwards);
+%\end{verbatim}
+%%
+%should be
+
+%\begin{verbatim}
+%yenwoD nellA
+%\end{verbatim}
+
+%
+%\end{enumerate}
+%\end{exercise}
+
+%\begin{exercise}
+%\begin{enumerate}
+
+%\item Create a new program called {\tt Sum.c},
+%and type in the following two functions.
+
+%\begin{verbatim}
+%  int FunctionOne (int m, int n) 
+%  {
+%      if (m == n) 
+%      {
+%          return n;
+%      } 
+%      else 
+%      {
+%          return m + FunctionOne (m+1, n);
+%      }
+%  }
+
+%  int FunctionTwo (int m, int n) 
+%  {
+%      if (m == n) 
+%      {
+%          return n;
+%      } 
+%      else 
+%      {
+%          return n * FunctionTwo (m, n-1);
+%      }
+%  }
+%\end{verbatim}
+%%
+%\item Write a few lines in {\tt main} to test these functions.
+%Invoke them a couple of times, with a few different values,
+%and see what you get.  By some combination of testing and
+%examination of the code, figure out what these functions do,
+%and give them more meaningful names.  Add comments that
+%describe their function abstractly.
+
+%\item Add a {\tt prinf} statement to the beginning of both
+%functions so that they print their arguments each time they are
+%invoked.  This is a useful technique for debugging recursive
+%programs, since it demonstrates the flow of execution.
+
+%\end{enumerate}
+%\end{exercise}
+
+%\begin{exercise}
+%\label{ex.power}
+%Write a recursive function called {\tt Power} that
+%takes a double {\tt x} and an integer {\tt n} and that
+%returns $x^n$.  Hint: a recursive definition of this
+%operation is {\tt Power (x, n) = x * Power (x, n-1)}.
+%Also, remember that anything raised to the zeroeth power
+%is 1.
+%\end{exercise}
+
+%
+%\begin{exercise}
+%\label{gcd}
+%(This exercise is based on page 44 of Ableson and Sussman's
+%{\em Structure and Interpretation of Computer Programs}.)
+
+%The following algorithm is known as Euclid's Algorithm because
+%it appears in Euclid's {\em Elements} (Book 7, ca. 300 B.C.).
+%It may be the oldest nontrivial algorithm.
+
+%The algorithm is based on the observation that, if $r$ is the
+%remainder when $a$ is divided by $b$, then the common divisors
+%of $a$ and $b$ are the same as the common divisors of $b$ and $r$.
+%Thus we can use the equation
+
+%\[ gcd (a, b) = gcd (b, r) \]
+
+%to successively reduce the problem of computing a GCD to the
+%problem of computing the GCD of smaller and smaller pairs of integers.
+%For example,
+
+%\[ gcd (36, 20) = gcd (20, 16) = gcd (16, 4) = gcd (4, 0) = 4\]
+
+%implies that the GCD of 36 and 20 is 4.  It can be shown
+%that for any two starting numbers, this repeated reduction eventually
+%produces a pair where the second number is 0.  Then the GCD is the
+%other number in the pair.
+
+%Write a function called {\tt gcd} that takes two integer parameters and
+%that uses Euclid's algorithm to compute and return the greatest
+%common divisor of the two numbers.
+%\end{exercise}

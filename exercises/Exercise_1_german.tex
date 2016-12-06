@@ -1,0 +1,184 @@
+% !TEX root = Übung1.tex
+
+\begin{exercise}
+
+Informatiker haben die ärgerliche Angewohnheit normale Worte 
+einer Sprache zu benutzen und ihnen eine ganz eigene Bedeutung
+zu geben, die von ihrer normalen Verwendung abweicht.
+So haben zum Beispiel die Worte \emph{Anweisung (statement)} und 
+\emph{Kommentar (comment)} normalerweise eine sehr ähnliche Bedeutung (zumindest auf Englisch).
+In einer Programmiersprache sind sie aber sehr unterschiedlich.
+Es ist wichtig, die Bedeutung der Elemente der Programmiersprache genau zu 
+kennen und sie richtig einzusetzen, anderenfalls können sie keine korrekten
+Programme schreiben.
+
+Das Glossar am Ende eines jeden Kapitels dient dazu, wichtige Begriffe
+und Phrasen zu rekapitulieren und die besondere Bedeutung dieser
+Begriffe klar zu machen.
+
+Achten Sie darauf, dass ein Begriff, den Sie aus der Umgangssprache
+kennen, eine ganz eigene Bedeutung haben kann, wenn er in der Programmierung
+verwendet wird.
+
+\begin{enumerate}
+
+\item Was ist der Unterschied zwischen einer \emph{Anweisung (statement)} und 
+einem \emph{Kommentar (comment)} in einer Programmiersprache?
+
+\item Was bedeutet es, wenn man sagt ein Programm sei \emph{portabel}?
+
+\item Was bedeutet es, wenn man sagt ein Programm sei \emph{ausführbar (executable)}?
+
+\end{enumerate}
+
+\end{exercise}
+
+\begin{exercise}
+
+Bevor wir uns eingehender mit der Programmiersprache beschäftigen, ist es wichtig
+herauszufinden, wie sich ein C-Programm auf unserem Computer kompilieren und
+ausführen lässt.
+Die erforderlichen Schritte können je nach verwendetem Betriebssystem und
+eingesetztem Compiler sehr unterschiedlich sein. 
+
+
+\begin{enumerate}
+
+\item Geben Sie das  ``Hello World''-Programm aus Abschnitt
+%~\ref{hello}
+1.5 
+des Vorlesungs-Scripts (siehe Moodle) in den Computer ein, kompilieren Sie es und führen Sie es aus.
+
+\item Fügen Sie eine zweite \texttt{printf()}-Anweisung hinzu, welche eine weitere 
+Nachricht ausgibt.  Irgendeine kurze Bemerkung, 
+wie zum Beispiel, ``How are you?''
+Speichern, kompilieren und führen Sie das Programm erneut aus.
+
+\item Fügen Sie eine Kommentarzeile zu ihrem Programm hinzu 
+(wo immer sie wollen), und kompilieren Sie das Programm erneut.
+
+Führen Sie das Programm aus. Wie hat sich der Kommentar auf den Ablauf
+des Programms ausgewirkt?
+
+\end{enumerate}
+
+Diese Übung mag Ihnen trivial erscheinen, aber sie ist der Grundstein
+für all die vielen Programme, die wir in der nächsten Zeit entwickeln werden.
+
+Um mit Vertrauen und Zuversicht die Eigenarten und Besonderheiten
+einer Programmiersprache zu entdecken, ist es erforderlich, dass man
+Vertrauen in die Programmierumgebung hat.
+Es ist nämlich zum Teil sehr einfach die Übersicht darüber zu verlieren,
+welches Programm jetzt gerade bearbeitet, übersetzt und ausgeführt wird.
+Und es kann leicht vorkommen, dass Sie versuchen den Fehler in einem
+Programm zu finden, während Sie versehentlich ein anderes Programm ausführen,
+oder Änderungen in einem Programm noch gar nicht gespeichert wurden.
+
+Das Hinzufügen und Ändern von Ausgabeanweisungen (\texttt{printf()})
+ist ein einfacher Weg um herauszufinden, ob das Programm, das sie
+ändern, auch das Programm ist, dass sie ausführen.
+
+\end{exercise}
+
+%\newpage
+
+\begin{exercise}
+
+Es ist eine gute Idee, sich mit einer Programmiersprache vertraut
+zu machen, indem man viele Sachen ausprobiert.
+
+Wir können zum Beispiel in unser Programm ganz bewusst Fehler
+einbauen und beobachten, ob der Compiler diese Fehler findet
+und wie er sie uns anzeigt.
+Manchmal wird der Compiler uns genau sagen, was falsch gelaufen
+ist und wie wir den Fehler beheben können. Manchmal bekommen
+wir nur eine unverständliche Meldung. 
+
+Durch einfaches Ausprobieren können wir uns einen Überblick
+verschaffen, wann wir dem Compiler trauen können und wann
+wir selbst herausfinden müssen, was falsch gelaufen ist.
+
+Nehmen Sie ein lauffähiges Programm und probieren Sie nacheinander die
+folgenden Veränderung. 
+
+\textbf{Achtung:} Verändern Sie immer nur eine Stelle in ihrem Programm und 
+lassen Sie es danach ausführen. Machen Sie die Änderung rückgängig, bevor Sie die
+nächste Änderung vornehmen.
+
+\begin {enumerate}
+
+\item Entfernen Sie die schließende, geschweifte Klammer (\}).
+
+\item Entfernen Sie die öffnende, geschweifte Klammer (\{).
+
+\item Entfernen Sie das {\tt int} vor {\tt main}.
+
+\item Anstelle von {\tt main} schreiben Sie {\tt mian}.
+
+\item Entfernen Sie das schließende {\tt */} von einem Kommentar.
+
+\item Ersetzen Sie {\tt printf} durch {\tt pintf} im Quelltext des Programms.
+
+% Example of a logical error:
+%
+%\item Replace {\tt printf} with {\tt print}.  This one is
+%tricky because it is a logical error, not a syntax error.
+%The statement {\tt System.out.print} is legal, but it may or may
+%not do what you expect.
+
+\item Löschen Sie  eine der Klammern:  {\tt (} oder  {\tt )}  
+
+\item Fügen Sie eine weitere Klammer hinzu.
+
+\item Löschen Sie  das Semikolon nach der {\tt return} Anweisung.
+
+\item Löschen Sie das Semikolon nach der {\tt printf()}-Anweisung.
+
+\item Entfernen Sie das hintere Anführungszeichen in den Klammern von {\tt printf()}.
+
+\item Entfernen Sie das vordere Anführungszeichen in den Klammern von {\tt printf()}.
+
+\item Schreiben Sie {\tt <sdtio.h>} statt {\tt <stdio.h>} .
+
+\item Lassen Sie das {\tt \#} vor der Präprozessoranweisung {\tt include} weg.
+
+\item Kopieren Sie den gesamten Code und fügen Sie ihn noch einmal am Ende ein.
+
+\item Schreiben Sie die Zeile {\tt printf(...);} einmal vor {\tt int main(void)}.
+
+\end {enumerate}
+
+\vskip 1em
+
+\begin{enumerate}[1)]
+\item Nennen Sie jeweils die erste Fehlermeldung, die der Compiler ausgibt (die weiteren sind üblicherweise Folgefehler).
+\item Versuchen Sie jede Fehlermeldung zu erklären. Was \emph{'denkt'} der Compiler, was hier passiert? Warum gibt er genau diesen Fehlertext aus? Wird in der Meldung tatsächlich der von Ihnen (im Augenblick) bewusst eingebaute Fehler bemängelt? Oder stört sich der Compiler eigentlich an etwas ganz anderem?
+\end{enumerate}
+
+
+\end{exercise}
+
+\begin{exercise}
+
+Die \texttt{printf()}-Funktion ist eine der wichtigsten Funktionen für das Erlernen der Programmiersprache C.
+Mit Hilfe der Funktion lassen sich interne Zustände im Programm auf dem Bildschirm ausgeben. 
+Leider ist die Funktion nicht besonders einfach zu benutzen und unterstützt eine Vielzahl von Optionen und 
+Umwandlungszeichen \texttt{(\%d, \%f, ...)}.
+
+Probieren Sie das folgende Progamm aus und erklären Sie die beobachteten Ausgaben:
+
+\begin{verbatim}
+  #include <stdio.h>
+  #include <stdlib.h>
+  
+  int main (void)
+  {
+     printf("%d\n",5/2);
+     printf("%f\n",5.0/2);
+     printf("%s\n","5/2");
+     printf("5/2\n");
+     return EXIT_SUCCESS;
+  }
+  
+\end{verbatim}
+\end{exercise}

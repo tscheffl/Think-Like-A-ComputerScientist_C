@@ -1,0 +1,186 @@
+\begin{exercise}
+
+%\subsubsection*{Deutsche Übersetzung der Aufgabe}
+In dieser Übung sollen Sie das Lesen von Programmcode
+praktizieren. Sie sollen den Ablauf der Ausführung von Programmen
+mit mehreren Funktionen verstehen und nachvollziehen lernen.
+
+
+\begin{enumerate}
+
+\item 
+Was gibt dieses Programm auf dem Bildschirm aus?
+Geben Sie präzise an wo sich Leerzeichen und Zeilenumbrüche
+befinden. 
+
+HINWEIS: Beginnen Sie mit einer verbalen Beschreibung dessen
+was die Funktionen {\tt Ping} und {\tt Baffle} tun, wenn sie aufgerufen
+werden.
+
+\begin{verbatim}
+#include <stdio.h>
+#include <stdlib.h>
+
+  void Ping (void) 
+  {
+    printf (".\n");
+  }
+
+  void Baffle (void) 
+  {
+    printf ("wug");
+    Ping ();
+  }
+
+ void Zoop (void) 
+ {
+    Baffle ();    
+    printf ("You wugga ");
+    Baffle ();
+  }
+
+  int main (void) 
+  {
+    printf ("No, I ");
+    Zoop ();
+    printf ("I ");
+    Baffle ();
+    return EXIT_SUCCESS;
+  }
+\end{verbatim}
+
+
+\item 
+Zeichnen Sie ein Stackdiagram welches den Status des Programms
+wiedergibt wenn {\tt Ping} zum ersten Mal aufgerufen wird.
+
+\end{enumerate}
+\end{exercise}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{exercise}
+
+%\subsubsection*{Deutsche Übersetzung der Aufgabe}
+
+In dieser Übung lernen Sie wie man Funktionen mit Parametern 
+schreibt und aufruft.
+
+\begin{enumerate}
+
+\item 
+Schreiben Sie die erste Zeile einer Funktion mit dem Namen {\tt Zool}.
+Die Funktion hat drei Parameter: ein {\tt int} und zwei {\tt char}.
+
+\item 
+Schreiben Sie eine Code-Zeile in der Sie {\tt Zool} aufrufen und
+die folgenden Werte als Argumente übergeben: {\tt 11}, den Buchstaben {\tt a}, und 
+den Buchstaben {\tt z}.
+\end{enumerate}
+\end{exercise}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{exercise}
+
+%\subsubsection*{Deutsche Übersetzung der Aufgabe}
+
+In dieser Übung werden wir ein Programm aus einer vorigen Übung anpassen
+und verändern, so dass eine Funktion mit Parametern zum Einsatz kommt. Starten
+mit einer funktionsfähigen Programmversion.
+%~\ref{ex.date}.
+
+\begin{enumerate}
+
+\item 
+Schreiben Sie eine Funktion mit dem Namen {\tt PrintDateAmerican}
+diese hat die folgenden Parameter day, month und year 
+und gibt das Datum im amerikanischen Standardformat aus.
+
+\item 
+Testen Sie die Funktion indem Sie diese aus {\tt main} heraus aufrufen
+und die entsprechenden Parameter als Argumente übergeben.
+Das Ergebnis sollte folgendem Muster entsprechen:
+%
+\begin{verbatim}
+3/29/2009
+\end{verbatim}
+%
+\item 
+Nachdem Sie die Funktion {\tt PrintDateAmerican} erfolgreich erstellt und
+ausgeführt haben, schreiben Sie eine weitere Funktion 
+{\tt PrintDateEuropean} welche das Datum im europäischen Format
+ausgibt.
+
+\end{enumerate}
+
+\end{exercise}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{exercise}
+\label{ex.multadd}
+
+
+%\subsubsection*{Deutsche Übersetzung der Aufgabe}
+
+Viele Berechnungen lassen sich übersichtlich als  ``multadd''
+Operation ausführen, dazu wird mit drei Operanden folgende Berechnung
+durchgeführt {\tt a*b + c}.  Einige Prozessoren bieten für diesen 
+Befehl sogar eine Hardwareimplementierung für Gleitkommazahlen.
+
+\begin{enumerate}
+
+\item 
+Erstellen Sie ein neues Programm mit dem Namen {\tt Multadd.c}.
+
+\item 
+Schreiben Sie eine Funktion {\tt Multadd} welche drei  {\tt doubles}
+als Parameter besitzt und  welche das Ergebnis der Multaddition ausgibt.
+
+\item 
+Schreiben Sie eine {\tt main} Funktion welche {\tt Multadd} 
+durch den Aufruf mit einigen einfachen Parametern testet
+und das Ergebnis ausgibt. 
+So sollte zum Beispiel für die Parameter {\tt 1.0, 2.0, 3.0} als 
+Ergebnis {\tt 5.0} ausgegeben werden.
+
+\item 
+Benutzen Sie {\tt Multadd} in der {\tt main} Funktion um den folgenden
+Wert zu berechnen:
+%
+\begin{eqnarray*}
+& \sin \frac{\pi}{4} + \frac{\cos \frac{\pi}{4}}{2} & 
+%\\
+%\\
+%& \log 10 + \log 20 &
+\end{eqnarray*}
+%
+\item 
+Schreiben Sie eine Funktion {\tt Yikes} welche ein {\tt double} als 
+Parameter übernimmt und {\tt Multadd} für die Berechnung und
+Ausgabe benutzt:
+%
+\begin{eqnarray*}
+x e^{-x} + \sqrt{1 - e^{-x}}
+\end{eqnarray*}
+%
+HINWEIS: Die mathematische Funktion für die Berechnung von  $e^x$ lautet {\tt double exp(double x);}.
+
+\end{enumerate}
+
+In der letzten Aufgabe sollen Sie eine Funktion schreiben, welche ihrerseits
+eine selbst erstellte Funktion aufruft. Dabei sollten Sie stets daran denken
+die erste Funktion ausgiebig zu testen bevor Sie mit der Arbeit an der 
+zweiten Funktion beginnen.
+Ansonsten kann es vorkommen, dass Sie gleichzeitig zwei Methoden
+debuggen müssen - ein sehr mühsames Unterfangen.
+
+Ein weiteres Ziel dieser Übung ist es ein spezielles Problem als Teil einer
+allgemeineren Klasse von Problemen zu erkennen. Wenn immer möglich sollten
+Sie versuchen Programme zu entwickeln, die allgemeine Probleme lösen.
+
+
+\end{exercise}

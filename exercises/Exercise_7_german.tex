@@ -1,0 +1,64 @@
+\begin{exercise}
+Schreiben Sie eine  Funktion namens {\tt CheckFactors(int,~int[], int)} mit 3 Parametern.
+Die Funktion übernimmt einen Integerwert {\tt n}, ein Array von Integerwerten
+sowie die Länge des Arrays {\tt len} als drittes Argument. 
+
+Die Funktion  soll {\tt TRUE} zurückliefern, falls alle Zahlen in dem übergebenen Array 
+ Faktoren von {\tt n} sind 
+(d.h.   {\tt n} durch alle diese Zahlen teilbar ist).
+Für den Fall, dass mindestens eines der Array-Elemente kein Faktor von 
+{\tt n} ist soll {\tt FALSE} zurückgegeben werden.
+
+HINWEIS: Ermitteln Sie vor dem Aufruf der Funktion {\tt CheckFactors()} die Länge des Arrays in der {\tt main()} Funktion, siehe dazu \ref{Array length}.
+Vergleichen Sie ebenfalls die Lösung der Übungsaufgabe~\ref{ex.isdiv}.
+\end{exercise}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{exercise}
+Schreiben Sie eine Funktion  {\tt void SetToZero(int[], int)}
+welche ein Array von  {\tt int} und die Länge dieses Arrays übernimmt und 
+anschließend dieses Array für alle Elemente auf
+den Wert {\tt 0} initialisiert.
+
+Für die Ermittlung der Länge des Arrays können Sie die Funktion aus dem
+Abschnitt~\ref{Array length} übernehmen.
+Testen Sie die korrekte Implementierung dieser Funktion mit Hilfe
+der {\tt PrintArray()} Funktion aus Abschnitt~\ref{Array of random numbers}.
+\end{exercise}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{exercise}
+Schreiben Sie eine Funktion welche ein Array von {\tt int}, 
+die Länge des Arrays {\tt len} und 
+einen {\tt int}  mit dem Namen
+{\tt target}  als Argumente übernimmt.  Die Funktion soll das
+Array durchsuchen und den Index zurückliefert an dem
+{\tt target} zum ersten Mal in dem Array auftritt. Sollte {\tt target} 
+nicht in dem Array enthalten sein soll -1 zurückgegeben werden.
+\end{exercise}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{exercise}
+%\textbf{Zusatzaufgabe!}
+
+One not-very-efficient way to sort the elements of an array
+is to find the largest element and swap it with the first
+element, then find the second-largest element and swap it with
+the second, and so on.
+
+\begin{enumerate}
+
+\item Write a function called {\tt IndexOfMaxInRange()} that 
+takes an array of integers, finds the
+largest element in the given range, and returns {\em its index}.
+
+\item Write a function called {\tt SwapElement()} that takes an
+array of integers and two indices, and that swaps the elements
+at the given indices.
+
+\item Write a function called {\tt SortArray()} that takes an array of
+integers and that uses {\tt IndexOfMaxInRange()} and {\tt SwapElement()}
+to sort the array from largest to smallest.
+
+\end{enumerate}
+\end{exercise}
