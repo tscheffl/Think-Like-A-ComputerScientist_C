@@ -1,0 +1,732 @@
+%!TEX root = Main_german.tex
+
+% LaTeX source for textbook ``How to think like a computer scientist''
+% Copyright (C) 1999  Allen B. Downey
+
+% This LaTeX source is free software; you can redistribute it and/or
+% modify it under the terms of the GNU General Public License as
+% published by the Free Software Foundation (version 2).
+
+% This LaTeX source is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% General Public License for more details.
+
+% Compiling this LaTeX source has the effect of generating
+% a device-independent representation of a textbook, which
+% can be converted to other formats and printed.  All intermediate
+% representations (including DVI and Postscript), and all printed
+% copies of the textbook are also covered by the GNU General
+% Public License.
+
+% This distribution includes a file named COPYING that contains the text
+% of the GNU General Public License.  If it is missing, you can obtain
+% it from www.gnu.org or by writing to the Free Software Foundation,
+% Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+
+\chapter{Strukturen}
+\label{structs}
+\index{struct}
+
+\section{Aggregierte Datentypen}
+
+Die meisten Datentypen mit denen wir bisher gearbeitet haben
+repräsentieren einen einzelnen Wert -- eine ganze Zahl,
+eine Fließkommazahl oder einen Zeichenwert. 
+Arrays und Strings dagegen sind aus mehreren Elementen 
+aufgebaut, die jedes für sich genommen einen Wert darstellen, 
+im Falle von Strings aus den einzelnen Zeichen. Diese
+Art von Datentypen bezeichnet man als {\bf aggregierte} 
+(zusammengesetzte) Datentypen. 
+
+Je nachdem was wir in unserem Programm mit den Daten machen,
+können wir aggregierte Datentypen als ein einzelnes Objekt
+betrachten oder auf die einzelnen Elemente des Datentyps zugreifen.
+Diese Mehrdeutigkeit ist für die Programmierung nützlich.
+Beim Funktionsaufruf übergeben wir das aggregierte Objekt als
+einzelnes Argument. Innerhalb der Funktion greifen wir dann auf die
+einzelnen Elemente des Objekts zu, verbergen diese Komplexität aber
+vor allen anderen Funktionen in unserem Programm.
+%
+%member variables).  This ambiguity is useful.
+
+Arrays sind aggregierte Datenobjekte aus Elementen des
+gleichen Typs, auf deren Elemente über
+ihren Index zugegriffen wird. 
+In der Programmiersprache C gibt es einen weiteren
+Mechanismus um aggregierte Datenobjekte zu bilden die 
+auch aus Elementen unterschiedlichen Typs bestehen können
+und weitere interessante Eigenschaften besitzen. Diese
+Datenobjekte werden in C als {\tt struct} (Struktur)  bezeichnet
+und können zum
+Beispiel benutzt werden um eigene Datentypen zu definieren.  
+
+\section{Das Konzept eines geometrischen Punkts}
+\index{Point}
+\index{struct!Point}
+
+Um die das Konzept der Strukturen zu erklären, möchte ich  
+ein einfaches Beispiel aus dem Bereich der Geometrie verwenden.
+Stellen wir uns die geometrische Beschreibung eines Punkts vor.
+In einem zweidimensionalen, kartesischen Koordinatensystem können wir jeden
+Punkt durch die Angabe von 2 Zahlen (Koordinaten) beschreiben.
+Diese beiden Koordinaten bilden zusammen ein Objekt, welches
+wir für weitere Betrachtungen immer gemeinsam verwenden wollen.
+In der Geometrie stellen wir deshalb Punkte oft als Zahlenpaar in
+Klammern dar, wobei ein Komma die Koordinaten trennt.  So 
+stellt zum Beispiel $P(0, 0)$ den Ursprung unseres Koordiatensystems
+dar und $P(x, y)$ kennzeichnet den Punkt der $x$ Einheiten auf der 
+X-Achse und $y$ Einheiten auf der Y-Achse vom Ursprung des
+Koordinatensystems entfernt ist.
+
+Solch einen Punkt können wir in C als zwei
+Werte vom Typ {\tt double}  speichern.
+Es bleibt aber die Frage, wie wir diese beiden Werte zu einem
+zusammengesetzten Objekt vom Typ {\tt Point\_t} zusammenfassen.
+Es kann ja vorkommen, dass wir in unserem Programm eine
+Vielzahl von Punkten definieren und bearbeiten wollen, für die jeweils
+zwei Werte zusammengenommen den Punkt definieren. 
+
+Die Antwort auf diese Frage liefern die folgenden Programmzeilen.
+Wir definieren einfach einen neuen  {\tt Point\_t} -Datentyp als {\tt struct}:
+
+\begin{verbatim}
+    typedef struct 
+    {
+        double x;
+        double y;
+    } Point_t;  
+\end{verbatim}
+%
+
+
+Die Definition gibt an, dass es in unserer Struktur zwei Elemente mit
+Namen {\tt x} und {\tt y} gibt.  Diese Elemente werden auch als
+{\bf Komponenten} der Struktur bezeichet. Die {\tt struct} Definition muss in unserem Programm außerhalb 
+der Funktionsdefinitionen vorgenommen werden, am besten direkt
+nach den {\tt \#include} Anweisungen.
+
+Es ist ein häufiger Fehler das Semikolon am Ende der Strukturdefinition
+zu vergessen. Normalerweise müssen wir hinter geschweiften Klammern
+kein Semikolon setzen, bei Strukturdefinitionen hingegen schon.
+
+Nachdem wir jetzt einen neuen Struktur-Datentyp definiert haben, 
+können wir ganz einfach neue Variablen dieses Typs erzeugen:
+
+\begin{verbatim}
+    Point_t blank;
+    blank.x = 3.0;
+    blank.y = 4.0;   
+\end{verbatim}
+%
+\index{Punktoperator}
+Die erste Zeile ist eine ganz normale Variablendeklaration: die Variable
+mit Namen {\tt blank} hat den Datentyp {\tt Point\_t}. 
+Die nächsten zwei Zeilen initialisieren die beiden Komponenten 
+des \texttt{struct}.  Der Punkt zwischen dem Namen der Strukturvariable
+und den Komponenten ist ein eigener Operator, der so genannte  {\bf Punktoperator}.
+Mit dem Punktoperator können wir über den Namen der Strukturvariable auf
+die einzelnen Komponenten der Struktur zugreifen.
+
+\index{Deklaration}
+\index{Anweisung!Deklaration}
+%\index{reference}
+\index{Zustandsdiagramm}
+\index{Zustand}
+
+Das Resultat der Zuweisung wird in dem folgenden Zustandsdiagramm gezeigt:
+
+\vspace{0.1in}
+\centerline{\epsfig{figure=figs/point.pdf, width=3cm}}
+\vspace{0.1in}
+
+So wie bei anderen Variablen auch, wird der Variablenname {\tt blank} außerhalb  
+und der Wert innerhalb des Kastens geschrieben.
+In unserem Fall setzt sich der innere Teil des Kastens aus den einzelnen Werten der
+zwei Komponenten des aggregierten Datenobjekts zusammen.
+%and its value appears inside the box.  In this case, that value is
+%a compound object with two named member variables.
+
+\section{Zugriff auf die Komponenten von Strukturen}
+\index{struct!Komponenten}
+
+Natürlich können wir die Werte der Komponenten einer Struktur nicht nur 
+setzen, sondern diese auch wieder auslesen. Auch hier müssen wir
+wieder den Punktoperator anwenden.:
+
+\begin{verbatim}
+    double x = blank.x;
+\end{verbatim}
+%
+Der Ausdruck {\tt blank.x} bedeutet ``gehe zu dem Objekt mit Namen {\tt
+blank} und ermittle den Wert von {\tt x}.''  In unserem Falle weisen wir dann den
+ermittelten Wert einer lokalen Variable mit Namen {\tt x} zu.  
+Dabei ist es wichtig zu verstehen, dass es keinen Konflikt zwischen
+der lokalen Variable {\tt x} und der Komponente {\tt x} der Variablen
+{\tt blank} gibt. Es handelt sich um zwei voneinander verschiedene 
+Speicherstellen und über den Punktoperator ist auch sichergestellt,
+dass es keinen Namenskonflikt zwischen {\tt x} und {\tt blank.x} gibt.
+%Notice that there is no
+%conflict between the local variable named  and the member
+%variable named {\tt x}.  The purpose of dot notation is to identify
+%{\em which} variable you are referring to unambiguously.
+
+Wir können den Punktoperator in jedem normalen Ausdruck in C verwenden,
+wie man an den folgenden Beispielen sehen kann:
+
+\begin{verbatim}
+    printf ("%0.1f, %0.1f\n", blank.x, blank.y);
+    double distance = sqrt (blank.x * blank.x + blank.y * blank.y);
+    blank.y++;
+\end{verbatim}
+%
+Die erste Programmzeile erzeugt die Bildschirmausgabe {\tt 3.0, 4.0}.
+Die zweite Zeile errechnet den Wert 5 und speichert diesen in der Variable
+{\tt distance}.
+In der dritten Zeile wird der Wert von {\tt blank.y} um {\tt 1} erhöht.
+
+\section{Operatoren und Strukturen}
+
+
+Die meisten Operatoren die wir bisher für einfache Datentypen
+wie {\tt int} und {\tt double} benutzt haben lassen sich leider
+nicht direkt für Strukturvariablen verwenden.
+Das betrifft auch die mathematischen Operatoren ( {\tt +}, {\tt \%}, etc.) 
+und die Vergleichsoperatoren ({\tt ==}, {\tt >}, etc.).
+
+\index{struct!Zuweisungsoperator}
+Der Zuweisungsoperator hingegen kann mit Strukturvariablen verwendet
+werden. Es gibt zwei Arten wie wir ihn einsetzen können. 
+Zuerst lässt sich mit dem Zuweisungsoperator eine Strukturvariable
+bei ihrer Definition bereits initialisieren. 
+Darüber hinaus lassen sich Strukturvariablen gleichen Typs auch direkt kopieren, 
+ohne dass wir jedes Element einzeln kopieren müssten.
+Eine Initialisierung sieht folgendermaßen aus:
+
+\begin{verbatim}
+    Point_t blank = { 3.0, 4.0 };
+\end{verbatim}
+%
+Die Werte in den geschweiften Klammern werden der Reihe nach den
+einzelnen Komponenten der Strukturvariable zugewiesen. Wir müssen
+daher genau wissen in welcher Reihenfolge die einzelnen Komponenten
+in der Typdefinition angegeben wurden.
+In unserem Fall wird der erste Wert der Komponente {\tt x} und der zweite
+Wert der Komponenten {\tt y} zugewiesen.
+
+Unglücklicherweise können wir diese Syntax nur während der 
+Initialisierung der Variablen verwenden und nicht dazu benutzen
+der Variablen zu einem späteren Zeitpunkt neue Werte zuzuweisen.
+Die folgenden Programmzeilen sind daher fehlerhaft:
+
+\begin{verbatim}
+    Point_t blank;
+    blank = { 3.0, 4.0 };       /* WRONG !! */
+\end{verbatim}
+%
+Jetzt habe ich aber behauptet, dass wir Strukturvariablen direkt kopieren können,
+warum ist dann diese Anweisung fehlerhaft?
+Es gibt eine kleine Einschränkung hinsichtlich der Kopierbarkeit. Strukturen
+können nur dann kopiert werden, wenn sie \emph{kompatibel} sind, das heißt,
+wenn Sie von der gleichen Typdefinition abgeleitet sind. 
+I unserem Falle weiß der Kompiler nicht, dass es sich bei der rechten Seite
+um den Inhalt einer Struktur handeln soll. Wir müssen daher noch den entspechenden
+Typ als explitite Typumwandlung (engl: cast) hinzufügen:
+\index{Typumwandlung}
+
+\begin{verbatim}
+    Point_t blank;
+    blank = (Point_t){ 3.0, 4.0 };
+\end{verbatim}
+%
+Das funktioniert!
+
+Wenn wir zwei Strukturvariablen vom gleichen Typ definiert haben, können wir
+natürlich auch einfach eine Zuweisungsoperation ausführen:
+
+\begin{verbatim}
+    Point_t p1 = { 3.0, 4.0 };
+    Point_t p2 = p1;
+    printf ("(%0.1f, %0.1f)\n", p2.x, p2.y);
+\end{verbatim}
+%
+Die Ausgabe dieser Programmzeilen beträgt {\tt 3.0, 4,0}.
+
+%%
+\section{Strukturen als Parameter}
+\label{Structures as parameters}
+\index{Funktionsparameter}
+\index{struct!Funktionsparameter}
+
+Wir können eine Struktur einfach als Parameter einer Funktion angeben:
+
+\begin{verbatim}
+    void PrintPoint (Point_t point) 
+    {
+        printf ("(%0.1f, %0.1f)\n", point.x, point.y);
+    }
+\end{verbatim}
+%
+Die Funktion {\tt PrintPoint()} wird mit einer Struktur vom Typ {\tt Point\_t}
+aufgerufen und gibt die Koordinaten des Punkts auf dem Bildschirm  aus.
+Wenn wir die Funktion folgendermaßen aufrufen {\tt PrintPoint(blank)},
+erzeugt sie die Ausgabe {\tt (3.0, 4.0)}.
+
+In einem zweiten Beispiel können wir die {\tt ComputeDistance()} Funktion aus
+Section~\ref{distance} so umschreiben, dass sie zwei {\tt Point\_t} -Variablen
+anstelle von vier {\tt double} -Variablen als Parameter besitzt:
+
+\begin{verbatim}
+    double ComputeDistance (Point_t p1, Point_t p2) 
+    {
+        double dx = p2.x - p1.x;
+        double dy = p2.y - p1.y;
+        return sqrt (dx*dx + dy*dy);
+    }
+\end{verbatim}
+
+\section{Call by value}
+\label{Call by value}
+\index{Parameterübergabe}
+\index{call by value}
+
+Wir erinnern uns,  Parameter und Argument einer Funktion
+sind unterschiedliche Dinge. 
+Der Parameter ist eine  Variable innerhalb der aufgerufenen Funktion.
+Bei dem Argument handelt es sich um den Wert den die aufrufenden
+Funktion an die aufgerufene Funktion übergibt. 
+Dieser Wert wird beim Funktionsaufruf in die Parametervariable
+der aufgerufenen Funktion kopiert. Diesen Vorgang bezeichnet man
+als Parameterübergabe.
+%there are two variables (one in the caller and one in the
+%callee) that have the same value, at least initially. 
+
+Wenn wir eine Struktur als Argument der Funktion {\tt PrintPoint()} 
+übergeben, sieht das Stackdiagramm folgendermaßen aus:
+%
+%you pass a structure as an argument, remember that the
+%argument and the parameter are not the same variable. For
+%example, when we call {\tt PrintPoint()}, the stack diagram
+%looks like this:
+
+\index{Diagramm!Stack}
+\index{Stackdiagramm}
+
+\vspace{0.1in}
+\centerline{\epsfig{figure=figs/stack_point2.pdf, width=6cm}}
+\vspace{0.1in}
+%
+Wenn {\tt PrintPoint()} jetzt den Wert der Komponenten 
+von {\tt point} verändert, so würde das keine Auswirkungen auf die
+Komponenten von {\tt blank} haben.  Da  in unserem Beispiel 
+die Funktion {\tt PrintPoint()}  die Parametervariable nicht
+modifiziert, ist diese Form der Parameterübergabe für das Programm angemessen.
+
+
+Wie bereits erwähnt, bezeichnen wir diese Art der Parameterübergabe als \emph{call by value},
+weil nur der Wert der Struktur (oder eines anderen Datentyps) an die Funktion übergeben wird
+und nicht die Struktur selbst. 
+
+\section{Call by reference}
+\label{Call by reference}
+\index{Parameterübergabe}
+\index{call by reference}
+\index{Pointer}
+
+Es gibt noch eine andere Art der Parameterübergabe an die
+aufgerufene Funktions, das so genannte \emph{call by reference}.
+In diesem Fall wird nicht der Wert des Arguments, sondern ein Verweis 
+an die aufgerufene Funktion übergeben.
+
+Genau genommen gibt es in C kein echtes \emph{call by reference}.
+Wir behelfen uns damit, dass wir statt der direkten Übergabe des Objekts
+einen Pointer auf ein Speicherobjekt an die Funktion übergeben.
+Dabei wird Wert des Adresse des Speicherobjekts als Argument in den
+Pointerparameter der Funktion kopiert. Da sich dabei die Adresse nicht verändert
+kann die Funktion direkt auf das Speicherobjekt außerhalb der Funktion zugreifen.   
+
+%alternative parameter-passing mechanism that is available
+%in C is called \emph{call by reference}.  
+%By now we already know that C uses pointers as references.
+Wir können mit diesem Mechanismus auch einen Pointer auf eine Struktur an 
+eine Funktion übergeben und die Funktion dazu benutzen um die Struktur
+selbst zu verändern.
+
+%This mechanism makes
+%it possible to pass a structure to a procedure and modify it directly.
+
+Stellen wir uns folgendes Beispiel vor: ein Punkt in einem Koordinatensystem
+soll an der 45$^{\circ}$-Linie gespiegelt werden. Dazu müssen einfach
+die beiden Koordinaten des Punkts vertauscht werden.
+
+Wenn wir jetzt eine Funktion {\tt ReflectPoint()} in der folgenden Weise schreiben,
+so werden wir damit nicht den erhofften Erfolg haben:
+
+\begin{verbatim}
+    void ReflectPoint (Point_t point)      /* Does not work! */
+    {
+        double temp = point.x;
+        point.x = point.y;
+        point.y = temp;
+    }
+\end{verbatim}
+%
+Die Funktion {\tt ReflectPoint()} arbeitet nicht korrekt, weil die Änderungen, die wir
+an der Strukturvariablen in der Funktion vornehmen, keine Auswirkungen auf die
+Strukturvariable in der aufgerufenen Funktion haben.
+
+Wir müssen die Funktion so ändern, dass wir statt einer Kopie der Struktur einen
+Verweis auf die Struktur erhalten (call-by-reference). Dazu muss die Funktion einen Parameter vom
+Typ {\tt Point\_t~*ptr} (Pointer auf die Struktur vom Typ {\tt Point\_t}) erhalten und wir 
+müssen die Adresse des originalen Strukturobjekts an die Funktion übergeben:
+
+
+\begin{verbatim}
+    void ReflectPoint (Point_t *ptr)
+    {
+        double temp = ptr->x;
+        ptr->x = ptr->y;
+        ptr->y = temp;
+    }
+\end{verbatim}
+\index{Pfeiloperator}
+Normalerweise benutzen wir den Punktoperator ({\tt .}) um auf die Elemente einer
+Struktur zuzugreifen.
+Wenn wir aber über einen Pointer (Zeiger) auf die Komponenten einer Struktur zugreifen, 
+müssen wir einen speziellen Operator, den \textbf{Pfeiloperator}  ({\tt ->}) benutzen.
+%
+%di we are accessing the struct member variables through a pointer 
+%we can no longer use the Punktoperator ({\tt .}). Instead we need to use
+%the .
+
+%
+\index{Adressoperator}
+Beim Funktionsaufruf müssen wir jetzt nur noch die Adresse der Struktur ermitteln und
+der Funktion als Argument mitgeben. 
+Wir benutzen dazu den \emph{Adressoperator} ({\tt \&}):
+
+\begin{verbatim}
+    PrintPoint (blank);
+    ReflectPoint (&blank);
+    PrintPoint (blank);
+\end{verbatim}
+%
+Die Ausgabe des Programms sieht folgendermaßen aus und entspricht unseren Erwartungen:
+
+\begin{verbatim}
+    (3.0, 4.0)
+    (4.0, 3.0)
+\end{verbatim}
+%
+Das Stackdiagramm für den Funktionsaufruf sieht folgendermaßen aus:
+
+\index{Diagramm!Stack}
+\index{Stackdiagramm}
+
+\vspace{0.1in}
+\centerline{\epsfig{figure=figs/stack_point3.pdf, width=6.5cm}}
+\vspace{0.1in}
+%
+Der Parameter {\tt ptr} ist ein Zeiger auf die Struktur  {\tt blank}.  
+Pointer werden in einem Stackdiagramm als ein Punkt mit einem 
+Pfeil dargestellt. Der Pfeil zeigt direkt auf das Speicherobjekt 
+dessen Adresse im Pointer gespeichert ist.
+
+Der wichtige Unterschied, den dieses Diagramm zum Ausdruck bringt,
+ist der Fakt, dass alle Änderungen welche innerhalb der Funktion 
+{\tt ReflectPoint()} über den Pointer  {\tt ptr} gemacht werden, eine
+direkte Änderung der Strukturvariablen  {\tt blank} zur Folge hat.
+
+Wenn wir die Adresse einer Struktur an eine Funktion übergeben 
+haben wir mehr Möglichkeiten, da die Funktion die Struktur
+selbst verändern kann und nicht nur mit einer Kopie arbeitet.  
+Außerdem ist es etwas schneller, weil der Rechner nicht erst eine Kopie
+der ganzen Struktur erzeugen muss.
+Auf der anderen Seite ist es weniger sicher und schwieriger nachvollziehbar.
+Wir müssen selbst nachverfolgen an welchen Stellen eine Struktur
+modifiziert wird und gerade wenn wir viele Funktionen benutzen kann das
+schnell unübersichtlich werden. 
+Trotzdem werden in C die meisten Strukturen über Pointer an 
+Funktionen übergeben. Die in diesem Buch beschriebenen Funktionen
+werden deshalb dieser Tradition treu bleiben. 
+
+\section{Rechtecke}
+\index{Rechtecke}
+\index{struct!Rectangle}
+
+Ok, nachdem wir jetzt also einen Punkt als Struktur 
+dargestellt haben, wollen wir noch etwas weiter gehen und
+uns überlegen wie wir ein Rechteck als Datenstruktur beschreiben
+können. Welche Daten sind nötig, um die geometrische Figur eines
+ Rechtecks vollständig zu beschreiben? \\
+(Um es uns etwas einfacher zu machen wollen wir davon ausgehen,
+dass das Rechteck immer rechtwinklig zu unserem Koordinatensystem
+ausgerichtet ist und niemals verdreht. )
+
+Es gibt  mehrere Möglichkeiten: wir könnten den Mittelpunkt des
+Rechtecks beschreiben (ein Punkt mit zwei Koordinaten) und die
+Länge und Breite des Rechtecks. Eine andere Möglichkeit wäre es
+zwei gegenüberliegende Ecken als Punkte zu beschreiben.
+
+Die meisten existierenden Programme geben die obere linke Ecke
+sowie die Länge und die Breite des Rechtecks an.
+Um ein solches Rechteck in C zu beschreiben brauchen wir
+eine Struktur die einen Punkt {\tt Point\_t}
+und zwei Fließkommazahlen {\tt double} enthält:
+
+\begin{verbatim}
+    typedef struct 
+    {
+        Point_t corner;
+        double width, height;
+    } Rectangle_t;  
+\end{verbatim}
+%
+Wie wir feststellen könnne, ist es erlaubt, dass eine Struktur eine andere
+Struktur als Komponente enthalten kann. Diese Art des Aufbaus von
+komplexeren aus einfacheren Strukturen ist sogar ziemlich verbreitet.
+
+Diese Definition bedeutet aber auch, dass wir bevor wir ein Rechteck
+{\tt Rectangle\_t} definieren können, zuerst einmal einen Punkt {\tt Point\_t}
+definieren müssen:
+
+\begin{verbatim}
+    Point_t corner = { 0.0, 0.0 };
+    Rectangle_t box = { corner, 100.0, 200.0 };
+\end{verbatim}
+%
+Diese Programmzeilen erzeugen eine neue {\tt Rectangle\_t} Struktur
+und initialisieren die Komponenten. In der folgenden Abbildung 
+ist diese Zuweisung als Zustandsdiagramm dargestellt:
+
+\vspace{0.1in}
+\centerline{\epsfig{figure=figs/rectangle.pdf, width=6cm}}
+\vspace{0.1in}
+%
+Wenn wir auf die Komponenten {\tt width} und {\tt height} zugreifen wollen, 
+so können wir das in der gewohnten Form tun:
+
+\begin{verbatim}
+    box.width = box.width + 50.0;
+    printf("%f\n", box.width);
+\end{verbatim}
+%
+Um auf die Komponenten der Struktur {\tt corner} zuzugreifen, könnten
+wir, falls wir den Wert nur auslesen wollen, eine temporäre Variable verwenden:
+
+\begin{verbatim}
+    Point_t temp = box.corner;
+    double x = temp.x;
+\end{verbatim}
+%
+Es ist allerdings viel einfacher den Punktoperator einzusetzen und
+über die verkettete Angabe der beiden Strukturen direkt auf die Komponente
+zuzugreifen:
+
+\begin{verbatim}
+    double x = box.corner.x;
+\end{verbatim}
+%
+Um diese Anweisung zu verstehen ist es am Sinnvollsten die
+Programmzeile von rechts nach links zu lesen:
+ ``Ermittle den Wert {\tt x} in der Struktur {\tt corner} in der Struktur {\tt box}
+und weise ihn der lokalen Variable {\tt x} zu.''
+
+Ich sollte vielleicht noch hinzufügen, dass man natürlich die 
+Strukturvariable {\tt box} auch in einem einzigen Programmschritt initialisieren
+kann: 
+%out that you can, in fact, create the {\tt Point} and the
+%{\tt Rectangle} at the same time:
+
+\begin{verbatim}
+    Rectangle_t box = { { 0.0, 0.0 }, 100.0, 200.0 };
+\end{verbatim}
+%
+\index{Verschachtelte Struktur}
+Die inneren geschweiften Klammern beschreiben die Koordinaten
+des Punkts {\tt corner}. Die zwei anderen Werte definieren
+{\tt width} und {\tt height} des neuen Rechtecks {\tt box}.
+Wir haben damit ein Beispiel für eine \emph{verschachtelte Struktur}
+geschaffen.
+Welche Variante der Initialisierung wir dabei verwenden ist uns überlassen. 
+Ich finde die erst Variante übersichtlicher, sie bedeutet aber auch mehr
+Schreibarbeit für den Programmierer.
+ 
+
+
+
+
+\section{Strukturen als Rückgabewerte}
+\index{struct!as return type}
+\index{return}
+\index{Anweisung!return}
+
+Es ist möglich Funktionen zu schreiben die eine Struktur an die
+aufrufende Funktion zurückgeben.
+Wir können zum Beispiel eine Funktion {\tt FindCenter()} erstellen,
+welche ein {\tt Rectangle\_t} als Parameter besitzt und
+einen {\tt Point\_t}~Wert zurückgibt, welcher die Koordinaten des
+Mittelpunkts des Rechtecks enthält:
+
+\begin{verbatim}
+    Point_t FindCenter (Rectangle_t box)
+    {
+        double x = box.corner.x + box.width/2;
+        double y = box.corner.y + box.height/2;
+        Point_t result = {x, y};
+        return result;
+    }
+\end{verbatim}
+%
+Um diese Funktion aufzurufen, müssen wir ein {\tt Rectangle\_t} als
+Argument an die Funktion übergeben (es wird eine Kopie des Werts
+der Struktur übergeben: call-by-value). Den Rückgabewert der Funktion
+weisen wir einer  {\tt Point\_t} Variable zu:
+
+\begin{verbatim}
+    Rectangle_t box = { {0.0, 0.0}, 100, 200 };
+    Point_t center = FindCenter (box);
+    PrintPoint (center);
+\end{verbatim}
+%
+Die Ausgabe dieser Programmzeilen lautet: {\tt (50, 100)}
+
+Wir hätten natürlich auch einen Pointer auf die Struktur an die
+Funktion übergeben können (call-by-reference). In diesem Fall
+hätte unsere Funktion folgendermaßen definiert werden müssen:
+\begin{verbatim}
+    Point_t FindCenter (Rectangle_t *box)
+    {
+        double x = box->corner.x + box->width/2;
+        double y = box->corner.y + box->height/2;
+        Point_t result = {x, y};
+        return result;
+    }
+\end{verbatim}
+In diesem Fall müssen wir neben dem Parameter natürlich auch noch
+den Zugriff auf die Komponenten der Struktur anpassen. Das ist
+notwendig, weil es sich bei  {\tt box} jetzt um einen Pointer handelt.
+Weiterhin muss natürlich auch der Funktionsaufruf von {\tt FindCenter()}
+verändert werden:
+
+\begin{verbatim}
+    Point_t center = FindCenter (&box);
+\end{verbatim}
+
+\section {Andere Datentypen als Referenz übergeben}
+\index{Parameterübergabe}
+\index{call by reference}
+\index{Pointer}
+
+Wir können nicht nur Strukturen als Pointer an eine Funktion
+übergeben. Jeder Datentyp den wir bisher gesehen haben, 
+kann auch als Pointer in einem Funktionsaufruf benutzt werden.
+So können wir zum Beispiel zwei ganzzahlige Werte in 
+der folgenden Funktion direkt vertauschen:
+
+\begin{verbatim}
+    void Swap (int *x, int *y)
+    {
+        int temp = *x;
+        *x = *y;
+        *y = temp;
+    }
+\end{verbatim}
+%
+Beim Funktionsaufruf müssen wir die Adressen der Variablen {\tt i} und {\tt j} 
+als Argumente der Funktion verwenden:
+
+\begin{verbatim}
+    int i = 7;
+    int j = 9;
+    printf (" i=%i, j=%i\n", i, j);
+    Swap (&i, &j);
+    printf (" i=%i, j=%i\n", i, j);
+\end{verbatim}
+%
+Die Ausgabe des Programms zeigt, dass die Werte der Variablen 
+getauscht wurden.
+Sie können ja selbst ein Stack-Diagramm zeichnen um
+sich davon zu überzeugen, dass die Funktion direkt auf die 
+Variablen der aufrufenden Funktion zugreift.\\
+Wenn ich die Funktionsparameter {\tt x} und {\tt y} als
+normale {\tt int} -Variablen (ohne {\tt *}) deklariert hätte, wäre die Funktion
+{\tt Swap()} nicht korrekt.
+Sie würde {\tt x} und {\tt y} innerhalb der Funktion vertauschen, hätte
+aber keinen Einfluss auf {\tt i} und {\tt j}.
+
+Wenn wir Werte per \emph{call-by-value} an eine Funktion übergeben,
+dann ist es durchaus üblich hier einen komplexeren Ausdruck
+als Argument der Funktion zu verwenden.
+Bei \emph{call-by-reference} Funktionen kann aber die Verwendung von Ausdrücken
+zu schwer zu findenden Programmfehlern führen. 
+Schauen wir uns folgende Programmzeilen an:
+
+\begin{verbatim}
+    int i = 7;
+    int j = 9;
+    Swap (&i, &j+1);         /* WRONG!! */
+\end{verbatim}
+%
+Vermutlich wollte der Programmierer den Wert von {\tt j} vor
+dem Tausch der Variablen um {\tt 1} erhöhen.
+Allerdings wird hier nicht der Wert von {\tt j} erhöht, sondern
+die Adresse von {\tt j}. Es ist also gar nicht mehr klar, wohin der
+Pointer {\tt *y} gerade zeigt.
+ 
+Eine gute Faustregel ist daher als Argumente einer \emph{call-by-reference} Funktion
+ nur Variablen zu verwenden und keine Ausdrücke.
+%For now a good rule of thumb is that reference arguments have to be
+%variables.
+\hint
+
+
+\section{Glossar}
+
+\begin{description}
+
+\item[Struktur (engl: \emph{structure}):]  Ein zusammengesetztes Datenobjekt, welches
+im Gegensatz zu einem Array aus einer Ansammlung von Werten unterschiedlichen Typs bestehen 
+kann. Strukturen werden in C durch das Schlüsselwort \texttt{struct} gekennzeichnet.  
+% of data grouped together and treated as a single object.
+
+\item[Komponente (engl: \emph{member variable}):]  Eine benanntes Element einer Struktur 
+auf das über seinen Namen einzeln zugegriffen werden kann.
+
+\item[Verweis (engl: \emph{reference}):]  Ein Wert der auf ein Datenobjekt verweist. Im
+Stack-Diagramm werden Verweise als Pfeil von einem Datenobjekt auf ein anderes dargestellt.
+
+\item[Call by value (engl: \emph{call by value}):]  Eine Art der Parameterübergabe beim Funktionsaufruf. 
+Dabei wird der Wert des Arguments in den dazugehörigen
+Parameter der Funktion kopiert. Die Speicherstelle des Parameters befindet sich innerhalb
+der aufgerufenen Funktion und ist komplett unabhängig von der aufgerufenen Funktion. 
+Dies ist die Standardform der Parameterübergabe in C.
+% of parameter-passing in which the
+%value provided as an argument is copied into the corresponding
+%parameter, but the parameter and the argument occupy distinct
+%locations.
+
+\item[Call by reference (engl: \emph{call by reference}):]  Eine Art der Parameterübergabe beim Funktionsaufruf. 
+Dabei wird an die aufgerufene Funktion ein Verweis übergeben. Über diesen Verweis kann
+die aufgerufene Funktion direkt auf Werte außerhalb ihres Speicherbereichs  zugreifen.
+%parameter-passing in which
+%the parameter is a reference to the argument variable.  Changes
+%to the parameter also affect the argument variable.
+
+\index{Struktur}
+\index{\texttt{struct}}
+\index{Komponente}
+\index{Verweis}
+\index{call by value}
+\index{call by reference}
+
+\end{description}
+
+\section{Übungsaufgaben}
+\setcounter{exercisenum}{0}
+
+\ifthenelse {\boolean{German}}{ \input{exercises/Exercise_9_german}}
+{\input{exercises/Exercise_9_english}}
+
+

@@ -1,0 +1,1156 @@
+%!TEX root = Main_german.tex
+
+% LaTeX source for textbook ``How to think like a computer scientist''
+% Copyright (C) 1999  Allen B. Downey
+
+% This LaTeX source is free software; you can redistribute it and/or
+% modify it under the terms of the GNU General Public License as
+% published by the Free Software Foundation (version 2).
+
+% This LaTeX source is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% General Public License for more details.
+
+% Compiling this LaTeX source has the effect of generating
+% a device-independent representation of a textbook, which
+% can be converted to other formats and printed.  All intermediate
+% representations (including DVI and Postscript), and all printed
+% copies of the textbook are also covered by the GNU General
+% Public License.
+
+% This distribution includes a file named COPYING that contains the text
+% of the GNU General Public License.  If it is missing, you can obtain
+% it from www.gnu.org or by writing to the Free Software Foundation,
+% Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+\setcounter{chapter}{1}
+\chapter{Variablen und Typen}
+
+\section{Noch mehr Bildschirmausgaben}
+\index{Ausgabe}
+\index{Anweisung!Ausgabe}
+
+Wie ich bereits im letzten Kapitel erwähnte, können wir so viele
+Anweisungen in {\tt main()} aufnehmen, wie wir wollen. 
+So können wir zum Beispiel in unserem Programm auch mehr als
+eine Zeile ausgeben lassen:
+
+\begin{verbatim}
+
+  #include <stdio.h>
+  #include <stdlib.h>
+
+  /* main: generate some simple output */
+
+  int main (void)
+  {
+        printf ("Hello World!\n");		    /* output one line */
+        printf ("How are you?\n");		    /* output another line */       
+        return EXIT_SUCCESS;
+  }
+
+\end{verbatim}
+%
+Wie man sehen kann, ist es erlaubt, Kommentare auch 
+direkt in eine Programmzeile
+zu schreiben und nicht nur in eine separate Zeile.
+
+\index{String}
+\index{Zeichenketten|see{String}}
+\index{Typ!String}
+
+Die Ausdrücke innerhalb der Anführungszeichen werden {\bf Strings} 
+oder {\bf Zeichenketten} genannt, weil sie aus einer Folge von Buchstaben
+bestehen. Strings können jede beliebige Kombination von Buchstaben,
+Ziffern, Satzzeichen und anderen speziellen Zeichen enthalten. Probleme
+bereiten uns nur die deutschen Umlaute und das 'ß'. 
+
+\index{newline}
+
+Manchmal ist es sinnvoll, den Text mehrerer Ausgabeanweisungen
+zusammen in einer Bildschirmzeile anzuzeigen. 
+Wir können das ganz einfach umsetzen, in dem wir das {\tt $\backslash$n} 
+Zeichen aus der ersten {\tt printf()} Anweisung entfernen:
+
+\begin{verbatim}
+
+    int main (void)
+    {
+        printf ("Goodbye, ");
+        printf ("cruel world!\n");	     
+        return EXIT_SUCCESS;
+    }
+
+\end{verbatim}
+%
+In diesen Fall erscheint die Ausgabe auf einer 
+einzelnen Zeile wie folgt:
+
+\begin{verbatim}
+     Goodbye, cruel world!
+\end{verbatim}
+
+Im Programm fällt auf, dass sich zwischen 
+dem \texttt{Goodbye,} und dem 
+Anführungszeichen noch ein Leerzeichen befindet. 
+Dieses Leerzeichen finden wir auch 
+in dem angezeigten Text auf dem Bildschirm wieder, 
+das heißt es beeinflusst das 
+Verhalten unseres Programms.
+
+Leerzeichen ausserhalb von Anführungszeichen, irgendwo 
+im Quelltext des Programms, haben üblicherweise 
+keinen Einfluss auf das Verhalten unseres Programms.
+Ich hätte den Quelltext auch in der folgenden Form aufschreiben können:
+
+\begin{verbatim}
+
+    int main(void)
+    {
+    printf("Goodbye, ");
+    printf("cruel world!\n");	     
+    return EXIT_SUCCESS;
+    }
+
+\end{verbatim}
+%
+Dieses Programm ist genauso gut kompilier- und ausführbar wie das 
+Original. Ebenso haben die Zeilenumbrüche an den Zeilenenden
+keine Bedeutung. Ich hätte also schreiben können:
+
+\begin{verbatim}
+
+    int main(void){printf("Goodbye, ");printf("cruel world!\n");
+    return EXIT_SUCCESS;}
+
+\end{verbatim}
+%
+Das funktioniert auch! Allerdings fällt auf, dass es
+schwerer und schwerer wird das Programm zu lesen.
+Zeilenumbrüche und Leerzeichen im Quelltext 
+sind ein sinnvolles Mittel um ein Programm visuell zu strukturieren.
+Es wird dadurch für uns einfacher das Programm zu lesen und
+mögliche Fehler im Programm zu finden, beziehungsweise das
+Programm später zu ändern und anzupassen.
+Moderne Entwicklungsumgebungen können uns dabei die
+Arbeit erleichtern. Sie bieten vielfach die Möglichkeit den
+Quelltext automatisch zu formatieren.
+
+\section{Werte und Datentypen}
+\index{Wert}
+\index{Daten}
+\index{Datentyp}
+\index{Typ|see{Datentyp}}
+
+Computerprogramme arbeiten mit Daten, die im 
+Speicher des Computers abgelegt sind. 
+Daten besitzen einen \textbf{Wert}  -- eine konkrete Zahl oder einen Buchstaben -- 
+und sind eines der fundamentalen Dinge mit denen ein Computerprogramm
+arbeiten kann.  
+
+%Deshalb spricht man von elektronischer Datenverarbeitung
+Die einzigen Daten, mit denen wir bisher gearbeitet haben, waren 
+Zeichenketten wie {\tt ''Hello, world!''}, die auf dem Bildschirm ausgegeben wurden.  
+Wir  (und der Compiler) können diese Zeichenketten
+anhand der umschließenden Anführungszeichen erkennen.
+%constant values
+
+
+
+
+%
+%\begin{center}
+%\newcommand{\bitlabel}[2]{%
+%        \bitbox[]{#1}{%
+%          %\raisebox{0pt}[0pt][0pt]{%
+%            \fontsize{7}{7}\selectfont#2}}%
+%	 
+%%}
+%
+%\begin{bytefield}{8}
+% \bitlabel{1}{$2^7$} & \bitlabel{1}{$2^6$} &
+%   \bitlabel{1}{$2^5$} & \bitlabel{1}{$2^4$} &
+%   \bitlabel{1}{$2^3$} &  \bitlabel{1}{$2^2$}
+%   \bitlabel{1}{$2^1$} & \bitlabel{1}{$2^0$} \\
+%%\bitheader{2,7} \\
+%\bitbox[]{1}{\texttt{0x003FFFFF}0} & 
+%\bitbox{1}{0} & 
+%\bitbox{1}{0} &
+%\bitbox{1}{0} &
+%\bitbox{1}{0} &
+%\bitbox{1}{1} &
+%\bitbox{1}{0} &
+%\bitbox{1}{1} \\
+%\end{bytefield}
+%\end{center}
+
+
+Daten repräsentieren unterschiedliche Dinge wie zum Beispiel die 
+ganzen Zahlen, die reellen Zahlen und Buchstaben. Wir unterscheiden die Daten
+anhand ihres \textbf{Typs}.
+
+Es ist wichtig, dass ein Programm ganz genau weiß, um welche 
+Art von Daten es sich bei den gespeicherten Werten handelt, 
+denn nicht alle Manipulationen sind für jeden Datentyp sinnvoll.
+Wir können zwei Zahlen addieren, aber die Addition von \texttt{'a' + 'a'}
+ist nicht definiert.
+
+Ein weiterer Grund für die Unterscheidung der Datentypen liegt in
+den unterschiedlichen Anforderungen für die Speicherung der Daten
+im Computer. Daten werden als Bitfolgen gespeichert. Ein Bit ist die  
+kleinste mögliche Informationseinheit.
+\index{Bit}
+
+Für die Speicherung von \emph{Buchstaben} reichen üblicherweise 7 oder 8 Bit.
+Ein einelnes Bit kann eine einfache Fallunterscheidung treffen 0 oder 1, an oder aus. Mit 8 Bit können wir
+256 Fälle unterscheiden -- mehr als genug für die Zeichen des Alphabets,
+der Ziffern und Satzzeichen. Für die Speicherung von 
+\emph{Zahlen} werden aber wesentlich mehr Bit benötigt. Wir wollen ja nicht nur
+von 0 bis 255 zählen können. 
+
+Der Datentyp legt also fest, welche Bedeutung diese Bitfolgen haben: \emph{Buchstabe}, \emph{ganze Zahlen}, usw. 
+
+
+
+\def\bitfeldIntern(#1,#2,#3,#4,#5,#6,#7,#8) {
+\setcounter{collumn}{25}
+\put(\thecollumn,\therow){\framebox(\theboxsize,\theboxsize){\textbf{\textsf{#1}}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\therow){\framebox(\theboxsize,\theboxsize){\textbf{\textsf{#2}}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\therow){\framebox(\theboxsize,\theboxsize){\textbf{\textsf{#3}}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\therow){\framebox(\theboxsize,\theboxsize){\textbf{\textsf{#4}}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\therow){\framebox(\theboxsize,\theboxsize){\textbf{\textsf{#5}}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\therow){\framebox(\theboxsize,\theboxsize){\textbf{\textsf{#6}}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\therow){\framebox(\theboxsize,\theboxsize){\textbf{\textsf{#7}}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\therow){\framebox(\theboxsize,\theboxsize){\textbf{\textsf{#8}}}}
+}
+\def\bitfeld#1{\bitfeldIntern(#1)}
+
+\newcommand{\initBitArray}[1]{
+% Counter for drawing the bit-boxes
+
+	\newcounter{boxsize}
+	\setcounter{boxsize}{#1}
+
+	\newcounter{row}
+	\setcounter{row}{0}
+
+	\newcounter{collumn}
+% Counter for drawing left and right annotations
+	\newlength{\txtoffset} %vertikaler Offset für Beschriftung (mittig zur Box)
+	\setlength{\txtoffset}{0.25cm} 
+
+	\newlength{\yspace}
+	\yspace=\theboxsize cm
+	\divide\yspace by 10
+
+	\newcounter{before}
+	\setcounter{before}{0}
+	\newcounter{after}
+	\setcounter{after}{85}
+}
+
+\newcommand{\addRow}{
+\addtocounter{row}{\theboxsize}
+}
+
+\def\bitHeaderIntern(#1,#2,#3,#4,#5,#6,#7,#8) {
+\setcounter{collumn}{25} 
+\addtocounter{collumn}{3} % zentrieren
+
+
+\addtocounter{row}{\theboxsize}
+\newlength{\mylen}
+%\setlength{\mylen}{36.5cm} 
+\mylen=\therow cm
+\divide\mylen by 10
+\addtolength{\mylen}{0.15cm}
+
+\put(\thecollumn,\LenToUnit{\mylen}){{\scriptsize \texttt{$#8$}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\LenToUnit{\mylen}){{\scriptsize \texttt{$#7$}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\LenToUnit{\mylen}){{\scriptsize \texttt{$#6$}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\LenToUnit{\mylen}){{\scriptsize \texttt{$#5$}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\LenToUnit{\mylen}){{\scriptsize \texttt{$#4$}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\LenToUnit{\mylen}){{\scriptsize \texttt{$#3$}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\LenToUnit{\mylen}){{\scriptsize \texttt{$#2$}}}
+\addtocounter{collumn}{\theboxsize} 
+\put(\thecollumn,\LenToUnit{\mylen}){{\scriptsize \texttt{$#1$}}}
+}
+\def\bitHeader#1{\bitHeaderIntern(#1)}
+
+
+
+
+
+\unitlength0.1cm
+\begin{picture}(120,45)%(0,-40)%shift origin eg: (0,-40)
+
+\initBitArray{7} %7 is the size of the box in mm
+
+\bitfeld{0,1,0,1,0,1,0,1} \addRow % wir zeichnen von unten nach oben
+\bitfeld{0,1,0,1,0,1,0,1} \addRow % ToDo: kann man das ändern?
+\bitfeld{0,1,0,1,0,1,0,1} \addRow
+\bitfeld{0,0,1,1,0,1,0,1} \addRow
+\bitfeld{0,0,0,0,0,1,0,1}
+
+\bitHeader{2^0,2^1,2^2,2^3,2^4,2^5,2^6,2^7}
+
+\put(0,\LenToUnit{\txtoffset}){{\large \texttt{Byte \textbf{...}}}}
+\addtolength{\txtoffset}{\yspace}
+\put(0,\LenToUnit{\txtoffset}){{\large \texttt{Byte \textbf{6683}}}}
+\addtolength{\txtoffset}{\yspace}
+\put(0,\LenToUnit{\txtoffset}){{\large \texttt{Byte \textbf{6682}}}}
+\addtolength{\txtoffset}{\yspace}
+\put(0,\LenToUnit{\txtoffset}){{\large \texttt{Byte \textbf{6681}}}}
+
+\put(\theafter,\LenToUnit{\txtoffset}){{\large \texttt{\textbf{ASCII-Zeichen '5'}}}}
+\addtolength{\txtoffset}{\yspace}
+\put(\thebefore,\LenToUnit{\txtoffset}){{\large \texttt{Byte \textbf{6680}}}}
+\put(\theafter,\LenToUnit{\txtoffset}){{\large \texttt{\textbf{Dezimalwert 5}}}}
+
+\end{picture}
+
+
+Computer speichern Daten in Gruppen einzelner
+Bits. Eine Gruppe von 8 Bit nennt man Byte und jedes Byte hat im Computer eine 
+eindeutige Adresse. Diese ist nötig, damit keine Daten verloren gehen und unser Programm immer ganz
+genau weiß, wo sich welche Daten befinden. 
+\index{Byte}
+\index{Adresse}
+Als Programmierer einer Hochsprache muss man die genaue numerische Adresse
+der Daten nicht kennen. Da wir uns als Menschen besser Namen 
+als lange Zahlenfolgen merken, werden wir im nächsten Abschnitt kennenlernen wie 
+wir \emph{Variablen} benutzen um Daten zu speichern und zu bearbeiten.
+
+
+Die \emph{ganzen Zahlen} (beispielsweise 1 oder 17) werden in C als \emph{integer} 
+bezeichnet.  Wir können nicht nur Zeichenketten sondern auch 
+ganze Zahlen auf dem Bildschirm ausgeben
+lassen. Die Ausgabe sieht auf den ersten Blick nicht anders aus, wenn wir uns
+eine Zahl ausgeben lassen oder eine Zeichenkette.
+Zahlen werden vom Computer aber anders behandelt als Zeichenketten, so kann man
+zum Beispiel mit Zahlen rechnen:
+
+\vskip 0.7em
+\begin{verbatim}
+   printf("%i\n", 16 + 1);
+\end{verbatim}
+\vskip 0.5em
+
+\index{int|see{Ganze Zahlen}}
+\index{integer|see{Ganze Zahlen}}
+\index{Ganze Zahlen}
+
+Wenn wir uns die  \texttt{printf()} Anweisung genau anschauen, fällt
+zwischen den Anführungszeichen ein \texttt{\%i} auf. Das ist ein 
+Platzhalterzeichen, welches angibt das eine ganze Zahl ausgegeben werden
+soll. Es gibt eine Reihe solcher Platzhalter für unterschiedliche Datentypen.
+Den Nächsten werden wir gleich kennenlernen.
+
+% Aufgabe: Vergleichen Sie die Ausgaben von 
+%    printf("%i\n", 16 + 1);
+%   und    printf("16 + 1\n");
+
+Der Datentyp \emph{character} repräsentiert einen Buchstaben, eine Ziffer
+oder ein Satzzeichen. 
+C benutzt für die Speicherung der Werte vom Typ \emph{character} den
+ASCII-Code (siehe Anhang \ref{ASCII-Table}). In diesem Code ist leider nur 
+das englische Alphabet definiert. Landestypische Erweiterungen des 
+Zeichensatzes werden  nicht berücksichtigt. Aus diesem Grund
+ist es am Anfang einfacher erst einmal komplett auf \textit{ä}, 
+\textit{ö}, \textit{ü} und \textit{ß} zu verzichten
+und statt dessen \textit{ae}, \textit{oe}, \textit{ue} und \textit{ss} zu schreiben. 
+Ein \emph{character}-Wert in unserem Programm wird durch einfache 
+Anführungsstriche kenntlich gemacht, wie zum Beispiel {\tt 'a'} oder {\tt '5'}.
+Wir können Daten vom Typ \emph{character} auch ausgeben:
+
+\vskip 0.7em
+\begin{verbatim}
+   printf("%c\n", '$');
+\end{verbatim}
+\vskip 0.5em
+%
+Dafür benötigen wir das Platzhalterzeichen \texttt{\%c}.
+Unser Beispiel gibt ein einzelnes Dollarzeichen in einer eigenen
+Bildschirmzeile aus. 
+
+%\index{{\tt char}|see{Zeichen}}
+\index{char|see{Zeichen}}
+\index{character|see{Zeichen}}
+\index{Zeichen}
+
+Am Anfang ist es schwer, die einzelnen Typen der Werte {\tt ''5''}, {\tt
+'5'} und {\tt 5} zu unterscheiden. Man muss sehr genau auf die
+Zeichensetzung achten, dann wird klar, dass der erste Wert
+ein String, der zweite Wert ein Buchstabe und der dritte eine
+ganze Zahl darstellt.
+Der Grund für diese Unterscheidung wird uns im Laufe des Kurses
+noch klarer werden.
+
+\section {Variablen}
+\index{Variablen}
+\index{Wert}
+
+Eine der mächtigsten Fähigkeiten einer Programmiersprache
+ist die Möglichkeit, Werte durch die Verwendung von {\bf Variablen} zu
+manipulieren.  
+In unseren bisherigen Versuchen waren alle Werte unserer Anweisungen
+durch die Angaben im Quelltext des Programms statisch festgelegt. 
+Ab jetzt werden wir oft Variablen benutzen um Werte zu speichern und zu
+verändern. Variablen könne wir uns wie die Speicherfunktion an
+einem Taschenrechner vorstellen, nur viel flexibler und mächtiger, weil wir 
+beliebig viele Variablen in unserem Programm anlegen können.  
+
+Da die Variablen verschiedene Werte unserer Daten speichern sollen,
+müssen auch die Variablen verschiedene Typen unterstützten.
+Es gibt einige Programmiersprachen, bei denen der Computer 
+selbstständig den Typ der Variable anhand des zu speichernden
+Werts erkennt. In C müssen wir den Typ immer selbst angeben.
+Wenn wir eine neue Variable erzeugen, müssen wir deren Typ deklarieren.
+So wird der Typ \emph{character} in C als {\tt char} angegeben.  
+Die folgende Anweisung erzeugt eine neue Variable 
+mit dem Namen {\tt fred} vom  Typ \textit{character}:
+
+\vskip 0.7em
+\begin{verbatim}
+    char fred;    /* creates a new character variable */
+\end{verbatim}
+\vskip 0.5em
+%
+\index{Typ!char}
+Diese Art von Anweisungen heißt {\bf Deklaration}.
+
+Der Typ einer Variable bestimmt, welche Werte gespeichert werden können.
+Eine {\tt char} Variable kann genau ein Zeichen speichern. Ganze 
+Zahlen können  hingegen in  {\tt int} Variablen gespeichert werden.
+
+
+\index{Deklaration}
+\index{Anweisung!Deklaration}
+
+Um eine einfache \emph {integer} Variable anzulegen, verwenden wir folgende
+Syntax:
+
+\vskip 0.7em
+\begin{verbatim}
+    int bob;
+\end{verbatim}
+\vskip 0.5em
+\index{Typ!int}
+%
+Dabei ist {\tt bob} ein beliebiger Name, den wir auswählen können um
+die Variable zu identifizieren. Es ist im allgemeinen eine gute
+Idee dabei Namen zu wählen, welche die Daten beschreiben,
+die in ihnen gespeichert werden sollen. Das erleichtert uns den
+Umgang mit einer Vielzahl von Variablen und macht ein Programm
+leichter lesbar.
+
+
+Schauen wir uns zum Beispiel die folgenden Variablendeklarationen
+an:
+
+\begin{verbatim}
+    char first_letter;
+    char last_letter;
+    int hour, minute;
+\end{verbatim}
+%
+Wir können wahrscheinlich eine erste, zutreffende Vermutung
+äußern, welche Werte in diesen Variablen gespeichert werden.
+Dieses Beispiel zeigt auch, wie wir einfach mehrere Variablen des
+gleichen Typs deklarieren können: {\tt hour} und {\tt minute}
+sind beides ganze Zahlen ({\tt int} Typ).
+
+Für sehr große und komplexe Programme ist auch diese
+Form der Variablenbezeichnung noch zu unübersichtlich.
+Deswegen hat der aus Ungarn stammende Programmierer 
+Charles Simonyi ein System der Variablenbezeichnung 
+entworfen, indem dem Namen einer Variablen noch weitere
+Informationen hinzugefügt werden können.\footnote{\url{http://de.wikipedia.org/wiki/Ungarische_Notation}}
+Wir werden dieses System in diesem Buch aber nicht anwenden,
+da unsere Programme noch sehr klein und übersichtlich sind.
+
+Im Gegensatz zu anderen Programmiersprachen gibt es in C keinen
+eigenen Datentyp, um die Werte von Zeichenketten in einer 
+Variable zu speichern. Das ist schade, aber wir werden lernen
+damit umzugehen. Leider brauchen wir dafür noch ein tieferes 
+Verständnis der Programmiersprache, so dass ich erst später im
+Kapitel~\ref{strings} darauf zurückkommen werde. 
+Für den Anfang beschränken wir uns also auf Zahlen und einzelne Zeichen.
+%but we
+%are going to skip that for now (see Chapter~\ref{strings}).
+
+
+ACHTUNG: Der ältere C89 Standard erlaubt die Deklaration von
+Variablen nur am Anfang eines neuen Abschnitts (Block) im Quelltext. 
+Es ist deshalb sinnvoll, alle in einer Funktion benötigten Variablen
+gleich am Anfang der Funktion zu deklarieren -- selbst wenn wir
+diese Variable erst viel später in unserem Programm benutzen wollen. \hint
+
+
+\section{Zuweisung}
+\label{sec:assignment}
+\index{Zuweisung}
+\index{Anweisung!Zuweisung}
+
+Nachdem wir jetzt einige Variablen erzeugt haben, möchten wir
+gern Werte in ihnen speichern. Dazu benutzen wir eine
+Anweisung, die eine {\bf Zuweisung} vornimmt:
+
+\vskip 0.7em
+\begin{verbatim}
+    first_letter = 'a';   /* give first_letter the value 'a' */
+    hour = 11;            /* assign the value 11 to hour */
+    minute = 59;          /* set minute to 59 */
+\end{verbatim}
+\vskip 0.5em
+%
+Dieses Beispiel zeigt drei Zuweisungen und die Kommentare
+geben uns drei Beispiele, wie Programmierer über den
+Vorgang des Speicherns eines Wertes in einer Variable sprechen.
+Das Vokabular ist vielleicht etwas verwirrend, aber die
+Idee ist eigentlich ziemlich einfach zu beschreiben:
+
+\begin{enumerate}
+
+\item Wenn wir eine Variable deklarieren, erschaffen wir eine benannte 
+Speicherstelle.
+
+\item Wenn wir eine Zuweisung zu dieser Variable vornehmen,
+speichern wir einen Wert in dieser Speicherstelle.
+
+\end{enumerate}
+
+Wir können dabei den zweiten Schritt nicht vor dem ersten Schritt
+tun. Sollten wir den zweiten Schritt vergessen, lässt sich die
+Variable durchaus verwenden (zum Beispiel in einer 
+Ausgabeanweisung), der Wert der Variable ist aber nicht bestimmt.
+Man sagt dazu, die Variable ist nicht initialisiert. Der Compiler legt 
+in der Regel beim Erstellen einer Variable keinen Anfangswert fest.
+Es ist deshalb eine gute Idee, einer Variablen einen definierten 
+Anfangswert zuzuweisen -- anderenfalls kann die Verwendung der
+Variable leicht zu schwer zu findenden Programmfehlern führen. 
+
+Eine weit verbreitete Methode Variablen auf Papier darzustellen,
+besteht darin einen Kasten mit dem Variablennamen zu zeichnen
+und den Wert der Variable hier einzutragen. 
+Das folgende Diagramm zeigt den Effekt der 
+drei Zuweisungsanweisungen:
+
+%\vspace{0.1in}
+%\centerline{\epsfig{figure=figs/assign.eps}}
+%\vspace{0.1in}
+
+\setlength{\unitlength}{1mm}
+\begin{picture}(20,17)
+\put(7,12){\large \texttt{first\_letter}}
+\put(46,12){\large \texttt{hour}}
+\put(74,12){\large \texttt{minute}}
+\put(10,0){\framebox(20,10){{\large \textsf{a}}}}
+\put(40,0){\framebox(20,10){{\large \textsf{11}}}}
+\put(70,0){\framebox(20,10){{\large \textsf{59}}}}
+\end{picture}
+
+
+%\begin{picture}(50,10)
+%\put(7,7){\large \texttt{Text}}
+%\put(10,0){\framebox(5,5){{\large \texttt{0}}}}
+%\put(15,0){\framebox(5,5){\texttt{1}}}
+%\put(20,0){\framebox(5,5){{\large \textsf{1}}}}
+%\thicklines
+%\put(30,2.5){\vector(1,0){5}}
+%\put(35,0){\framebox(5,5){ \textsf{1}}}
+%\end{picture}
+
+
+Wir können auf diese Weise den aktuellen Zustand einer Variablen 
+darstellen.
+Dieser Zustand ist abhängig von der Ausführung von 
+Anweisungen in unserem Programm und kann sich während
+des Programmablaufs ändern. Solche Veränderungen
+kann man in einem {\bf Zustandsdiagramm} darstellen. 
+
+%I sometimes use different shapes to indicate different
+%variable types.  These shapes should help remind you that one of the
+%rules in C  is that a variable has to have the same type as the
+%value you assign it.  
+
+Bei der Zuweisung von Werten an Variablen müssen
+wir aufpassen, dass der Typ des Werts mit dem Typ der
+Variable übereinstimmt.
+So können wir zum Beispiel keine Zeichenkette in einer
+{\tt int} Variable speichern.  Die folgende Anweisung führt zu einer
+Warnmeldung des Compilers:
+
+\vskip 0.7em
+\begin{verbatim}
+    int hour;
+    hour = "Hello.";       /* WRONG !! */
+\end{verbatim}
+\vskip 0.5em
+%
+Diese Regel führt manchmal zu Verwirrungen, weil es viele Möglichkeiten
+gibt, Werte von einem Typ in einen anderen Typ zu konvertieren.
+Manchmal nimmt C diese Typumwandlung auch automatisch vor.
+Es hilft aber sich einzuprägen, dass Variablen
+und Werte den gleichen Typ haben müssen. Wir werden uns später
+um die Spezialfälle kümmern.
+
+Eine weitere Quelle für Verwechslungen besteht darin, 
+dass einige Zeichenketten wie Zahlen \emph{aussehen}, aber keine
+sind.
+So ist zum Beispiel die Zeichenkette {\tt ''123''}, aus
+den Zeichen {\tt 1}, {\tt 2} und {\tt 3} zusammengesetzt.
+Der \emph{String} {\tt ''123''} unterscheidet sich für den Computer grundlegend
+von der {\em Zahl} {\tt 123}.
+Die folgende Zuweisung ist illegal:
+
+\vskip 0.7em
+\begin{verbatim}
+   minute = "59";         /* WRONG!! */
+\end{verbatim}
+%
+\section{Variablen ausgeben}
+\label{output variables}
+
+Wir können die Werte von Variablen mit den selben Kommandos ausgeben, die
+wir auch für die Ausgabe von einfachen Werten genutzt haben:
+
+\begin{verbatim}
+
+    int hour, minute;
+    char colon;
+
+    hour = 11;
+    minute = 59;
+    colon = ':';
+
+    printf ("The current time is ");
+    printf ("%i", hour);
+    printf ("%c", colon);
+    printf ("%i", minute);
+    printf ("\n"); 
+
+\end{verbatim}
+%
+Dieses Programmfragment erzeugt zwei \emph{integer} Variablen mit Namen {\tt hour} und {\tt
+minute}, und die \emph{character} Variable {\tt colon}.  
+Den Variablen werden geeignete Werte zugewiesen, um danach mit einer
+Reihe von Ausgabeanweisungen die folgende Nachricht auf dem Bildschirm auszugeben:
+
+
+\begin{verbatim}
+    The current time is 11:59
+\end{verbatim}
+
+Wenn wir davon sprechen eine Variable ``auszugeben'', meinen wir,
+dass wir den {\em Wert} der Variable ausgeben.  
+Der Name einer Variable ist nur für den Programmierer wichtig.
+Wir erinnern uns, es ist ein Name für eine Speicherstelle.
+Das kompilierte Programm enthält diese für Menschen
+lesbare Referenzen nicht mehr. Den Benutzer interessiert nur noch
+der dort gespeicherte Wert. 
+
+
+%The name of a variable only has significance for
+%the programmer. The compiled program no longer contains a human readable
+%reference to the variable name in your program. 
+%If you need to output the {\em name} of a variable,
+%you have to print  it in quotes.  For example: {\tt cout << "hour";}
+
+
+Die \texttt{ printf()} Ausgabeanweisung kann mehr als einen Wert in einer
+einzigen Anweisung ausgeben. Dafür müssen wir so viele Platzhalterzeichen
+wie auszugebende Werte in die Anweisung einfügen und danach
+die auszugebenden Werte mit Komma getrennt anfügen. Wichtig ist es
+dabei, auf die richtige Reihenfolge und den Typ der Werte zu achten. 
+Damit können wir unser Programm folgendermaßen zusammenfassen:
+
+\begin{verbatim}
+
+    int hour, minute;
+    char colon;
+
+    hour = 11;
+    minute = 59;
+    colon = ':';
+
+    printf ("The current time is %i%c%i\n", hour, colon, minute);
+
+\end{verbatim}
+%
+In einer Programmzeile können wir jetzt einen \emph{string}, zwei \emph{integer} und 
+einen \emph{character} Wert ausgeben.  Sehr eindrucksvoll!
+
+\section{Schlüsselwörter}
+\index{Schlüsselwörter}
+
+Einige Abschnitte zuvor sagte ich, dass wir für unsere Variablen
+beliebige Namen verwenden dürfen.
+Das war leider nicht ganz richtig. 
+
+Es gibt in C einige Namen, die reserviert sind,
+weil sie bereits vom Compiler genutzt werden,
+um die Struktur eines C Programms zu parsen.
+Wenn wir diese Wörter als Variablennamen verwenden,
+würden Mehrdeutigkeiten entstehen und der Compiler könnte
+nicht mehr auseinanderhalten, ob es sich dabei um den 
+Variablennamen oder das reservierte Wort der Sprache handelt. 
+
+Die komplette Liste der Schlüsselwörter ist im jeweiligen C Standard festgelegt.
+Die hier aufgeführten Schlüsselwörter entsprechen der Sprachdefinition,
+wie sie die Internationale Organisation für Normung (ISO) am 1. September 1998 
+festgelegt hat.  
+
+Die reservierten Wörter werden {\bf Schlüsselwörter} genannt. 
+In der folgenden Tabelle sind alle derzeit definierten Schlüsselwörter
+der Sprache aufgeführt. 
+
+\vskip 1em
+
+\setlength{\fboxsep}{6pt} 
+\begin{center}
+\begin{boxedminipage}[c]{0.9\linewidth}
+\begin{center}
+\begin{multicols}{5}[\underline{Reservierte Schlüsselwörter der Sprache C}]
+\begin{verbatim}
+auto 
+break 
+case 
+char 
+const 
+continue 
+default 
+do 
+double 
+else 
+enum 
+extern 
+float 
+for 
+goto 
+if 
+inline 
+int 
+long 
+register 
+restrict 
+return 
+short 
+signed 
+sizeof 
+static 
+struct 
+switch 
+typedef 
+union 
+unsigned 
+void 
+volatile 
+while 
+_Bool 
+_Complex 
+_Imaginary 
+\end{verbatim}
+\end{multicols}
+\end{center}
+\end{boxedminipage}
+\end{center}
+
+\vskip 1em
+
+
+%You can download a copy electronically from
+%
+%\begin{verbatim}
+%    http://www.ansi.org/
+%\end{verbatim}
+%
+Anstatt diese Liste jetzt auswendig zu lernen, empfehle ich einen
+der Vorteile moderner Entwicklungsumgebungen zu nutzen: Syntaxhervorhebungen.
+Wenn wir den Quelltext in einer Entwicklungsumgebung
+wie Code::Blocks\footnote{http://www.codeblocks.org/} eingeben, werden
+unterschiedliche Teile unseres Programms unterschiedlich farblich
+eingefärbt. So erscheinen beispielsweise Schlüsselwörter in der
+Farbe blau, Zeichenketten rot und alle anderen Befehle schwarz.
+Wenn wir jetzt einen Variablennamen eingeben und dieser in der
+Farbe blau erscheint, sollten wir aufpassen! Der Compiler 
+wird wahrscheinlich ein seltsames Verhalten zeigen.
+ 
+%
+%Rather than memorize the list, I would suggest that you
+%take advantage of a feature provided in many development
+%environments: code highlighting.  As you type, different
+%parts of your program should appear in different colors.  For
+%example, keywords might be blue, strings red, and other code
+%black.  If you type a variable name and it turns blue, watch
+%out!  You might get some strange behavior from the compiler.
+
+\section{Mathematische Operatoren}
+\label{operators}
+\index{Operatoren!mathematische}
+
+
+Mathematische {\bf Operatoren} sind spezielle Symbole, die dazu benutzt werden,
+einfache Berechnungen wie Addition und Multiplikation darzustellen. Viele
+der mathematischen Operatoren in C verhalten sich genauso, wie wir das von den
+gebräuchlichen mathematischen Symbolen kennen. So wird zum
+Beispiel das Zeichen {\tt +}  für die Addition von zwei Zahlen benutzt.
+Für die Multiplikation wird das Zeichen {\tt *} und für die Division
+das Zeichen {\tt /} verwendet.
+
+\index{Ausdruck}
+
+Wenn wir Operatoren mit Operanden kombinieren, entsteht ein
+sogenannter {\bf Ausdruck} der einen Wert repräsentiert. Ausdrücke
+können Variablen, Werte und Operatoren enthalten. 
+In jedem Fall werden immer die Namen der Variablen durch 
+die Werte der Variablen ersetzt, bevor die Berechnung (Auswertung)
+des Ausdrucks vorgenommen wird.
+ 
+Die folgenden Ausdrücke der Sprache C sind legal und ihre 
+Bedeutung erschließt sich praktisch von selbst:
+
+\begin{verbatim}
+  1+1        hour-1       hour*60+minute     minute/60
+\end{verbatim}
+%
+Addition, Subtraktion und Multiplikation funktionieren in C so, wie
+wir das erwarten würden. Überrascht werden wir vom Ergebnis
+der Division. Schauen wir uns das folgende Programm an:
+
+\begin{verbatim}
+
+   int hour, minute;
+   hour = 11;
+   minute = 59;
+   printf ("Minutes since midnight: %i\n", hour*60 + minute);
+   printf ("Fraction of the hour that has passed: %i\n", minute/60);
+
+\end{verbatim}
+%
+Es erzeugt die folgende Ausgabe: 
+
+\begin{verbatim}
+    Number of minutes since midnight: 719
+    Fraction of the hour that has passed: 0
+\end{verbatim}
+%
+Die erste Zeile der Ausgabe ist korrekt, aber die zweite Zeile ist
+seltsam. Der Wert der Variablen {\tt minute} ist 59 und
+59 dividiert durch 60 ergibt 0,98333, nicht~0.  Der Grund für dieses
+Verhalten liegt darin, dass C für ganze Zahlen eine 
+{\bf ganzzahlige Division} durchführt.
+
+\index{Datentyp!int}
+\index{Ganzzahldivision}
+\index{arithmetic!integer}
+\index{Division!ganze Zahlen}
+\index{Operand}
+
+Wenn beide {\bf Operanden} ganzzahlige Werte sind,
+%(operands are the things operators operate on)
+dann ist das Resultat der Berechnung ebenfalls ein ganzzahliger Wert.
+Nach der Definition wird dabei eine Division mit Rest durchgeführt.
+Das Ergebnis ist ein Ganzzahlquotient und ein Divisionsrest und
+hierbei wird niemals aufgerundet, selbst dann, wenn  
+die nächste Ganzzahl noch so nah ist.
+
+Eine mögliche Alternative wäre in unserem Fall statt des gebrochenen
+Anteils den Prozentwert auszurechnen:
+
+\begin{verbatim}
+    printf ("Percentage of the hour that has passed: ");
+    printf ("%i\n", minute*100/60);
+\end{verbatim}
+%
+Das Resultat ist:
+
+\begin{verbatim}
+    Percentage of the hour that has passed: 98
+\end{verbatim}
+%
+Auch hier fehlen wieder die Nachkommastellen, aber jetzt ist die
+Antwort wenigstens annähernd korrekt.  
+Um eine noch genauere Antwort zu erhalten, müssen wir einen
+ganz neuen Typ von Variablen für die Berechnung benutzen: Fließkommazahlen.
+Mit diesem Variablentyp könne auch die Resultate von Brüchen und
+reellen Zahlen gespeichert werden. 
+%In order to get an even more accurate
+%answer, we could use a different type of variable, called
+%floating-point, that is capable of storing fractional values.
+Wir werden darauf im nächsten Kapitel zurückkommen.
+
+\section{Rangfolge der Operatoren}
+%\index{precedence}
+\index{Rangfolge der Operatoren}
+\index{Vorrang}
+\index{Operatoren!Rangfolge}
+
+
+Wenn mehr als ein Operator in einem Ausdruck enthalten ist,
+wird die Reihenfolge der Auswertung von  {\bf Vorrangregeln} 
+zwischen den Operatoren bestimmt.
+Eine komplette Erklärung dieser Regeln wäre sehr umfangreich,
+so dass ich hier nur die Wichtigsten erwähnen möchte:
+
+\begin{itemize}
+
+\item Multiplikation und Division werden vor
+Addition und Subtraktion ausgeführt (Punktrechnung geht vor Strichrechnung).  
+{\tt 2*3-1} ergibt 5, nicht 4 und {\tt 2/3-1} ergibt -1, nicht 1 
+%(remember that in integer division {\tt 2/3} is 0).
+
+\item Wenn die Operatoren den selben Rang aufweisen, werden sie von
+links nach rechts ausgewertet. So wird in dem Ausdruck {\tt minute*100/60},
+zuerst die Multiplikation ausgeführt, was {\tt 5900/60} ergibt, die weitere
+Auswertung ergibt {\tt 98}. 
+%Wäre die Berechnung von rechts nach links
+%durchgeführt worden , 
+%the result would be {\tt 59*1} which is {\tt 59}, which
+%is wrong.
+
+\item Immer dann, wenn wir diese Vorrangregeln ändern wollen (oder
+wenn wir uns nicht komplett sicher sind), können wir Klammern 
+setzen. Klammern setzen die automatischen Vorrangregeln außer Kraft.
+Ausdrücke in Klammern werden zuerst ausgewertet, so wird 
+{\tt 2*(3-1)} zu 4 ausgewertet.
+Weiterhin kann man Klammern dazu verwenden einen Ausdruck
+einfacher lesbar zu machen, wie in {\tt (minute*100)/60}, 
+obwohl das natürlich keine Auswirkungen auf das Resultat hat.
+
+\end{itemize}
+
+\section{Operationen über Buchstaben}
+%\index{character operator}
+\index{Operator!Zeichen}
+
+Interessanterweise können wir die gleichen mathematischen Operationen
+für \emph{integer} Werte auch mit  \emph{character} Werten
+benutzen. 
+So gibt zum Beispiel das folgende Programm,
+
+\begin{verbatim}
+
+    char letter;
+    letter = 'a' + 1;
+    printf ("%c\n", letter);
+
+\end{verbatim}
+%
+den Buchstabe {\tt b} auf dem Bildschirm aus. Der Grund dafür besteht
+in der Art und Weise, wie Buchstaben im Computer gespeichert werden.
+So ist es erlaubt Buchstaben auch zu multiplizieren,
+aber es ist sehr selten sinnvoll das zu tun.
+
+Ich habe im Abschnitt \ref{sec:assignment} davon gesprochen,
+dass wir \emph{integer} Variablen nur \emph{integer} Werte zuweisen 
+können und \emph{character} Variablen nur \emph{character} Werte.
+Ich sagte aber auch, dass es viele Ausnahmen von dieser Regel
+gibt. So ist das folgende Beispiel völlig legal: 
+
+
+\begin{verbatim}
+    int number;
+    number = 'a';
+    printf ("%i\n", number);
+\end{verbatim}
+%
+Das Resultat unseres Programms ist 97. Dabei handelt es sich um
+die Zahl die von C dazu benutzt wird um den Buchstaben {\tt 'a'}
+darzustellen (siehe Anhang~\nameref{ASCII-Table}). 
+Wir müssen uns immer wieder klar machen, der Computer 
+speichert alle Daten (Zahlen, Buchstaben, Töne, Bilder) als 
+Folgen von Bits.    
+Diese Bitfolgen können unterschiedlich \emph{interpretiert} werden.
+Es ist allerdings eine gute Idee, Zahlen als Zahlen
+zu behandeln und Buchstaben als Buchstaben und 
+nur dann eine Darstellung in die andere umzuwandeln, wenn
+dafür ein guter Grund besteht.
+
+Die automatische Umwandlung eines Datentyps in einen anderen
+(engl.: \emph{automatic type conversion}) ist ein Beispiel für ein 
+häufiges Designproblem bei der Erschaffung einer Programmiersprache.
+Dabei besteht der Konflikt zwischen {\bf Formalismus} und 
+{\bf Bequemlichkeit}.
+Der Formalismus gebietet, dass eine Programmiersprache
+einfache Regeln mit wenigen Ausnahmen aufweist.
+Die Bequemlichkeit fordert, dass eine Programmiersprache
+einfach benutzbar ist.
+
+Im Falle von C hat die Bequemlichkeit gewonnen.
+Das ist gut für den erfahrenen Programmierer, er wird vor rigorosen,
+aber manchmal unhandlichen Formalismen verschont. 
+Für den Programmieranfänger ist das allerdings schlecht, 
+weil er oft von der Komplexität der Regeln und der Vielzahl
+von Ausnahmefällen verwirrt ist.
+In diesem Buch habe ich versucht den Einstieg in die Programmierung
+mit C dadurch zu vereinfachen, dass ich die generellen Regeln
+hervorhebe und viele der bestehenden Ausnahmen weglasse.
+
+
+%formalism}, which is the requirement that formal languages should have
+%simple rules with few exceptions, and {\bf convenience}, which is the
+%requirement that programming languages be easy to use in practice.
+
+
+\section{Komposition}
+\index{Komposition}
+\index{Ausdruck}
+
+Bisher haben wir uns die Elemente einer Programmiersprache
+ -- Variablen, Ausdrücke und Anweisungen -- jeweils einzeln
+ betrachtet, ohne darüber nachzudenken, wie wir sie miteinander
+ kombinieren können.
+ 
+Eine der nützlichsten Eigenschaften einer Programmiersprache
+besteht darin, einzelne kleine Bausteine zu nehmen und
+diese zu einer mächtigeren Konstruktion zusammenzusetzen.
+So wissen wir zum Beispiel, wie man ganzzahlige Werte
+multipliziert, und wir wissen, wie man Variablen ausgibt.
+Es stellt sich  heraus, dass wir beides zur gleichen Zeit
+tun können:
+
+\begin{verbatim}
+    printf ("%i\n", 17 * 3);
+\end{verbatim}
+%
+Also eigentlich sollte ich nicht sagen ``zur gleichen Zeit'', weil die
+Multiplikation bereits ausgeführt sein muss, bevor
+das Ergebnis auf dem Bildschirm angezeigt wird.
+
+Worauf ich hinaus will, ist das folgende: 
+Es ist möglich, beliebige Ausdrücke (bestehend aus
+Zahlen, Buchstaben, Variablen und Operatoren) in einer
+Anweisung zu benutzen. Der Ausdruck wird vom Computer
+ausgewertet und mit dem aktuell ermittelten Wert weitergearbeitet. 
+Wir haben dafür bereits ein Beispiel gesehen:
+
+\begin{verbatim}
+    printf ("%i\n", hour * 60 + minute);
+\end{verbatim}
+%
+Wir können auch beliebige Ausdrücke auf die rechte Seite einer
+Zuweisungsanweisung schreiben:
+
+\begin{verbatim}
+    int percentage;
+    percentage = (minute * 100) / 60;
+\end{verbatim}
+%
+Diese Fähigkeit ist momentan noch nicht sehr eindrucksvoll, aber
+wir werden weitere Beispiele sehen, wo wir mit Hilfe der 
+Fähigkeit zur Komposition komplexe Berechnungen einfach
+und präzise ausdrücken können.
+
+ACHTUNG: Es existieren ein paar Einschränkungen, 
+wo wir bestimmte Ausdrücke verwenden können. 
+So dürfen sich auf der linken Seite einer
+Zuweisungsanweisung nur \emph{Variablen} und keine
+zusammengesetzten Ausdrücke befinden.
+Der Grund dafür liegt darin, dass die linke Seite einer 
+Zuweisung eine Speicherstelle darstellt, der ein Wert zugewiesen
+wird. Ausdrücke repräsentieren keine Speicherstelle, nur Werte.
+Somit wäre die folgende Schreibweise illegal: 
+\begin{verbatim}
+     minute + 1 = hour;      /*WRONG!! */
+\end{verbatim}
+ 
+%There are limits on where you can use certain
+%expressions; most notably, the left-hand side of an assignment
+%statement has to be a {\em variable} name, not an expression.
+%That's because the left side indicates the storage location
+%where the result will go.  Expressions
+%do not represent storage locations, only values.  
+\section{Glossar}
+
+\begin{description}
+
+\item[Variable (engl.: \emph{variable}):] Eine benannte Stelle im Hauptspeicher. Dort können Werte 
+abgelegt, verändert und wieder gefunden werden.  Alle Variablen haben einen Typ. Dieser legt fest,
+welche Werte gespeichert werden können.
+
+\item[Wert (engl.: \emph{value}):] Ein anderer Begriff für digitale Daten. Das können Buchstaben, Zahlen oder
+andere Repräsentation von Information sein. Diese lassen sich verarbeiten und in Variablen speichern.
+
+\item[Typ (engl.: \emph{type}):] Die Kategorie der Daten. Datentypen mit denen wir bisher gearbeitet haben
+sind die ganzen Zahlen ({\tt int} in C) und Buchstaben ({\tt char} in C).
+
+\item [Schlüsselwort (engl.: \emph{keyword}):] Ein Wort, welches
+in dieser Programmiersprache eine bestimmte Bedeutung hat, und nicht als Name von 
+Variablen oder Funktionen verwendet werden darf.
+Bisher haben wir die Schlüsselwörter {\tt int}, {\tt void} und {\tt char} verwendet.
+
+\item[Anweisung (engl.: \emph{statement}):] 
+Eine Befehlszeile die einen abgeschlossenen Schritt (Kommando, Aktion)
+in einem Programm darstellt. In C werden Anweisungen mit einem Semikolon beendet.
+%Bisher kennen wir Anweisungen die  declarations,
+%assignments, and output statements.
+
+\item[Deklaration (engl.: \emph{declaration}):] Eine Anweisung welche den Typ
+und den Namen einer Variable festlegt.
+\label{Glossary:Declaration}
+
+\item[Zuweisung (engl.: \emph{assignment}):] Eine Anweisung welche einer Variablen (einer
+Speicherstelle) einen Wert zuweist.
+
+\item[Ausdruck (engl.: \emph{expression}):] Eine Kombination von Variablen, Operatoren und
+Werten, welche zu einem Resultat ausgewertet werden, also wiederum einen Wert darstellen. 
+Ausdrücke haben einen bestimmten Typ, der durch die verwendeten Operatoren und Operanden
+bestimmt wird.
+
+\item[Operator (engl.: \emph{operator}):] Ein spezielles Symbol, welches eine einfache 
+Verknüpfung oder Berechnung  darstellt (z.B. Multiplikation oder Addition).
+%that represents a simple computation like addition or multiplication.
+
+\item[Operand (engl.: \emph{operand}):] Einer der Werte mit denen ein Operator eine Operation durchführt. 
+
+\item[Vorrang (engl.: \emph{precedence}):] Die Reihenfolge in der die einzelnen Teilschritte einer
+Operation mit mehreren Operatoren ausgewertet wird. % order in which operations are evaluated.
+
+\item[Komposition (engl.: \emph{composition}):] 
+Die Fähigkeit einfache Ausdrücke und Anweisungen zu komplexeren Ausdrücken und
+Anweisungen zusammenzufassen. Komplexe Probleme und Sachverhalte lassen sich 
+durch die geeignete, schrittweise Ausführung einfacher Anweisungen beschreiben und lösen.
+%
+%The ability to combine simple
+%expressions and statements into compound statements and expressions
+%in order to represent complex computations concisely.
+
+\index{Variablen}
+\index{Wert}
+\index{Typ}
+\index{Schlüsselwort}
+\index{Anweisung}
+\index{Zuweisung}
+\index{Ausdruck}
+\index{Operator}
+\index{Operand}
+\index{Vorrang}
+\index{Komposition}
+
+\end{description}
+
+
+\section{Übungsaufgaben}
+\setcounter{exercisenum}{0}
+
+\ifthenelse {\boolean{German}}{ \input{exercises/Exercise_2_german}}
+{\input{exercises/Exercise_2_english}}
+
+
+
+

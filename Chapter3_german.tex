@@ -1,0 +1,1001 @@
+%!TEX root = Main_german.tex
+
+
+\selectlanguage{ngerman}
+\setcounter{chapter}{2}
+\chapter{Funktionen}
+
+\section{Fließkommazahlen}
+\index{Fließkommazahlen}
+\index{Typ!double}
+\index{Typ!float}
+\index{double (floating-point)}
+
+Im letzten Kapitel hatten wir Problem mit der der Darstellung von
+Ergebnissen die keine ganzen Zahlen waren.
+Wir haben uns dadurch geholfen, dass wir keine Dezimalbrüche
+sondern Prozentwerte benutzt haben. 
+Eine bessere Lösung stellt die Verwendung des Datentyps
+der Fließkommazahlen dar. Fließkommazahlen können 
+auch den gebrochenen Anteil der Zahlen darstellen. 
+% more general solution is
+%to use floating-point numbers, which can represent fractions
+%as well as integers.  
+In C existieren zwei Arten der Darstellung von Fließkommazahlen,
+genannt {\tt float} und {\tt double}.  
+Für Computer ist es schwierig das mathematische Konzept der
+Unendlichkeit zu realisieren. Das Ergebnis der folgenden einfachen Division, $10 : 3 = 3,\overline{3}$ weist unendlich viele Nachkommastellen auf.
+Die Datentypen {\tt float} und {\tt double} unterscheiden sich darin, wie
+genau das Ergebnis dargestellt wird.
+In diesem Buch verwenden wir ausschließlich 
+{\tt double}s.
+
+Wir können Fließkomma-Variablen erzeugen und ihnen Werte zuweisen
+mit der gleichen Syntax die wir für andere
+Datentypen benutzen. Ein Beispiel: 
+
+\begin{verbatim}
+    double pi;
+    pi = 3.14159;
+\end{verbatim}
+%
+
+
+Es ist auch erlaubt eine Variable zu deklarieren und ihr zur gleichen Zeit einen
+Wert zuzuweisen:
+
+\begin{verbatim}
+    int x = 1;
+    char first_char = "a";
+    double pi = 3.14159;
+\end{verbatim}
+%
+Diese Syntax ist sogar ziemlich weit verbreitet.
+Die kombinierte Deklaration
+und Zuweisung wird auch als  {\bf Initialisierung} bezeichnet.
+
+\index{Initialisierung}
+
+WICHTIG:  Für die Darstellung von Dezimalbrüchen wird im englischen Sprachraum
+ein Punkt statt eines Kommas verwendet. C verwendet ebenfalls diese Schreibweise.
+Die Verwendung des Dezimalkommas stellt einen Syntaxfehler dar. 
+
+\pagebreak
+
+Obwohl Fließkommazahlen nützlich sind, führen Sie doch
+auch zu Verwirrungen, weil es eine scheinbare
+Überschneidung zwischen ganzen Zahlen und 
+Fließkommazahlen gibt.
+Wenn wir uns zum Beispiel den Wert~{\tt 1} anschauen, ist 
+das eine Ganze Zahl, eine Fließkommazahl, oder beides?
+
+Genaugenommen unterscheidet C zwischen dem Wert
+der ganzen Zahl {\tt 1} und dem Wert der Fließkommazahl {\tt 1.0}, 
+obwohl beide die gleiche Zahl repräsentieren. 
+Diese Werte gehören zu unterschiedlichen Datentypen 
+und wir hatten die generelle Regel aufgestellt, dass es
+nicht erlaubt ist Zuweisungen 
+zwischen unterschiedlichen Datentypen durchzuführen.
+Im folgenden Beispiel,
+
+
+\begin{verbatim}
+    double y = 1;
+\end{verbatim}
+%
+ist die Variable auf der linken Seite ein {\tt double} und der
+Wert auf der rechten Seite ein {\tt int}.  
+Allerdings führt die Zuweisung  nicht zu einer Fehlermeldung
+des Compilers. C nimmt an dieser Stelle eine automatische
+Typumwandlung vor. 
+\index{Typumwandlung!automatisch}
+Die automatische Umwandlung ist für den Programmierer bequem, kann aber zu 
+allerlei Problemen führen.
+So gehen uns im folgenden Beispiel alle Nachkommastellen verloren:
+
+\begin{verbatim}
+    int x = 1.98;    	             /* Ergebnis: x = 1 */
+\end{verbatim}
+%
+Das Ergebnis des folgenden Programmcodes ist für Anfänger besonders verwunderlich:
+
+\begin{verbatim}
+    double y = 1 / 3;    	         /* Ergebnis: y = 0.0 */
+\end{verbatim}
+%
+Es wäre zu erwarten, dass der Variablen {\tt y} der Wert 
+{\tt 0.333333} zugewiesen wird, 
+%which is a legal floating-point value, 
+allerdings hat sie den Wert  {\tt 0.0}.  
+Der Grund dafür liegt in dem Ausdruck auf der rechten Seite der
+Zuweisung.
+Diesen Ausdruck wertet der Computer als Verhältnis zwischen
+zwei ganzen Zahlen und deshalb führt C eine Ganzzahldivision
+durch, welche den ganzzahligen Wert {\tt 0} als Ergebnis liefert.  
+Erst bei der Zuweisung wird dieser Wert in eine Fließkommazahl
+konvertiert und das Resultat beträgt  {\tt 0.0}.
+
+
+%
+% Gemischte Ausdrücke!
+%
+
+Eine Möglichkeit dieses Problem zu lösen (nachdem 
+wir die Ursache herausgefunden haben) besteht darin
+den Ausdruck auf der rechten Seite als Gleitkommazahl
+darzustellen:
+
+\begin{verbatim}
+    double y = 1.0 / 3.0;	
+\end{verbatim}
+%
+Dadurch wird {\tt y} der erwartete Wert {\tt 0.333333} zugewiesen.
+Wir müssen also beachten, dass immer erst der rechte Ausdruck
+einer Zuweisung komplett ausgewertet  und anschließend die
+Zuweisung durchgeführt wird.
+
+\index{arithmetic!floating-point}
+
+Alle Berechnungen die wir bisher gesehen haben -- Addition, Subtraktion,
+Multiplikation und Division -- funktionieren sowohl für Fließkommazahlen als auch für
+ganze Zahlen.
+Allerdings müssen wir wissen, dass die grundlegenden Mechanismen
+der Speicherung und Verarbeitung dieser Zahlen komplett verschieden
+realisiert sind. Die meisten modernen Prozessoren haben spezielle 
+Hardwareerweiterungen für die Verarbeitung von Fließkommazahlen.
+Es ist ebenfalls wichtig zu beachten, dass Fließkommazahlen nur
+mit eingeschränkter Genauigkeit dargestellt werden können, was zu
+Rundungsverlusten bei Berechnungen führen kann.
+ 
+
+% double y =123456789987654321;
+% 123456789987654320.000000 
+
+\section{Konstanten}
+\label{sec:Constants}
+\index{Konstanten}
+\index{Konstante Werte}
+
+Im letzten Abschnitt haben wir den Wert 3.14159 einer Variable 
+vom Typ {\tt double} zugewiesen. 
+Variablen haben die wichtige Eigenschaft, dass unser Programm in ihnen
+unterschiedliche Werte zu unterschiedlichen Zeiten speichern kann.
+
+%An important thing to remember about variables
+%is, that they can hold -- as their name implies -- 
+%different values at different points in your program. 
+So können wir zum Beispiel der Variablen {\tt pi}
+aktuell den Wert 3.14159 zuweisen und ihr später erneut
+einen anderen Wert geben:
+
+\begin{verbatim}
+    double pi = 3.14159;
+    ...
+    pi = 10.999;  /* wahrscheinlich ein logischer Fehler */
+\end{verbatim}
+%
+
+Der zweite Wert hat wahrscheinlich nichts mehr mit der ursprünglich
+ {\tt pi} genannten Speicherstelle in unserem Programm zu tun.
+ Der Wert von $\pi$ ist konstant und ändert sich nicht im Laufe der Zeit.
+ Wenn wir die Speicherstelle  {\tt pi} dazu benutzen auch beliebige andere
+ Werte zu speichern, kann das zu schwer zu findenden Fehlern in unserem
+ Programm führen.
+
+Wir benötigen eine Möglichkeit um festzulegen, dass es sich bei einer
+Speicherstelle um einen konstanten Wert handeln soll, der während
+des Programmablaufs nicht verändert werden darf.
+In C müssen wir dazu zusätzlich das Schlüsselwort  {\bf {\tt const}}
+bei der Deklaration der Speicherstelle angeben. Weiterhin
+ist es natürlich erforderlich auch den Datentyp der Konstanten 
+anzugeben.
+%Definition/Deklaration/Initialisierung
+
+ 
+Der Wert der Konstanten muss zum Zeitpunkt der Deklaration
+festgelegt werden (Initialisierung). Im weiteren Ablauf des
+Programms kann dieser Wert nicht mehr verändert werden.  
+Um Konstanten
+visuell von Variablen zu unterscheiden, verwenden wir für die 
+Namen von Konstanten ausschließlich Großbuchstaben.
+
+\begin{verbatim}
+    const double PI = 3.14159;
+    printf ("Pi: %f\n", PI);
+     ...
+    PI = 10.999;  /* falsch, Fehler wird vom Compiler gefunden */
+\end{verbatim}
+%
+
+Es ist nicht länger möglich den Wert von {\tt PI}  nachträglich zu verändern. 
+Unabhängig davon können wir aber Konstanten genau so in Berechnungen
+zu verwenden wie Variablen.
+
+
+
+
+
+\section{Explizite Umwandlung von Datentypen}
+\label{rounding}
+\label{typecasting} 
+\index{rounding}
+\index{Typumwandlung!cast}
+
+Wie wir gesehen haben wandelt C automatisch
+zwischen den numerischen Datentypen um, wenn nötig.
+%As I mentioned, C converts {\tt int}s
+%to {\tt double}s automatically if necessary, because no
+%information is lost in the translation.  On the other hand,
+%going from a {\tt double} to an {\tt int} requires rounding
+%off.  C doesn't perform this operation automatically, in
+%order to make sure that you, as the programmer, are aware
+%of the loss of the fractional part of the number.
+Manchmal ist es jedoch sinnvoll die Konvertierung nicht dem
+Kompiler zu überlassen, sondern selbst zu bestimmen
+wann und wie eine Typumwandlung durchgeführt werden soll.
+
+\pagebreak[3]
+In dem folgenden Beispiel soll das Ergebnis der Berechnung
+als Dezimalbruch ermittelt werden:
+\begin{verbatim}
+   int x = 9;
+   int y = 2;
+   double result = x / y;      /* result = 4.0 */
+\end{verbatim}
+
+Wir erinnern uns, bei Operanden
+vom Typ  {\tt int} führt C automatisch eine Ganzzahldivision durch
+und das Ergebnis entspricht nicht unserer Anforderung.
+Wir müssten die Werte in dem Ausdruck auf der rechten Seite von 
+{\tt int} nach  {\tt double} wandeln, damit die Berechnung das
+korrekte Ergebnis liefert.
+
+Um eine ganze Zahl in eine Fließkommazahl zu wandeln, können 
+wir einen {\bf Cast} oder {\bf Typecast} benutzen.  Typecasting erlaubt es
+uns in einem Ausdruck so zu tun, als hätten wir einen anderen Datentyp vorliegen.
+Der Wert selbst wird dabei nicht verändert und auch der Typ
+der ursprünglichen Variablen oder Konstanten ändert sich nicht.
+
+Die Syntax für die Typumwandlung erfordert die explizite Angabe 
+des Zieltyps  {\tt (type)} in Klammern vor dem umzuwandelnden Ausdruck.
+Zum Beispiel:
+
+\begin{verbatim}
+   int x = 9;
+   int y = 2;
+   double result = (double) x / (double) y;     /* result = 4.5 */
+\end{verbatim}
+%
+Der {\tt (double)} Operator interpretiert {\tt x} und {\tt y} als Fließkommatypen
+und das Ergebnis der Berechnung liefert uns den erwarteten Dezimalbruch.
+
+%so {\tt x} gets the value
+%3.  Converting to an integer always rounds down, even if the fraction
+%part is 0.99999999.
+
+Für jeden Datentyp in C, gibt es einen entsprechenden Operator welcher
+das Argument in den entsprechenden Typ umwandelt.
+
+\section{Mathematische Funktionen}
+\index{Mathematische Funktion}
+\index{Funktion!mathematische}
+\index{Ausdruck}
+\index{Argument}
+
+Aus dem Bereich der Mathematik kennen wir Funktionen wie $\sin$ und
+$\log$ und wir haben gelernt mathematische Ausdrücke wie $\sin(\pi/2)$ 
+und $\log(1/x)$ auszuwerten.  
+Dazu wird zuerst der Ausdruck in Klammern, das {\bf Argument} der Funktion,
+ausgewertet. So ist zum Beispiel, $\pi/2$ näherungsweise 1.571 und $1/x$ ergibt
+0.1 (wenn wir für $x$ den Wert 10 annehmen).
+Danach wird die Funktion selbst berechnet, entweder durch Nachschlagen
+in einer Tabelle oder über die Durchführung verschiedener Berechnungen.
+Der Sinus ($\sin$) von 1.571 ist
+1 und der Logarithmus ($\log$) von 0.1 ist  -1 (unter der Annahme, dass $\log$ 
+den Logarithmus zur Basis 10 darstellt).
+
+Dieser Prozess kann mehrfach wiederholt werden, um immer kompliziertere
+Ausdrücke, wie  $\log(1/\sin(\pi/2))$ auszuwerten.  Zuerst werten wir
+die innersten Funktionen aus, danach die umgebenden Funktionen und
+immer so weiter.
+
+C bietet uns eine Reihe von eingebauten Funktionen, welche die meisten
+bekannten mathematischen Operationen unterstützen.
+Die mathematischen Funktionen werden in einer der mathematischen
+Schreibweise ähnelnden Form aufgerufen:
+
+\begin{verbatim}
+    double my_log = log (17.0);
+    double angle = 1.5;
+    double height = sin (angle);
+\end{verbatim}
+%
+Das erste Beispiel weist der Variable {\tt my\_log} den Logarithmus von 17 zur Basis
+$e$ zu. Es existiert auch eine Funktion {\tt log10} welche den Logarithmus zur 
+Basis 10 ermittelt.
+
+Das zweite Beispiel findet den Sinus des Werts der Variablen 
+{\tt angle}.  C nimmt an, dass die Werte die wir mit {\tt sin()} und 
+anderen trigonometrischen Funktionen  
+({\tt cos}, {\tt tan}) benutzen in {\em Radian} (rad) vorliegen.  Um
+von Grad in Radiant umzurechnen müssen wir den Wert durch
+360 dividieren und mit $2 \pi$ multiplizieren.  
+
+Wenn uns momentan nicht einfällt wie die ersten 15 Ziffern von $\pi$ lauten, so können wir
+diese mit der {\tt acos()} Funktion berechnen.  Der Arkuskosinus 
+(oder invertierter Kosinus) von -1 ist $\pi$ (da der Kosinus von 
+$\pi$ als Ergebnis -1 liefert).
+
+\begin{verbatim}
+    const double PI = acos(-1.0);
+    double degrees = 90;
+    double angle = degrees * 2 * PI / 360.0;
+    
+\end{verbatim}
+%
+WICHTIG: Bevor wir mathematische Funktionen in unserem 
+Programm verwenden können, müssen wir die mathematische
+Bibliothek in unser Programm einbinden. 
+Dafür reicht es die entsprechende {\bf Header-Datei}
+in unser Programm einzufügen.
+
+Header-Dateien enthalten Informationen die der Kompiler
+benötigt um Funktionen nutzen zu können, die außerhalb unseres
+Progamms definiert wurden.
+So haben wir zum Beispiel in unserem ``Hello, world!''-
+Programm  eine Header-Datei mit dem Namen {\tt stdio.h} eingefügt.
+Zum Einfügen nutzen wir den {\bf include} Befehl:
+
+\begin{verbatim}
+    #include <stdio.h>
+\end{verbatim}
+%
+
+\index{Header-Datei}
+\index{<stdio.h>}
+\index{<math.h>}
+\index{Header-Datei!stdio.h}
+\index{Header-Datei!math.h}
+\index{Bibliothek!stdio.h}
+\index{Bibliothek!math.h}
+
+Die Header-Datei {\tt stdio.h} enthält Informationen über die in C verfügbaren über Ein- und 
+Ausgabefunktionen  (Input und Output -- I/O).
+Gleichermaßen enthält die Bibliothek  {\tt math.h}  Informationen
+über mathematische Funktionen in C. \\
+Wir können diese Datei zusammen mit
+ {\tt stdio.h} in unser Programm einbinden:
+
+% you can use any of the math functions, you have to
+%include the math {\bf header file}. 
+
+\begin{verbatim}
+    #include <stdio.h>
+    #include <math.h>
+\end{verbatim}
+
+\section {Komposition}
+\label{composition}
+\index{Komposition}
+\index{Ausdruck}
+
+So wie in der Mathematik, können wir in C Funktionen
+zusammensetzten. 
+%Just as with mathematical functions, C functions can be {\bf
+%composed}, 
+Das heißt, wir können einen Ausdruck als Teil eines anderen 
+verwenden. So lässt sich zum Beispiel ein beliebiger Ausdruck als
+Argument einer Funktion verwenden:
+
+\begin{verbatim}
+    double x = cos (angle + PI/2);
+\end{verbatim}
+%
+Diese Anweisung nimmt den Wert von {\tt PI}, teilt ihn durch zwei und
+addiert das Ergebnis zum Wert von {\tt angle}.  Die Summe wird dann
+als Argument der {\tt cos()} Funktion benutzt.
+
+Wir können auch das Resultat einer Funktion nehmen und es als
+Argument einer weiteren Funktion benutzen:
+
+\begin{verbatim}
+    double x = exp (log (10.0));
+\end{verbatim}
+%
+Diese Anweisung ermittelt zuerst den Logarithmus zur Basis $e$ von 10 
+um $e$ anschließend mit diesem Ergebnis zu potenzieren. 
+Das Resultat wird der Variablen {\tt x} zugewiesen. Ich hoffe
+Ihnen ist klar, was das Ergebnis ist.
+
+\section{Hinzufügen neuer Funktionen}
+\index{Funktion!Definition}
+\index{main()}
+\index{Funktion!main()}
+
+Bisher haben wir ausschließlich Funktionen benutzt die bereits
+Teil der Programmiersprache sind. Es ist aber genauso gut möglich
+neue Funktionen hinzuzufügen.
+Eigentlich haben wir das auch bereits getan, ohne es zu bemerken.
+Wir haben unserem Programm bereits eine Funktion hinzugefügt: {\tt main}. 
+ %Actually, we have already seen one function definition: {\tt main}.  
+Die Funktion mit Namen {\tt main} ist ganz besonders wichtig, weil
+sie angibt, wo in einem Programm die Ausführung der Befehle beginnt.
+Die Syntax für die Definition von {\tt main()} ist aber die gleiche wie für
+jede andere Funktion auch:
+
+\begin{verbatim}
+    DATENTYP FUNKTIONSNAME ( LISTE DER PARAMETER ) 
+    {
+        ANWEISUNGEN;
+    }
+\end{verbatim}
+%
+Wir können einer neuen Funktion einen beliebigen Namen 
+geben, wir dürfen sie aber nicht {\tt main} oder nach einem Schlüsselwort
+der Programmiersprache benennen.
+Die Liste der Parameter gibt an, welche Informationen 
+bereitgestellt werden müssen, um die neue Funktion zu nutzen (oder {\bf aufzurufen}).
+Diese Liste kann auch leer sein. 
+In diesem Fall machen wir mit dem Schlüsselwort {\tt void}
+klar, dass es keine Parameter gibt, hier also nichts vergessen wurde. 
+
+Die {\tt main()}-Funktion hat in unseren Beispielen keine Parameter, 
+wie wir aus dem Schlüsselwort {\tt (void)} zwischen den Klammern
+der Funktionsdefinition entnehmen können.
+Die ersten Funktionen die wir schreiben, kommen ebenfalls ohne
+Parameter aus, sie haben auch keinen festgelegten Datentyp, so 
+das die Syntax wie folgt aussieht:
+
+\begin{verbatim}
+    void PrintNewLine (void) 
+    {
+        printf ("\n");
+    }
+\end{verbatim}
+%
+Diese Funktion mit Namen {\tt PrintNewLine()} enthält nur eine einzige
+Anweisung, welche eine Leerzeile auf dem Bildschirm darstellt.
+
+Der Name unserer neuen Funktion beginnt mit einem Großbuchstaben.
+Die folgenden Worte des Funktionsnamens haben wir ebenfalls groß
+geschrieben. Dabei handelt es sich um eine oft genutzte Konvention,
+der wir in diesem Buch folgen werden.
+Die Großschreibung verhindert es, dass wir zufällig den gleichen
+Namen wie eine bereits existierende Funktion wählen. Der Name der
+Funktion selbst sollte eine treffende Beschreibung der Aufgabe dieser
+Funktion sein.
+
+
+%Notice that we start
+%the function name with an uppercase letter. The following words of the
+%function name are also capitalized. We will use this convention for the naming 
+%of functions consistently throughout the book.
+
+In unser {\tt main()}-Funktion können wir die neue Funktion jetzt aufrufen.
+Dazu benutzen wir eine Syntax die vergleichbar ist mit dem Aufruf der
+standardmäßig in C vorhandenen Funktionen:
+
+\begin{verbatim}
+    int main (void)
+    {
+       printf ("First Line.\n");
+       PrintNewLine ();
+       printf ("Second Line.\n");
+       return EXIT_SUCCESS;
+    }
+\end{verbatim}
+%
+Die Ausgabe des Programms sieht dann folgendermaßen aus:
+
+\begin{verbatim}
+    First line.
+
+    Second line.
+
+\end{verbatim}
+%
+Haben Sie den zusätzlichen Abstand zwischen den beiden Zeilen bemerkt?\\
+Wie können wir noch mehr Abstand zwischen den Texten erzeugen?
+Wir rufen die Funktion einfach mehrfach nacheinander auf:
+
+\begin{verbatim}
+  int main (void)
+  {
+      printf ("First Line.\n");
+      NewLine ();
+      NewLine ();
+      NewLine ();
+      printf ("Second Line.\n");
+      return EXIT_SUCCESS;
+  }
+\end{verbatim}
+%
+Oder wir könnten eine neue Funktion schreiben die wir {\tt PrintThreeLines()} nennen und diese
+Funktion gibt drei Leerzeilen auf dem Bilschirm aus: 
+
+\begin{verbatim}
+  void PrintThreeLines (void)
+  {
+    PrintNewLine ();  PrintNewLine ();  PrintNewLine ();
+  }
+
+  int main (void)
+  {
+      printf ("First Line.\n");
+      PrintThreeLines ();
+      printf ("Second Line.\n");
+      return EXIT_SUCCESS;
+  }
+\end{verbatim}
+%
+Ein paar Dinge in diesem Programm sollten besonders beachtet werden:
+
+\begin{itemize}
+
+\item Wir können die selbe Funktion mehrfach aufrufen.  Das kommt in der
+Tat in den meisten Programmen ziemlich oft vor und ist ein sinnvoller Umgang
+mit Funktionen. 
+
+\item Wir können aus einer Funktion eine andere Funktion aufrufen.  In unserem
+Fall ruf {\tt main()} die Funktion {\tt PrintThreeLines()} und {\tt PrintThreeLines()}
+die Funktion {\tt PrintNewLine()} auf.  Auch das ist nützlich und verbreitet der Fall.
+
+\item In {\tt PrintThreeLines()} habe ich drei Anweisungen in die gleiche Zeile
+geschrieben. Einerseits ist das syntaktisch erlaubt (Leerzeichen und Zeilenumbrüche
+ändern typischerweise die Bedeutung unseres Programm nicht). 
+Andererseits ist es besser jede Anweisung in eine eigene
+Programmzeile zu schreiben -- das Programm wird dadurch einfacher lesbar.
+Ich weiche manchmal von dieser Regel ab, um in diesem Buch etwas Platz zu
+sparen.
+\end{itemize}
+
+Bisher dürfte vielleicht noch nicht klar geworden sein, warum wir uns
+die Mühe mit der Erstellung dieser neuen Funktionen machen.
+Es gibt dafür eine ganze Reihe von Gründen, ich möchte an dieser Stelle
+aber nur auf zwei von ihnen eingehen: 
+
+%So far, it may not be clear why it is worth the trouble to
+%create all these new functions.  Actually, there are a lot
+%of reasons, but this example only demonstrates two:
+
+\begin{enumerate}
+
+\item In dem wir einen neue Funktion erstellen, erhalten wir die Möglichkeit 
+einer Gruppe von Anweisungen einen Namen zu geben.
+Funktionen können die Struktur eines Programms vereinfachen. Wir verbergen
+komplexe Berechnungen hinter einem einfachen Befehl. 
+Wir können für diesen Befehl  'sprechende' Bezeichnungen wählen, statt 
+direkt obskuren Programmcode lesen zu müssen. Was ist klarer {\tt PrintNewLine()} 
+oder {\tt printf("$\backslash$n")}?
+
+\index{Sprechende Bezeichner}
+
+\item Durch die Verwendung von eigenen Funktionen können wir
+ein Programm kürzer machen, indem wir wiederholende Anweisungen eliminieren.
+So können wir auf einfache Weise neun aufeinanderfolgende
+Lehrzeilen dadurch erzeugen, dass wir {\tt PrintThreeLines()} drei mal nacheinander
+aufrufen. Wie gehen wir vor, wenn wir 27 Lehrzeilen ausgeben müssen?
+
+\end{enumerate}
+
+\section {Definitionen und Aufrufe}
+
+Wenn wir alle Code-Fragmente der vorigen Abschnitte zusammenfügen, sieht
+das komplette Programm wie folgt aus:
+
+\begin{verbatim}
+  #include <stdio.h>
+  #include <stdlib.h>
+
+  void PrintNewLine (void) 
+  {
+      printf ("\n");
+  }
+
+  void PrintThreeLines (void)
+  {
+      PrintNewLine ();  PrintNewLine ();  PrintNewLine ();
+  }
+
+  int main (void)
+  {
+     printf ("First Line.\n");
+     PrintThreeLines ();
+     printf ("Second Line.\n");
+     return EXIT_SUCCESS;
+  }
+\end{verbatim}
+
+Das Programm enthält drei Funktionsdefinitionen: {\tt PrintNewLine()},
+{\tt PrintThreeLine()} und {\tt main()}.
+
+Innerhalb der Definition von {\tt main()} befindet sich eine Anweisung
+welche die Funktion {\tt PrintThreeLine()} aufruft. Auf die gleiche
+Art ruft  {\tt PrintThreeLine()} die Funktion {\tt PrintNewLine()} drei mal auf.  
+Auffallend ist, dass die Definition jeder Funktion vor der Stelle erfolgt,
+an der die Funktion aufgerufen wird.
+
+Diese Reihenfolge ist in C notwendig. Die Deklaration einer Funktion muss
+erfolgt sein, bevor die Funktion verwendet werden kann. Der Grund dafür liegt
+in der Art und Weise wie der Compiler versucht unser Programm zu übersetzen.
+Er geht dabei den Quellcode nur ein einziges mal durch und muss daher bereits
+alle Funktionen kennen, bevor sie verwendet werden.  
+\hint
+
+Sie können ja einmal versuchen die Reihenfolge der Funktionen zu vertauschen
+und das Programm zu kompilieren. Dies wird in den meisten Fällen zu einer
+Fehlermeldung des Kompilers führen.
+
+
+\todo{ Impliziter Typ int!}
+\todo{Funktionsprotoyp, Index}
+\todo{Kapitel FAQ einführen: Fehlermeldung}
+
+Wenn uns diese Verhalten nicht gefällt, können wir es durch das Hinzufügen eines 
+\textbf{Funktionsprototyp} ändern.
+\index{Funktionsprototyp}
+\index{Prototyp (Funktion)}
+Ein Funktionsprototyp erlaub es dem Compiler zu erkennen, welche Funktionsnamen,
+Typen und Parameter in unserem Programm verwendet werden, bevor wir die Funktion
+überhaupt aufgeschrieben haben. 
+Dazu müssen wir vor \texttt{main()}  die folgenden Zeilen einfügen. Danach ist die Reihenfolge
+der Funktionsdefinition nicht mehr wichtig.\\
+ACHTUNG: Funktionsprotoypen müssen mit einem Semikolon (;) abgeschlossen werden:
+\hint
+\begin{verbatim}
+  #include <stdio.h>
+  #include <stdlib.h>
+
+  void PrintNewLine (void);
+  void PrintThreeLines (void);
+
+  int main (void)
+  ...
+\end{verbatim}
+
+\section {Programme mit mehreren Funktionen}
+
+Wenn wir uns den Quelltext eines C Programms mit mehreren
+Funktionen anschauen, so ist es verführerisch, diesen von
+oben nach unten durchzulesen (als Menschen lesen wir Texte so).
+
+Das kann allerdings schnell zur Verwirrung führen, da die einzelnen
+Funktionen in der Regel unabhängig voneinander sind. Für das 
+Verständnis ist es deshalb
+besser den Quelltext in der {\bf Reihenfolge der Programmausführung}
+zu lesen.
+
+Die Ausführung beginnt immer mit der ersten Anweisung in {\tt main()},
+unabhängig, davon, wo sich die  {\tt main()}-Funktion im Programm befindet
+(sehr oft ist dies am Ende des Programms).
+Anweisungen werden der Reihe nach, eine nach der anderen ausgeführt,
+bis wir einen Funktionsaufruf erreichen.
+Funktionsaufrufe können wir uns wie eine Umleitung in der Programmausführung
+vorstellen. Anstatt die nächstfolgende Anweisung zu bearbeiten wird die
+Ausführung des Programms mit der ersten Anweisung der aufgerufenen
+Funktion fortgesetzt. Es werden dann alle Anweisungen der Funktion
+ausgeführt und erst danach wird die Programmausführung an die Stelle
+im Programm zurückgekehrt von der wir die Funktion aufgerufen haben.
+
+Das hört sich einfach genug an, allerdings müssen wir bedenken, dass
+eine Funktion wiederum selbst andere Funktionen aufrufen kann.
+So kommt es, dass während wir uns mitten in der  {\tt main()}-Funktion befinden
+die Ausführung plötzlich in  {\tt PrintThreeLines()} fortgesetzt wird und die  Anweisungen
+dort ausgeführt werden. Bei der Ausführung von {\tt PrintThreeLines()} werden wir drei 
+mal unterbrochen um Anweisungen in der Funktion {\tt PrintNewLine()} auszuführen.
+
+Glücklicherweise ist C geschickt darin die Übersicht über die Programmausführung zu behalten. 
+Jedes mal, wenn {\tt PrintNewLine()} abgearbeitet wurde,  setzt das Programm
+genau an der Stelle fort, wo {\tt PrintThreeLine()} verlassen wurde und 
+kehrt schließlich zurück zu {\tt main()} um das Programm erfolgreich
+zu beenden.
+
+Was ist die Moral dieser Geschichte?  Wenn wir ein Programm verstehen wollen
+sollten wir besser nicht von oben nach unten lesen, sondern dem
+Fluss der Programmausführung folgen.
+
+\section {Parameter und Argumente}
+\index{Parameter}
+\index{Argumente}
+
+Einige der eingebauten Funktionen die wir bisher benutzt haben 
+hatten {\bf Parameter}. Ein Parameter ist ein Objekt welches
+die Funktion benötigt um ihre Aufgabe zu erfüllen.
+Wenn wir zum Beispiel den Sinus einer Zahl bestimmen wollen,
+so müssen wir angeben um welche Zahl es sich dabei handelt.
+Demzufolge hat die {\tt sin()}-Funktion einen {\tt double} Wert als Parameter.
+% of the built-in functions we have used have {\bf parameters},
+%which are values that you provide to let the function do its job.  
+
+
+Einige Funktionen besitzen mehr als einen Parameter, wie zum 
+Beispiel die {\tt pow()}-Funktion zu Potenzberechnung,  
+welche zwei {\tt double}s, Basis und Exponent, für die Berechnung 
+benötigt.
+
+Wir müssen weiterhin beachten, dass in allen diesen Fällen nicht 
+nur die Anzahl der Parameter eine Rolle spielt, sondern auch die
+Beachtung des Datentyps wichtig ist.
+Es sollte also nicht überraschen, dass wir in der Funktionsdefinition
+auch den jeweiligen Typ eines Parameters in der Parameterliste
+mit angeben müssen. Ein Beispiel: 
+%Notice that in each of these cases we have to specify not
+%only how many parameters there are, but also what type they
+%are.  So it shouldn't surprise you that when you write a
+%function definition, the parameter list indicates the type of
+%each parameter.  For example:
+
+\begin{verbatim}
+  void PrintTwice (char phil) 
+  {
+      printf("%c%c\n", phil, phil);
+  }
+\end{verbatim}
+%
+Diese Funktion hat einen Parameter, mit Namen {\tt phil}, dieser
+ist vom Typ {\tt char}.  Je nachdem welchen Wert der Parameter 
+währen des Funktionsaufrufs hat (und zu diesem Zeitpunkt
+haben wir keine Idee welcher Wert das ist), dieser Wert wird 
+zwei mal ausgegeben, gefolgt von einem Zeilenumbruch.
+Ich habe den Namen {\tt phil} für den Parameter gewählt um zu
+zeigen, dass der Name des Parameters völlig nebensächlich ist.
+Wir können den Namen frei wählen, meistens ist es sinnvoll  
+anstelle von sinnfreien Namen wie {\tt phil} 'sprechende' Bezeichner zu verwenden.
+
+
+Um diese Funktion in unserem Programm aufzurufen, müssen wir
+einen {\tt char} Wert angeben.
+Unsere {\tt main()}-Funktion könnte zum Beispiel folgendermaßen aussehen:
+
+
+\begin{verbatim}
+  int main (void) 
+  {
+      PrintTwice ('a');
+      return EXIT_SUCCESS;
+  }
+\end{verbatim}
+%
+Der bereitgestellte {\tt char} Wert wird {\bf Argument} genannt und 
+man sagt das Argument wird an die Funktion {\bf übergeben}.  In unserem
+Fall wird der Wert {\tt 'a'} als Argument an die Funktion
+{\tt PrintTwice()} übergeben, wo er zwei mal ausgegeben wird.
+
+Alternativ, hätten wir auch eine {\tt char} Variable deklarieren können und
+diese als Argument benutzen können:
+
+\begin{verbatim}
+  int main (void) 
+  {
+      char argument = 'b';
+      PrintTwice (argument);
+      return EXIT_SUCCESS;
+  }
+\end{verbatim}
+%
+WICHTIG: Wir sollten uns das Folgende gut einprägen: 
+der Name der Variablen ({\tt argument}) die wir als Argument an die 
+Funktion übergeben, hat nichts mit dem Namen des Parameters
+der Funktion ({\tt phil}) zu tun.  Ich möchte das gleich noch einmal wiederholen:
+\hint
+
+\begin{quote}
+
+{\bf Der Name der Variablen die wir als Argument übergeben hat nichts mit dem
+Namen des Parameters zu tun!}
+
+\end{quote}
+
+Die Namen können gleich sein, oder sie können sich unterscheiden.
+Wichtig ist, sie stellen unterschiedliche Objekte (Speicherstellen im
+Hauptspeicher des Rechners) dar und haben nur eine Gemeinsamkeit:
+sie besitzen den gleichen Wert (in unserem Fall das Zeichen {\tt 'b'}).
+
+Die Werte die wir als Argumente übergeben, müssen den gleichen Typ
+haben wie die Parameter der aufgerufenen Funktion.
+Diese Regel ist wichtig, obwohl auch hier C manchmal Argumente automatisch
+von einen Typ in einen anderen umwandelt. 
+Momentan ist es aber wichtig die generelle Regel zu kennen und
+sich später um die Ausnahmen zu kümmern.
+%important, but it is sometimes confusing because C sometimes
+%converts arguments from one type to another automatically.  For
+%now you should learn the general rule, and we will deal with
+%exceptions later.
+
+\section {Parameter und Variablen sind lokal gültig}
+\index{Variablen!lokale}
+\index{Lokale Variablen}
+
+
+Parameter und Variablen existieren nur innerhalb ihrer
+eigenen Funktionen in denen sie definiert wurden.  
+Innerhalb von {\tt main()} gibt es kein {\tt phil}.
+Wenn wir dort versuchen  {\tt phil} zu verwenden wird sich 
+der Kompiler beschweren.
+Gleichfalls gilt, innerhalb von {\tt PrintTwice()} können wir nicht
+auf das Objekt {\tt argument} zugreifen.
+
+Variablen dieser Art nennt man {\bf lokale Variablen}.  
+Um die Übersicht über alle Funktionsparameter und lokalen
+Variablen zu behalten ist es nützlich ein so genanntes 
+{\bf Stack Diagramm} zu zeichnen.  
+Stack Diagramme zeigen ähnlich wie Zustandsdiagramme
+den Wert jeder Variablen an. Der Unterschied besteht darin,
+dass in Stack Diagrammen die Variablen innerhalb größerer
+Kästchen gezeichnet werden. Diese Kästchen stellen die
+Funktionen dar, zu denen diese Variablen gehören.
+So sieht das Stack Diagram für {\tt PrintTwice()} 
+folgendermaßen aus:
+
+\index{Diagramm!Stack}
+\index{Stackdiagramm}
+\todo{Stackdiagramm umdrehen, auch an anderen Stellen}
+\vspace{0.1in}
+\centerline{\epsfig{figure=figs/stack.pdf,width=6cm}}
+\vspace{0.1in}
+%
+\todo{heißt das bei C Instanz? Kopie?}
+
+Jedes mal, wenn eine Funktion aufgerufen wird, wird die Programmausführung
+in der aufrufenden Funktion unterbrochen und zur aufgerufenen
+Funktion gesprungen. Die aufgerufene Funktion können wir uns als eigenständiges Exemplar
+des Programmcodes der Funktion im Arbeitsspeicher des Computers vorstellen.
+Jede Funktion enthält ihre eigenen Parameter und lokalen Variablen und ist unabhängig
+von allen anderen Funktionen des Programms. Wird die aufgerufene Funktion beendet,
+kehrt das Programm zur aufrufenden Funktion zurück.
+
+Im Diagramm wird jede aufgerufene Funktion durch einen
+Kasten mit dem Funktionsnamen an der Außenseite und den
+Variablen und Parametern im Inneren dargestellt.
+
+In unserem Beispiel hat {\tt main()} eine lokale Variable {\tt argument}, und
+keine Parameter.  {\tt PrintTwice()} hat keine lokalen Variablen aber 
+einen Parameter mit Namen {\tt phil}.
+
+Ein Stack Diagramm ist ein dynamische Diagramm. Im Programmablauf
+werden Funktionen aufgerufen und wieder beendet.
+Ein Stack Diagramm stellt also einen bestimmten Zeitpunkt in der 
+Programmabarbeitung dar. 
+
+
+\section {Funktionen mit mehreren Parametern}
+\index{Parameter!mehrere}
+\index{Funktion!mehrere Parameter}
+%\index{class!Time}
+
+Die Syntax für die Deklaration und den Aufruf von Funktionen mit
+mehreren Parametern ist die Quelle vieler Programmierfehler. Zuerst
+müssen wir daran denken, dass wir bei der Definition eine Funktion 
+den Typ jedes Parameters der Funktion mit angeben müssen. Zum Beispiel:
+
+\begin{verbatim}
+  void PrintTime (int hour, int minute) 
+  {
+    printf ("%i", hour);
+    printf (":");
+    printf ("%i", minute);
+  }
+\end{verbatim}
+%
+Es erscheint verlockend hier einfach die zweite Typangabe 
+wegzulassen und {\tt (int hour, minute)} zu schreiben.
+Diese Schreibweise ist leider nur bei der Deklaration von Variablen
+erlaubt und nicht für Parameter.
+
+Eine weiteres Missverständnis besteht darin, dass wir 
+den Typ der Parameter angeben,
+den Typ der Argumente aber nicht angeben müssen, ja sogar
+einen Fehler machen, wenn wir den Typ der Argumente 
+mit aufschreiben.
+Der folgende Code ist falsch!
+
+\begin{verbatim}
+    int hour = 11;
+    int minute = 59;
+    PrintTime (int hour, int minute);   /* WRONG! */
+\end{verbatim}
+%
+Der Kompiler kennt den Typ von {\tt hour} und {\tt minute}. 
+Wir haben ihn bei der Deklaration angegeben. 
+Es ist daher nicht nötig und erlaubt den Typ mit anzugeben,
+wenn wir Variablen als Argumente einer Funktion verwenden.
+Die korrekte Syntax lautet: {\tt PrintTime (hour, minute);}
+
+\section {Funktionen mit Ergebnissen}
+\index{Funktionen mit Ergebnissen}
+\index{Funktionen!Ergebnisse}
+
+Es sollte mittlerweile aufgefallen sein, dass einige Funktionen die wir
+benutzen (wie zum Beispiel die mathematischen Funktionen) Ergebnisse
+liefern. Andere Funktionen wie {\tt PrintNewLine()} führen bestimmte
+Aktionen durch, liefern aber kein Ergebnis an die aufrufende Funktion zurück.
+Dieses Verhalten lässt einigen Fragen offen:
+
+\begin{itemize}
+
+\item Was passiert, wenn wir eine Funktion aufrufen und
+danach nichts mit dem Resultat der Funktion machen
+(wir weisen es keiner Variablen zu und wir nutzen
+es auch nicht als Teil eines größeren Ausdrucks)?
+%do anything with the result (i.e. you don't assign it to
+%a variable or use it as part of a larger expression)?
+
+\item Was passiert, wenn wir eine Funktion die kein Resultat
+liefert, als Teil eines Ausdrucks verwenden, wie zum Beispiel
+{\tt PrintNewLine() + 7} ?
+
+\item Können wir auch Funktionen schreiben, die uns Resultate
+liefern, oder müssen wir uns mit Funktionen vom Typ 
+{\tt PrintNewLine()} und {\tt PrintTwice()} begnügen?
+
+\end{itemize}
+
+Die Antwort auf die dritte Frage ist ``ja, wir können Funktionen 
+schreiben welche ein Resultat zurückgeben,'' und wir werden
+das in einigen Kapiteln auch tun. 
+Ich überlasse es ihnen die Antworten auf die ersten beiden 
+Fragen durch Probieren herauszufinden. Jedes mal, wenn die Frage auftaucht
+was in der Programmiersprache C erlaubt und möglich ist,
+ist es eine gute Ideen den C-Compiler zu fragen. 
+
+
+\section{Glossar}
+
+\begin{description}
+
+\item[Konstante (engl: \emph{constant}):] Eine bennante Speicherstelle, ähnlich einer Variable.
+Im Interschied zu Variaben können Konstanten nicht mehr verändert werden, nachdem ihr Wert
+festgelegt wurde: \\z.B. \texttt{\#define PI 3.141592}
+
+\item[Fließkomma (engl: \emph{floating-point}):] Der Typ einer Variable (oder eines Werts) welche
+reelle Zahlen speichern kann.  Es existieren mehrere Fließkommatypen 
+in C; in diesem Buch verwenden wir meistens {\tt double}.
+
+\item[Initialisierung (engl: \emph{initialization}):]  Eine Anweisung welche eine neue Variable
+definiert und gleichzeitig dieser Variable einen Wert zuweist.
+
+\item[Definition (engl: \emph{definition}):] Eine Deklaration (siehe \ref{Glossary:Declaration}) gibt 
+nur bekannt, das eine Variable oder eine Funktion existiert (Funktionsprototyp). Eine Definition 
+spezifiziert die Variable und Funktion und legt sie im Speicher an. Es darf dabei mehrere Deklarationen aber
+nur eine Definition geben.
+
+%\item[Instanz (engl: \emph{instance}):] Eine Instanz ist ein eigenständiges Exemplar des Programmcodes einer 
+%Funktion im Arbeitsspeicher des Computers.
+%Jede Instanz einer Funktion enthält ihre eigenen Parameter und lokalen Variablen.
+%Instanzen werden beim Funktionsaufruf erzeugt und existieren nur währen der Abarbeitung
+%der Funktion. 
+
+\item[Funktion (engl: \emph{function}):]  Eine eigenständige Folge von Anweisungen die über einen
+Funktionsnamen aufgerufen werden kann. Funktionen können Parameters besitzen und einen Wert
+an die aufrufenden Funktion zurückgeben - müssen aber nicht.
+
+\item[Parameter (engl: \emph{parameter}):]  Eine Variable in einer Funktion, deren Wert 
+beim Funktionsaufruf durch die aufrufende Funktion bestimmt wird.\\
+Der Name und Wert des Parameters ist nur innerhalb der Funktion gültig!
+
+\item[Argument (engl: \emph{argument}):]  Der Ausdruck (Wert), mit dem die Funktion aufgerufen wird.
+Argumente müssen in Typ und Reihenfolge mit den Parametern der Funktion übereinstimmen.
+
+
+
+\item[Aufruf (engl: \emph{call}):]  führt dazu, dass eine Funktion ausgeführt wird.
+
+\index{Gleitkommazahl}
+\index{Funktion}
+\index{Parameter}
+\index{Argument}
+\index{Aufruf}
+\index{Initialisierung}
+\index{Instanz}
+
+
+\end{description}
+
+
+\section{Übungsaufgaben}
+\setcounter{exercisenum}{0}
+
+\ifthenelse {\boolean{German}}{ \input{exercises/Exercise_3_german}}
+{\input{exercises/Exercise_3_english}}
+
+

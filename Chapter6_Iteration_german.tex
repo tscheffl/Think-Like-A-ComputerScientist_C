@@ -1,0 +1,940 @@
+%!TEX root = Main_german.tex
+
+% LaTeX source for textbook ``How to think like a computer scientist''
+% Copyright (C) 1999  Allen B. Downey
+
+% This LaTeX source is free software; you can redistribute it and/or
+% modify it under the terms of the GNU General Public License as
+% published by the Free Software Foundation (version 2).
+
+% This LaTeX source is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% General Public License for more details.
+
+% Compiling this LaTeX source has the effect of generating
+% a device-independent representation of a textbook, which
+% can be converted to other formats and printed.  All intermediate
+% representations (including DVI and Postscript), and all printed
+% copies of the textbook are also covered by the GNU General
+% Public License.
+
+% This distribution includes a file named COPYING that contains the text
+% of the GNU General Public License.  If it is missing, you can obtain
+% it from www.gnu.org or by writing to the Free Software Foundation,
+% Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+\selectlanguage{ngerman}
+\chapter{Iteration}
+
+\section{Zuweisung unterschiedlicher Werte}
+\index{Zuweisung}
+\index{Anweisung!Zuweisung}
+\index{Zuweisung unterschiedlicher Werte}
+
+
+Ich habe noch nicht darüber gesprochen, aber es ist durchaus
+erlaubt einer Variablen mehr als einmal einen Wert zuzuweisen.
+Der Effekt der zweiten Zuweisung besteht darin, dass der
+\emph{alte} Wert der Variablen durch einen \emph{neuen} Wert ersetzt wird:
+%
+% haven't said much about it, but it is legal in C to
+%make more than one assignment to the same variable.  The
+%effect of the second assignment is to replace the old value
+%of the variable with a new value.
+
+\begin{verbatim}
+    int fred = 5;
+    printf ("%i", fred);
+    fred = 7;
+    printf ("%i", fred);
+\end{verbatim}
+%
+Die Ausgabe dieses Programms ist {\tt 57}. \\
+Wenn {\tt fred} zum ersten Mal ausgegeben wird, hat die Variable den Wert 5.
+Zum Zeitpunkt der zweiten Ausgabe hat die Variable den Wert 7.
+
+Diese Art von {\bf aufeinanderfolgenden Zuweisungen} ist der Grund warum
+ich Variablen als ein {\em Container} für Werte bezeichnet habe.  
+Wenn wir einer Variablen einen Wert zuweisen, wird der Inhalt
+dieses Containers verändert, wie in der folgenden Grafik dargestellt:
+
+\vspace{0.1in}
+\centerline{\epsfig{figure=figs/assign2.eps}}
+\vspace{0.1in}
+
+Wenn wir mehrere Zuweisungen zu einer Variable vornehmen, ist es besonders wichtig,
+dass wir zwischen der Zuweisungsanweisung und der Anweisung, welche
+die Gleichheit von Werten testet unterscheiden.
+
+Die Programmiersprache C benutzt das Symbol {\tt =} für die Zuweisung von Werten.
+Es ist daher verführerisch, die Anweisung {\tt a = b}
+als eine Überprüfung der Gleichheit der Variablen {\tt a} und {\tt b} 
+zu interpretieren. Was nicht der Fall ist! 
+
+Zuerst einmal können wir feststellen, dass die Gleichheitsoperation 
+kommutativ ist und eine Zuweisungsoperation nicht. In der 
+Mathematik gilt:
+
+\vskip -1em
+\begin{displaymath}
+\mathrm{Wenn}\  a = 7\mathrm{ ,}\  \mathrm{dann }\ 7 = a
+\end{displaymath}
+
+In C ist  {\tt a = 7;} eine gültige Anweisung. Wenn wir aber
+die Anweisung {\tt 7 = a;} in unser Programm schreiben
+erhalten wir einen Fehler. Bei der linken Seite einer Zuweisung
+muss es sich um einen Ort im Speicher des Computers  
+handeln.
+
+Weiterhin ist in der Mathematik ein Ausdruck der Gleichheit
+zu jeder Zeit wahr. Wenn  $a = b$ ist, dann wird $a$ \textbf{immer} 
+den gleichen Wert besitzen wie $b$.
+In C, kann eine Zuweisung zwei Variablen den gleichen Wert
+geben, aber die Werte der Variablen sind damit nicht für alle
+Zeit festgelegt und können sich ändern!
+
+\begin{verbatim}
+    int a = 5;
+    int b = a;     /* a und b haben jetzt den gleichen Wert */
+    a = 3;         /* a und b sind nicht länger gleich */
+\end{verbatim}
+%
+Die dritte Zeile ändert den Wert von {\tt a}, der Wert der 
+Variablen {\tt b} ist davon aber nicht betroffen. Ab diesem 
+Zeitpunkt im Programm sind die Variablen nicht länger gleich.
+In vielen anderen Programmiersprachen wird deshalb für 
+die Wertzuweisung an eine Variable ein anderes Symbol (\,{\tt :=}\, oder \, {\tt <-}\,) und nicht das
+Gleichheitszeichen benutzt.
+Damit wird die Verwechslungsgefahr zwischen den Operationen
+verringert.
+
+Obwohl die mehrfache Zuweisung von unterschiedlichen Werten 
+an eine Variable oft sehr nützlich sein kann, sollten wir diese
+Art der Wertzuweisung mit Vorsicht benutzen.
+Wenn sich der Wert einer Variablen ständig an unterschiedlichen
+Stellen in einem Programm verändert, so wird das Lesen und
+die Fehlersuche in dem Programm deutlich erschwert. \hint
+
+\section{Iteration - Wiederholungen im Programm}
+\index{Iteration}
+
+Eine der wichtigsten Aufgaben die durch Computer übernommen 
+werden ist die Automatisierung ständig wiederkehrender Aufgaben.
+Die fehlerfreie Wiederholung identischer oder sehr ähnlicher 
+Aufgaben ist ein Gebiet auf dem  Computer den menschlichen
+Benutzern deutlich überlegen sind.
+
+Wir haben im Kapitel  \ref{recursion} bereits Funktionen 
+wie  {\tt PrintLines()} und {\tt Countdown()} kennengelernt, die mit 
+Hilfe der Rekursion wiederkehrende Aufgaben bewältigt haben.
+Dabei wurden Wiederholungen durch die ineinander geschachtelte
+Ausführung von Funktionen erreicht.
+
+Wir werden jetzt eine neue Art der Ausführung von Wiederholungen
+kennenlernen bei der mit Hilfe von Kontrollstrukturen die Ausführung
+gesteuert werden kann. 
+Diese Art der wiederholten Ausführung bezeichnet man auch als
+{\bf Iteration}. 
+Mit Hilfe der  {\tt while} und der {\tt for}-Anweisung
+können wir die Wiederholung von Anweisungsblöcken genau steuern.
+
+
+\section{Die {\tt while}-Anweisung}
+\index{Anweisung!while}
+\index{while Anweisung}
+
+Ich möchte kurz an einem Beispiel zeigen, wie wir die
+bereits bekannte {\tt Countdown()} Funktion mittels einer  {\tt while}-Anweisung umschreiben können:
+
+\begin{verbatim}
+  void Countdown (int n) 
+  {
+      while (n > 0) 
+      {
+          printf ("%i\n", n);
+          n = n-1;
+      }
+      printf ("Blastoff!\n");
+  }
+\end{verbatim}
+%
+Was auffällt ist die gute Lesbarkeit des Quelltextes der
+{\tt while}-Anweisung, welcher sich fast von selbst erklärt. 
+Die Anweisung hat folgende Bedeutung:  
+``Solange (engl: \textit{while}) {\tt n} größer als Null ist, 
+geben wir den aktuellen Wert von {\tt n} auf
+dem Bildschirm aus. Danach verringern wir den 
+Wert von  {\tt n} um 1.  Wenn  {\tt n} den Wert Null erreicht hat,
+wird die Schleife verlassen und das Wort ``Blastoff!''
+auf dem Bildschirm ausgegeben.
+
+Etwas formeller können wir die Arbeitsweise der {\tt while}-Anweisung
+folgendermaßen beschreiben:
+
+\begin{enumerate}
+
+\item  Die in Klammern angegebene Bedingung wird ausgewertet und
+der Wahrheitswert {\tt true} oder {\tt false} ermittelt.
+
+\item Wenn die Bedingung falsch ist, wird die {\tt while}-Anweisung verlassen
+und die Ausführung des Programms mit der nächstfolgenden Anweisung fortgesetzt.
+
+\item Wenn die Bedingung wahr ist, werden alle Anweisungen im Anweisungsblock
+der {\tt while}-Anweisung nacheinander ausgeführt und am Ende des Blocks wird zu Schritt
+1 zurückgekehrt.
+
+\end{enumerate}
+
+\index{Schleifen}
+\index{Schleife!Körper}
+\index{Körper!Schleife}
+
+
+Diese Art des Programmablaufs wird auch als eine {\bf Schleife} bezeichnet,
+weil der dritte Schritt im Ablauf wieder auf den ersten Schritt zurückführt. 
+
+Die Anweisungen im Inneren der Schleife bezeichnet man
+als den {\bf Schleifenkörper}.
+Sollte es der Fall sein, dass gleich beim ersten Überprüfen der Bedingung der
+Wert  {\tt false} ermittelt wird, so werden die Anweisungen im Schleifenkörper 
+überhaupt nicht ausgeführt.
+
+\index{Schleifen!endlos}
+\index{Endlosschleifen}
+
+Üblicherweise wird die Ausführungshäufigkeit der Schleife durch eine
+Kontrollvariable gesteuert.
+Der Körper einer Schleife sollte den Wert der 
+Kontrollvariablen so ändern, dass schließlich irgendwann
+die Bedingung den Wert  {\tt false} erhält und die Schleife
+beendet wird. Anderenfalls würde die Schleife unendlich oft
+wiederholt werden. Eine derartige Schleife bezeichnet man dann
+als  {\bf Endlosschleife}. 
+Informatiker finden daher  zum Beispiel den Aufdruck 
+auf einigen Shampoo-Flaschen sehr amüsant:  ``Einseifen, Ausspühlen, Wiederholen'' 
+ist eine Endlosschleife.
+
+Im Fall von {\tt Countdown()} können wir beweisen, dass die
+Schleife irgendwann beendet sein muss, weil wir
+wissen dass der Wert von {\tt n} endlich ist und wir sehen
+können, dass mit jedem Schleifendurchlauf (jeder {\bf Iteration}) der 
+Wert von {\tt n} stetig kleiner wird.
+Irgendwann wird dieser Wert also Null sein und die Schleife endet. 
+
+Nicht in allen Fällen lässt sich das so einfach ermitteln:
+
+\begin{verbatim}
+  void Sequence (int n) 
+  {
+      while (n != 1) 
+      {
+          printf ("%i\n", n);
+          if (n%2 == 0)       /* n ist gerade */
+          {          
+              n = n / 2;
+          } 
+          else                /* n ist ungerade */
+          {                  
+              n = n*3 + 1;
+          }
+      }
+  }
+\end{verbatim}
+%
+Die Bedingung dieser Schleife ist {\tt n != 1}, dass heißt die 
+Schleife wird fortgesetzt bis  {\tt n} den Wert 1 erhält, was dazu
+führt, dass die Bedingung falsch wird.\\
+Bei jeder Iteration gibt das Programm den Wert von {\tt n} aus und
+prüft dann, ob {\tt n} gerade oder ungerade ist.
+Ist es gerade, so wird der Wert von 
+{\tt n} durch Zwei geteilt.  Ist {\tt n} ungerade ermittelt sich der neue Wert
+von {\tt n} aus der  Formel $3n+1$.  
+
+Nehmen wir an, der Startwert der Funktion  (das Argument welches der
+Funktion  {\tt Sequence()} übergeben wurde) ist 3. Damit ergibt sich die
+folgende Sequenz:\\
+3, 10, 5, 16, 8, 4, 2, 1.
+
+Weil sich nun der Wert von {\tt n} manchmal vergrößert und manchmal 
+verringert, gibt es keinen naheliegenden Beweis, dass {\tt n} 
+überhaupt jemals den Wert  1 erreichen wird (und damit das 
+Programm beendet würde).
+Für einige bestimmte Werte von {\tt n} lässt sich beweisen, dass
+die Schleife endlich ist. Ist zum Beispiel der Startwert von {\tt n}  
+eine Zweierpotenz, so ist jedes Zwischenresultat gerade und
+die auszuführende Division führt geradewegs zum Ergebnis 1. 
+In unserem vorigen Beispiel stellen die letzten 5 Ziffern eine solche Sequenz
+dar, die mit dem Wert 16 beginnt.
+
+Wenn wir aber herausfinden wollen, ob diese Schleife für alle nur 
+denkbaren Werte von {\tt n} endlich ist, dann stehen wir vor einer
+sehr großen Herausforderung.
+Bisher ist es jedenfalls noch niemandem gelungen dies zu 
+Beweisen  {\em oder} den Gegenbeweis anzutreten!
+
+\section{Tabellen}
+\index{Tabellen}
+\index{Logarithmus}
+\index{Sinus}
+\index{Kosinus}
+
+Eine Sache die sich mit Hilfe von Schleifen leicht umsetzen lässt, ist 
+die Erzeugung von tabellarischen Daten. 
+
+Bevor Menschen Computer zur Verfügung hatten,
+mussten Logarithmen, Sinus, Kosinus und andere
+mathematische Funktionen von Hand berechnet werden.
+Um diese Berechnungen zu vereinfachen wurden Bücher mit
+Tabellen der Funktionswerte von häufig genutzten Funktionen
+gedruckt.
+Die Erstellung dieser Tabellen war langwierig und langsam
+und die Resultate waren oftmals fehlerhaft.
+
+Als schließlich Computer verfügbar wurden, war die erste
+Reaktion der Mathematiker, 
+ ``Das ist großartig!  Von jetzt ab werden wir die Tabellen
+ mit Hilfe des Computer berechnen und dann gibt es keine Fehler
+ mehr.''  Diese Voraussage stellte sich als
+richtig heraus, war aber nicht sehr visionär, denn
+kurze Zeit später waren Computer und Taschenrechner 
+so weit verbreitet, dass niemand mehr die Tabellen benutzt
+um Funktionswerte zu ermitteln.
+
+Na ja, jedenfalls meistens.  
+Für einige Berechnungen benutzen selbst Computer Tabellen,
+um Näherungswerte zu bestimmen. Mit diesen Näherungswerten
+führen sie dann weitere Berechnungen durch, um das Ergebnis
+zu verbessern.
+Leider ist es aber auch schon vorgekommen, dass in diesen 
+internen Tabellen Fehler enthalten waren. Ein bekanntes
+Beispiel dafür war der Fehler in den Tabellen des ersten Intel Pentium
+Prozessors, welcher dazu führte, dass manche Ergebnisse 
+der Division von Fließkommazahlen nicht korrekt waren.
+
+\index{Division!Fließkommazahlen}
+
+Obwohl eine  ``Logarithmentafel'' heutzutage nicht mehr so nützlich
+ist wie früher, stellt ihre Berechnung immer noch ein gutes Beispiel für
+die Anwendung iterativer Algorithmen dar.
+Das folgende Programm stellt in der linken Spalte eine Folge von
+Werten und in der rechten Spalte die dazugehörigen Logarithmen dar.
+  
+
+\begin{verbatim}
+    double x = 1.0;
+    while (x < 10.0) 
+    {
+        printf ("%.0f\t%f\n", x ,log(x));
+        x = x + 1.0;
+    }
+\end{verbatim}
+%
+Die Zeichenfolge \verb+\t+ steht dabei für das {\bf Tab}-Zeichen.
+Die Zeichenfolge \verb+\n+ repräsentiert das Zeichen für den Zeilenumbruch (engl: \textit{newline}).
+Diese Zeichenfolgen sind sogenannte Ersetzungszeichen für 
+Zeichen aus dem ASCII-Zeichensatz, die sich nicht direkt darstellen lassen.
+Sie können an jeder beliebigen Stelle in einem String stehen -- 
+in unserem Beispiel sind sie die einzigen Zeichen im Formatierungsstring.
+
+Das {\bf Tab}-Zeichen veranlasst den Cursor um eine bestimmte Anzahl von
+Zeichen nach rechts zu rücken, bis der nächste {\bf Tab Stop} erreicht ist.
+Normalerweise beträgt dieser Abstand 8 Zeichen. Wie wir gleich sehen werden,
+sind Tabulatoren sehr nützlich um die Spalten einer Tabelle gleichmäßig auszurichten.
+Ein Zeilenumbruch führt dazu, dass der Cursor auf die nächste Bildschirmzeile
+bewegt wird.
+
+Die Ausgabe des Programms sieht folgendermaßen aus:
+
+\begin{verbatim}
+    1      0.000000
+    2      0.693147
+    3      1.098612
+    4      1.386294
+    5      1.609438
+    6      1.791759
+    7      1.945910
+    8      2.079442
+    9      2.197225
+\end{verbatim}
+%
+Wenn Ihnen diese Werte seltsam vorkommen, so erinnern Sie sich bitte
+daran, dass die {\tt log}-Funktion die Basis $e$ benutzt. 
+Da Zweierpotenzen in der Informatik so eine große Rolle spielen,
+kommt es oft vor, dass wir Logarithmen zur Basis 2 finden wollen.
+Wir können dazu folgende Formel benutzen:
+
+\[ \log_2 x = \frac {log_e x}{log_e 2} \]
+%
+Wenn wir die Ausgabeanweisung wie folgt ändern,
+
+\begin{verbatim}
+      printf ("%.0f\t%f\n", x, log(x) / log(2.0));
+\end{verbatim}
+%
+ergibt sich:
+
+\begin{verbatim}
+    1      0.000000
+    2      1.000000
+    3      1.584963
+    4      2.000000
+    5      2.321928
+    6      2.584963
+    7      2.807355
+    8      3.000000
+    9      3.169925
+\end{verbatim}
+%
+Wir können erkennen, dass 1, 2, 4 und 8 Zweierpotenzen sind, weil
+ihre Logarithmen zur Basis 2 runde Zahlen sind.  Wenn wir 
+die Logarithmen weiterer Zweierpotenzen ermitteln wollen, können
+wir das Programm folgendermaßen verändern:
+
+\begin{verbatim}
+    double x = 1.0;
+    while (x < 100.0) 
+    {
+        printf ("%.0f\t%.0f\n", x, log(x) / log(2.0));
+        x = x * 2.0;
+    }
+\end{verbatim}
+%
+Statt bei jedem Schleifendurchlauf einen festen Betrag zu {\tt x} 
+hinzuzuaddieren, was zu einer {\bf arithmetischen Folge} führt,
+multiplizieren wir {\tt x} mit einem Wert, woraus eine
+ {\bf geometrischen Folge} resultiert.
+ 
+ \newpage
+Das Resultat ist:
+
+\begin{verbatim}
+    1      0
+    2      1
+    4      2
+    8      3
+    16     4
+    32     5
+    64     6
+\end{verbatim}
+%
+Auffallend ist die exakte Ausrichtung der Spalten auch bei größeren Werten.
+Da wir zwischen den Spalten tab-Zeichen verwenden, hängt
+die Position der zweiten Spalte nicht von der Anzahl der Ziffern
+in der ersten Zeile ab.
+
+Logarithmentafeln mögen heutzutage nicht mehr sehr nützlich sein.
+Die Kenntnis der Zweierpotenzen ist allerdings für Informatiker und
+Elektroniker nach wie vor extrem wichtig!
+Modifizieren Sie daher das Programm, so dass es alle Zweierpotenzen
+bis zum Wert 65536 (das ist $2^{16}$) ausgibt. 
+Drucken Sie das Ergebnis aus und prägen Sie sich die Werte ein.
+
+\section{Zweidimensionale Tabellen}
+\label{Two-dimensional tables}
+\index{Tabellen!Zweidimensional}
+
+Eine zweidimensionale Tabelle ist eine Tabelle, bei der man
+die Zeile und Spalte auswählt und den Wert am Kreuzungspunkt
+ausliest. Ein gutes Beispiel dafür ist eine Multiplikationstafel.
+
+Angenommen, wir wollen eine Multiplikationstafel für
+alle Werte von 1 bis 6 erstellen.
+Ein guter Anfang könnte darin bestehen, dass
+wir eine einfache Schleife schreiben, welche
+alle Vielfachen von 2 in einer Zeile ausgibt:
+
+\begin{verbatim}
+    int i = 1;
+    while (i <= 6) 
+    {
+        printf("%i   ", i*2);
+        i = i + 1;
+    }
+    printf("\n");
+\end{verbatim}
+%
+In der ersten Zeile wird eine Variable namens {\tt i} initialisiert.
+Diese Variable ist die {\bf Schleifenvariable}, die uns als
+Zähler dient. Während der Ausführung der Schleife erhöht
+sich der Wert von  {\tt i} von 1 bis 6. Wenn {\tt i} 
+den Wert 7 erreicht, wird die Schleife abgebrochen.
+Bei jedem Schleifendurchlauf geben wir den Wert von
+{\tt i*2}, gefolgt von drei Leerzeichen aus. 
+Indem wir in der ersten Ausgabeanweisung einfach die 
+Zeichenfolge \verb+\n+  weg lassen, werden alle auszugebenden
+Werte nacheinander in einer Bildschirmzeile ausgegeben.
+
+\index{Schleifenvariable}
+\index{Variable!Schleife}
+
+Das Programm erzeugt folgende Ausgabe:
+
+\begin{verbatim}
+    2   4   6   8   10   12
+\end{verbatim}
+%
+So weit, so gut. Der nächste Schritt besteht darin die Funktionalität 
+des Programms zu {\bf kapseln} und 
+zu {\bf verallgemeinern}.
+
+\section {Modularisierung und Verallgemeinerung}
+%Daten-kapselung und Verallgemeinerung
+
+\emph{Modularisierung} bedeutet, dass wir unseren
+Quellcode in mehrere separate Programmabschnitte (Module) aufteilen.
+In C werden diese Module als Funktionen realisiert. Indem wir unseren
+Code nehmen und in einer Funktion verpacken, können wir von allen 
+Vorteilen profitieren, die uns Funktionen bei der Programmentwicklung bieten. 
+Unsere Programme werden übersichtlicher und im Laufe der Zeit entsteht
+unsere eigene kleine Funktionsbibliothek die wir immer wieder benutzen und
+erweitern können.
+
+Wir haben mit  {\tt PrintParity()} in Section~\ref{alternative} und {\tt
+IsSingleDigit()} in Section~\ref{bool}  bereits zwei Beispiele für modularisierte Programme
+kennengelernt.
+
+\emph{Verallgemeinerung} bedeutet, dass wir aus einer spezifischen, auf ein bestimmtes
+Problem bezogenen Lösung, eine allgemeinere Lösung entwickeln, die
+es uns erlaubt mehrere Probleme der gleichen Klasse zu lösen.
+Zum Beispiel kann unser Programm derzeit Vielfache von 2 ausgeben.
+Wir wollen unser Programm verallgemeinern, so dass wir
+die Vielfachen einer beliebigen ganzen Zahl ausgeben können.
+
+\index{Modularisierung}
+\index{Verallgemeinerung}
+
+Ich habe also unsere Schleife als eine Funktion umgeschrieben. 
+Gleichzeitig haben wir die Eigenschaft der Funktion verallgemeinert,
+so dass es jetzt möglich ist, die Vielfachen von {\tt n} auszugeben:
+
+\begin{verbatim}
+    void PrintMultiples (int n)
+    {
+        int i = 1;
+        while (i <= 6) 
+        {
+            printf("%i   ", i*n);
+            i = i + 1;
+        }
+        printf("\n");
+    }
+\end{verbatim}
+%
+Um die Schleife zu modularisieren, habe ich
+einfach die erste Zeile hinzugefügt. Diese deklariert den Funktionsnamen 
+und den Rückgabewert der Funktion. Der Rest der Schleife wird
+in eine Blockanweisung geschrieben.
+
+Um die Funktion zu verallgemeinern ist es notwendig
+einen Funktionsparameter hinzuzufügen. Dieser gibt 
+den Wert an, der in der Schleife vervielfacht wird.
+Im Schleifenkörper ersetzen wir dann einfach den
+Wert 2 mit dem Parameter {\tt n}.
+
+Wenn wir diese Funktion mit dem Argument 2 aufrufen, erhalten wir
+die gleiche Ausgabe wie zuvor. Mit Argument 3, sieht die Ausgabe folgendermaßen
+aus:
+
+\begin{verbatim}
+    3   6   9   12   15   18
+\end{verbatim}
+%
+und Argument 4, ergibt die folgende Ausgabe:
+
+\begin{verbatim}
+    4   8   12   16   20   24 
+\end{verbatim}
+%
+Mittlerweile sollte klar werden, wie wir weiter vorgehen müssen,
+um eine komplette Multiplikationstafel zu drucken.
+Wir rufen einfach {\tt PrintMultiples()} mehrfach mit unterschiedlichen
+Argumenten auf. Am einfachsten ist es, wenn wir dazu wieder
+eine Schleife benutzen.
+
+\begin{verbatim}
+    int i = 1;
+    while (i <= 6) 
+    {
+        PrintMultiples (i);
+        i = i + 1;
+    }    
+\end{verbatim}
+%
+Es ist auffallend, wie sehr die äußere Schleife der 
+inneren Schleife von {\tt PrintMultiples()} ähnelt.  
+Ich habe nichts weiter gemacht, als den Aufruf der \texttt{printf()}-Funktion
+durch den Funktionsaufruf von {\tt PrintMultiples()} zu ersetzen.
+
+Die Ausgabe des Programms sieht folgendermaßen aus:
+
+\begin{verbatim}
+    1   2   3   4   5   6   
+    2   4   6   8   10   12   
+    3   6   9   12   15   18   
+    4   8   12   16   20   24   
+    5   10   15   20   25   30   
+    6   12   18   24   30   36   
+\end{verbatim}
+%
+Wir sehen eine (leicht unordentliche) Multiplikationstafel.  
+Wenn Sie die Unordnung stört, dann können Sie versuchen die Leerzeichen
+zwischen den Spalten der Ausgabe durch \textbf{Tab}-Zeichen zu ersetzen
+und damit die Anordnung zu verbessern.
+
+\section{Funktionen}
+\index{Funktionen}
+
+Im letzte Abschnitt habe ich von  den 
+\emph{Vorteilen, die uns Funktionen bei der Programmentwicklung bieten} gesprochen.
+Wahrscheinlich haben Sie sich schon gefragt, was genau ich wohl damit gemeint haben
+könnte. 
+Ich möchte deshalb noch einmal genauer auf den Vorteil des Einsatzes von Funktionen bei
+der Programmentwicklung eingehen.
+
+Die Aufteilung eines Programms in Funktionen hat den Vorteil, dass wir jedes Modul unabhängig vom
+restlichen Quellcode unseres Programms entwickeln und testen können.
+Möglicherweise können wir diese Funktionen auch später in anderen
+Projekten einfach weiterverwenden. Außerdem sind modularisierte Programme
+viel leichter zu durchschauen, als wenn wir alle Anweisungen einfach hintereinander
+in die {\tt main()}-Funktion schreiben würden:
+
+\begin{itemize}
+
+\item Indem wir einer konzeptionell zusammengehörenden Folge von Anweisungen einen 
+Namen geben, machen wir unser Programm einfacher lesbar. Gleichzeitig wird die 
+Fehlersuche einfacher.
+
+\item Wenn wir ein langes Programm in Teile zerlegen,
+können wir diese Teile einzeln entwickeln und testen. Anschließend
+können wir die Funktionen wieder zu einem funktionsfähigen Programm
+zusammensetzen.
+
+\item Funktionen erlauben den einfachen Einsatz von rekursiver und iterativer Programmierung.
+
+\item Gut konstruierte Funktionen können in vielen künftigen Programmen
+weiter verwendet werden (die Bibliotheksfunktionen von C sind solche Funktionen).
+Nachdem wir eine Funktion geschrieben und vorhandene Fehler
+entfernt haben, können wir sie einfach immer wieder verwenden.
+
+\end{itemize}
+
+\section{Noch mehr Modularisierung}
+\index{Modularisierung}
+\index{Programmentwicklung!Modularisierung}
+
+%To demonstrate encapsulation again, I'll take the code
+%from the previous section and wrap it up in a function:
+Um ein weiteres Beispiel für die Modularisierung von 
+Programmen zu geben, werde ich jetzt den Programmcode
+aus dem letzten Beispiel nehmen und in einer Funktion
+kapseln:
+
+\begin{verbatim}
+    void PrintMultTable (void) 
+    {
+        int i = 1;
+        while (i <= 6) 
+        {
+            PrintMultiples (i);
+            i = i + 1;
+        }
+    }
+\end{verbatim}
+%
+Der Prozess, den ich hier demonstriere, ist eine ziemlich 
+verbreitete Entwicklungsstrategie. 
+Wir entwickeln unser Programm schrittweise, indem wir
+Progammzeilen zu unserer {\tt main()}-Funktion oder einer anderen
+Funktion hinzufügen. Wenn wir ein lauffähiges Programm 
+erstellt haben, versuchen wir den Code zu extrahieren und
+in einer eigenen Funktion unterzubringen.
+
+Nicht immer wissen wir schon vor der Erstellung unseres
+Programms genau, wie wir dieses in einzelne Module
+strukturieren können. 
+Mit dem gerade vorgestellten Ansatz können wir die 
+Struktur unseres Programms entwerfen, während
+wir programmieren.
+Natürlich können wir die Funktionen auch schon vorher 
+festlegen, aber manchmal ist das einfach nicht möglich.
+
+\section{Lokale Variablen}
+
+Haben Sie sich schon gefragt, wie es möglich ist, dass ich die 
+gleiche Variable {\tt i} in beiden Funktionen {\tt PrintMultiples()} und {\tt
+PrintMultTable()} verwenden kann? \\
+Hatte ich nicht gesagt, das man eine Variable nur einmal deklarieren
+darf?\\
+Und führt es nicht zu Problemen, wenn eine der Funktionen
+den Wert der Variablen verändert?
+
+Die Antwort der letzten beiden Fragen lautet  ``nein,'' weil das {\tt i} in {\tt
+PrintMultiples()} und das {\tt i} in {\tt PrintMultTable()} 
+{\em nicht die selbe Variable sind}.  Sie haben den selben Namen, aber
+sie verweisen nicht auf die gleiche Speicherstelle. Somit ist klar, dass
+wenn wir den Wert der einen Variable ändern, hat das keine Auswirkung
+auf den Wert der anderen Variablen.
+
+\index{Lokale Variablen}
+\index{Variablen!lokale}
+
+Erinnern wir uns: Variablen, die innerhalb einer Funktion
+deklariert werden, sind so genannte \emph{lokale Variablen}.  
+Es ist nicht möglich auf eine lokale Variable von außerhalb ihrer
+``Heimatfunktion'' zuzugreifen und wir können mehrere
+Variablen mit dem gleichen Namen haben, solange sie sich 
+in unterschiedlichen Funktionen befinden.
+% cannot access a local variable from outside its
+%``home'' function, and you are free to have multiple variables with
+%the same name, as long as they are not in the same function.
+
+Das Stackdiagramm für dieses Programm macht es völlig klar,
+dass  die zwei Variablen mit Namen {\tt i} an unterschiedlichen
+Stellen im Speicher liegen.
+Sie können unterschiedliche Werte besitzen und wenn wir eine
+der Variablen ändern hat das keine Auswirkungen auf die andere.
+
+\index{Stackdiagramm}
+\index{Diagramm!Stack}
+
+\vspace{0.1in}
+\centerline{\epsfig{figure=figs/stack4.pdf,width=6.5cm}}
+\vspace{0.1in}
+%
+Der Wert des Parameters {\tt n} in der Funktion
+{\tt PrintMultiples()} ist dabei identisch mit dem Wert 
+von {\tt i} in {\tt PrintMultTable()}. 
+Der Wert von {\tt i} in {\tt PrintMultiples()} läuft von
+1 bis 6.  In unserem Diagramm, steht der Wert derzeit bei 3.
+Beim nächsten Durchlauf der Schleife wird der Wert 4 sein.
+
+Es ist oft besser für unterschiedlichen Funktionen  
+unterschiedliche Variablennamen zu verwenden, um Verwechslungen
+zu vermeiden.
+Wenn wir uns an die Richtlinien für die Verwendung von Variablen- 
+und Funktionsnamen halten (siehe Anhang \ref{Conventions for names})
+und \emph{sprechende Bezeichner} wählen, sollten wir damit
+keine Probleme haben.
+
+\index{Sprechende Bezeichner}
+
+Es existieren aber auch gute Gründe dafür stets die gleichen
+Namen zu nutzen. So hat es sich zum Beispiel eingebürgert {\tt i}, {\tt j} 
+und {\tt k} für die Bezeichnung von Schleifenvariablen zu nutzen.
+Wenn jetzt  unseren Funktionen andere Namen für
+Schleifenvariablen verwenden, kann es dazu führen, dass unsere
+Programme schwerer lesbar werden.
+
+\index{Schleifenvariable}
+\index{Variable!Schleife}
+
+%%
+\section{Noch mehr Verallgemeinerung}
+\label{More generalization}
+\index{Verallgemeinerung}
+
+Wir können unser Programm aber noch weiter verallgemeinern.
+Stellen wir uns vor, wir brauchen ein Programm, welches eine
+Multiplikationstafel von beliebiger Größe und nicht nur 
+im Format 6x6 ausgibt.  
+
+Um die Länge der Tabelle anzugeben, können wir einen Parameter
+zur Funktion {\tt PrintMultTable()} hinzufügen:
+
+\begin{verbatim}
+    void PrintMultTable (int high) 
+    {
+        int i = 1;
+        while (i <= high) 
+        {
+            PrintMultiples (i);
+            i = i + 1;
+        }
+    }
+\end{verbatim}
+%
+Ich haben den Wert 6 mit dem Parameter {\tt high} ersetzt.  
+Wenn ich jetzt {\tt PrintMultTable()} mit dem Argument 7 aufrufe, 
+erhalte ich:
+
+\begin{verbatim}
+    1   2   3   4   5   6   
+    2   4   6   8   10   12   
+    3   6   9   12   15   18   
+    4   8   12   16   20   24   
+    5   10   15   20   25   30   
+    6   12   18   24   30   36   
+    7   14   21   28   35   42   
+\end{verbatim}
+%
+Das sieht auf dem ersten Blick schon ganz gut aus,
+allerdings möchte ich, dass meine Multiplikationstafel
+ausbalanciert ist, die Anzahl der Spalten und Zeilen übereinstimmt.
+%which is fine, except that I probably want the table to
+%be square (same number of rows and columns), which means
+%I have to add another parameter to {\tt PrintMultiples()},
+%to specify how many columns the table should have.
+%allerdings sollte es auch möglich sein
+%die Anzahl der Vielfachen in der Multiplikationstafel 
+%festlegen zu können.
+Das kann ich erreichen, indem ich einen weiteren Parameter 
+zu {\tt PrintMultiples()} hinzufüge, welcher angibt wie
+viele Spalten unsere Tabelle haben sollte.
+
+%Just to be annoying, I will also call this parameter {\tt high},
+Nur um lästig zu sein möchte ich noch einmal demonstrieren,
+dass auch die Parameter unterschiedlicher Funktionen den gleichen
+Namen besitzen dürfen (so wie lokale Variablen auch):
+
+\begin{verbatim}
+    void PrintMultiples (int n, int high) 
+    {
+        int i = 1;
+        while (i <= high) 
+        {
+            printf ("%i    ", n*i);
+            i = i + 1;
+        }    
+        printf ("\n");
+    }
+
+    void PrintMultTable (int high) 
+    {
+        int i = 1;
+        while (i <= high) 
+        {
+            PrintMultiples (i, high);
+            i = i + 1;
+        }
+    }
+\end{verbatim}
+%
+Wenn ich einen neuen Parameter zu einer Funktion hinzufüge, muss
+ich die erste Zeile der Funktion anpassen und 
+die Stelle in der Funktion ändern, wo dieser Parameter verwendet werden 
+soll (in der Schleifenbedingung wird der Wert 6  durch {\tt high} ersetzt). 
+Weiterhin muss ich natürlich auch den Funktionsaufruf in {\tt PrintMultTable()}
+anpassen.
+
+Wie erwartet erzeugt unser Programm jetzt eine 7x7 Tabelle:
+
+\begin{verbatim}
+    1   2   3   4   5   6   7   
+    2   4   6   8   10   12   14   
+    3   6   9   12   15   18   21   
+    4   8   12   16   20   24   28   
+    5   10   15   20   25   30   35   
+    6   12   18   24   30   36   42   
+    7   14   21   28   35   42   49
+\end{verbatim}
+%
+Wenn wir eine Funktion verallgemeinern, finden wir oft, dass die
+neue Funktion Eigenschaften aufweist, die wir so nicht unbedingt beabsichtigt
+haben.
+
+Zum Beispiel ist unsere Multiplikationstafel symmetrisch, weil
+ $ab = ba$. Daraus folgt, dass fast alle Einträge in der Tabelle
+doppelt auftreten.
+Wir könnten jetzt auf die Idee kommen, Druckkosten zu sparen,
+indem wir nur eine Hälfte der Tabelle drucken.
+Um das zu tun brauchen wir nur eine Zeile in {\tt PrintMultTable()} zu 
+ändern.
+Anstatt 
+
+\begin{verbatim}
+      PrintMultiples (i, high);
+\end{verbatim}
+%
+können wir
+
+\begin{verbatim}
+      PrintMultiples (i, i);
+\end{verbatim}
+%
+schreiben und erhalten das folgende Ergebnis:
+
+\begin{verbatim}
+    1   
+    2   4   
+    3   6   9   
+    4   8   12   16   
+    5   10   15   20   25   
+    6   12   18   24   30   36   
+    7   14   21   28   35   42   49  
+\end{verbatim}
+%
+\index{Law of Unintended Consequences}
+Ich überlasse es jetzt jedem selbst herauszufinden, wie diese Änderung funktioniert. \\
+Allerdings geht uns durch die Änderung die ursprüngliche Definition der zweidimensionalen 
+Tabelle verloren (siehe Abschnitt \ref{Two-dimensional tables}).
+Solche unbeabsichtigten Beeinflussungen kommen gar nicht so selten vor und man bezeichnet 
+sie auch als das \emph{Gesetz der unbeabsichtigten Folgen} (engl: \textit{Law of Unintended Consequences}).
+Es ist daher wichtig vor der Programmierung klare Anforderungen an das Programm zu definieren
+und diese durch Tests sicher nachzuweisen.
+
+\section{Glossar}
+%(engl: \emph{})
+\begin{description}
+
+\item[Schleife (engl: \emph{loop}):]  Eine Anweisung oder Anweisungsblock, der mehrfach
+ausgeführt wird solange eine Bedingung \emph{wahr} ist, oder bis irgendeine andere Bedingung 
+erfüllt ist.
+
+
+\item[Endlosschleife (engl: \emph{infinite loop}):]  Eine Schleife, deren Bedingung immer \emph{wahr} ist.
+
+\item[Schleifenkörper (engl: \emph{body}):]  Alle Anweisungen die innerhalb einer Schleife ausgeführt werden.
+
+\item[Schleifendurchlauf (engl: \emph{iteration}):]  Ein Durchlauf %(Ausführung) 
+der Anweisungen des Schleifenkörpers.
+Dies schließt die Auswertung der Bedingung der Schleife mit ein.
+
+\item[Tab (engl: \emph{tab}):] Ein spezielles Zeichen aus dem ASCII-Zeichensatz, geschriebne als \verb+\t+ in C,
+welches den Cursor an die nächste Tab-Stop Position auf der aktuellen Zeile bewegt.
+
+\item[Modularisierung (engl: \emph{modularisation/encapsulation}):]  Die Zerlegung eines großen, komplexen
+Programms in einzelne, unabhängige Komponenten (wie z.B. Funktionen). Die Komponenten können durch
+die Verwendung lokaler Variablen voneinander isoliert werden. 
+
+\item[Lokale Variable (engl: \emph{local variable}):]  Eine Variable, welche innerhalb einer Funktion
+deklariert wird und die nur innerhalb dieser Funktion existiert. Auf lokale Variablen kann 
+durch andere Funktionen nicht zugegriffen werden. Gleichnamige lokale Variablen in unterschiedlichen
+Funktionen sind voneinander unabhängig.
+
+\item[Verallgemeinern (engl: \emph{generalize}):]  Beschreibt den Vorgang in dem
+wir eine spezifische Lösung die für ein eng umrissenes Problem zutrifft %(zum Beispiel beschrieben durch einen konstanten Wert)
+durch ein allgemeineres Konzept ersetzt (durch den Einsatz von Variablen oder Parameter), um damit eine ganze Klasse von Aufgabenstellungen zu bearbeiten. 
+Die Verallgemeinerung erhöht die Nützlichkeit unseres Programms, weil es sich leichter weiterverwenden 
+lässt und für einen breiteren Einsatzbereich verwendet werden kann.
+
+\item[Softwareentwicklungsprozess (engl: \emph{software development process}):]  
+Die Vorgehensweise die es uns ermöglicht von einer Idee zu einem funktionsfähigen
+Programm zu gelangen. In diesem Kapitel habe ich einen Ansatz vorgestellt,
+bei dem man ausgehend von einfachen Programmen zur Lösung spezieller
+Problem durch Verallgemeinerung und Modularisierung zu umfassenden 
+Lösungen gelangt. \\
+Ein Teilbereich der Informatik, das Software Engineering befasst
+sich mit verschiedenen Methoden der Programmentwicklung.
+
+\index{Schleife}
+\index{Endlosschleife}
+\index{Schleifenkörper}
+\index{Tab}
+\index{Schleife!Endlos}
+\index{Iteration}
+\index{Modularisierung}
+\index{generalization}
+\index{Lokale Variable}
+\index{Variable!Lokal}
+\index{Programmntwicklung}
+
+\end{description}
+
+\section{Übungsaufgaben}
+\setcounter{exercisenum}{0}
+
+\ifthenelse {\boolean{German}}{ \input{exercises/Exercise_6_german}}
+{\input{exercises/Exercise_6_english}}
+
+

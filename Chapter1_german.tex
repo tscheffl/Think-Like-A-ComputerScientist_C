@@ -1,0 +1,835 @@
+%!TEX root = Main_german.tex
+
+
+\selectlanguage{ngerman}
+\chapter{Achtung, jetzt kommt ein Programm!}
+\label{chap01}
+
+Das Ziel dieses Buches ist es, das Verständnis dafür zu wecken,
+wie Informatiker denken. Ich mag es, wie Informatiker denken,
+weil sie sich dabei der unterschiedlichen Ansätze aus der Mathematik,
+der Ingenieurwissenschaften und der Sprachwissenschaften bedienen,
+um mit viel Kreativität, Ausdauer und Beharrlichkeit etwas Neues noch
+nicht Dagewesenes zu schaffen.  
+
+Informatiker benutzen dabei, wie die Mathematiker, \emph{formale Sprachen}
+um ihre Ideen und Berechnungen aufzuschreiben. 
+Sie entwerfen Dinge und konstruieren komplexe Systeme, die sie
+aus einzelnen Komponenten zusammenbauen, und müssen dabei
+verschiedene Alternativen bewerten, abwägen und auswählen.
+Sie  beobachten  das Verhalten dieser Systeme wie Wissenschaftler:
+sie formulieren Hypothesen und testen ihre Vorhersagen.
+  
+Die wichtigste Fähigkeit eines Informatikers besteht darin, \textbf{Probleme
+zu lösen}.
+Dazu muss er diese Probleme erkennen, geschickt formulieren, 
+kreativ über mögliche Lösungen nachdenken und diese
+klar, übersichtlich und nachvollziehbar ausdrücken und darstellen können.
+So wie es sich herausstellt, ist  der Prozess des Erlernen einer Programmiersprache
+eine exzellente Möglichkeit, sich in der Fähigkeit des Problemlösens
+zu üben. Deshalb heißt dieses Kapitel ``Achtung, jetzt kommt ein Programm!''
+
+%As it turns out, the process of learning to program is an
+%excellent opportunity to practice problem-solving skills.  That's why
+%this chapter is called ``The way of the program.''
+
+Das Erlernen des Programmierens ist für sich allein genommen bereits 
+eine nützliche Fähigkeit. Je mehr wir uns in der Fähigkeit üben, um so 
+offensichtlicher wird es werden, dass wir das Programmieren auch als
+ein Mittel zum Zweck nutzen können. Dass es sich dabei um ein sehr leistungsfähiges
+Mittel handelt, wird hoffentlich im Laufe
+des Buches noch klarer werden. 
+ 
+
+\section{Was ist eine Programmiersprache?}
+\index{Programmiersprache}
+\index{Sprache!Programmierung}
+
+Die Programmiersprache, welche wir in diesem Kurs lernen werden, heißt 
+C und wurde in den frühen 1970er Jahren von  Dennis M. Ritchie 
+in den Bell Laboratories entwickelt.  C ist eine so genannte 
+{\bf Hochsprache} oder {\bf  High-level Sprache}. Andere Hochsprachen, die
+in der Programmierung verwendet werden, sind Pascal, Python, C++ und Java.
+
+Aus dem Namen ``Hochsprache'' kann man ableiten, dass
+ auch sogenannte {\bf Low-level Sprachen} existieren. Diese nennt man 
+Maschinensprache oder auch Assembler. 
+Computer können nur Programme in Maschinensprache ausführen.
+Es ist daher notwendig, die Programme, welche in einer Hochsprache geschrieben
+wurden, in Maschinensprache zu übersetzen.
+Diese Übersetzung benötigt Zeit und einen zusätzlichen Arbeitsschritt, was
+einen klitzekleinen Nachteil gegenüber Low-level Sprachen darstellt.
+
+\index{portabel}
+\index{High-level Sprache}
+\index{Low-level Sprache}
+\index{Sprache!high-level}
+\index{Sprache!low-level}
+
+Allerdings sind die Vorteile von Hochsprachen enorm.
+So ist es, erstens, {\em viel} einfacher in einer Hochsprache zu programmieren.
+Mit ``einfacher'' meine ich, dass es weniger Zeit in Anspruch nimmt ein Programm
+zu schreiben. Das Programm ist kürzer, einfacher zu lesen und mit einer höheren
+Wahrscheinlichkeit auch korrekt. Das heißt, es tut, was wir von dem Programm erwarten.
+High-level Sprachen verfügen über eine zweite wichtige Eigenschaft, sie sind {\bf portabel}.
+Das bedeutet, dass unser Programm auf unterschiedlichen Arten von 
+Computern ausgeführt werden kann. Maschinensprachen sind jeweils nur für
+eine bestimmte Computerarchitektur definiert. Programme, die in 
+Low-level Sprachen erstellt wurden, müssten komplett neu geschrieben werden, wenn
+in unserem Computer statt einem Intel-kompatiblen Prozessor ein Prozessor von  ARM
+verwendet würde. Ein Programm in einer Hochsprache muss einfach nur neu
+übersetzt werden.
+
+Aufgrund dieser Vorteile wird die überwiegende
+Anzahl von Programmen in Hochsprachen geschrieben.
+Low-level Sprachen werden nur noch für wenige Spezialanwendungen verwendet.
+
+\index{Kompilieren}
+\index{Interpretieren}
+
+Für die Übersetzung unseres Programms benötigen wir eine bestimmte 
+Software auf unserem Computer - den Übersetzer.
+Es existieren grundsätzlich zwei Wege ein Programm zu übersetzen:
+{\bf Interpretieren} oder {\bf Kompilieren}.  Ein \emph{Interpreter}
+ist ein Programm welches ein High-level Programm
+interpretiert und ausführt.  Dazu übersetzt der Interpreter das
+Programm Zeile-für-Zeile und führt nach jeder übersetzten
+Programmzeile die darin enthaltenen Kommandos sofort aus.
+
+\myfig{figure=figs/interpret.eps}
+
+Ein \emph{Compiler} ist ein Programm, welches ein High-level Programm
+im Ganzen einliest und übersetzt. Dabei wird stets das gesamte Programm
+komplett übersetzt, bevor die einzelnen Kommandos des Programms
+ausgeführt werden können. Die Programmiersprache C verwendet einen
+Compiler für die Übersetzung der Befehle in Maschinensprache.
+
+Durch das Kompilieren entsteht eine neue, ausführbare Datei.
+Es wird dazu ein Programm zuerst kompiliert und das so übersetzte 
+Programm in einem zweiten, separaten Schritt zur Ausführung gebracht.
+Man bezeichnet in diesem Fall das High-level
+Programm als den  {\bf Source code} oder {\bf Quelltext}, und das
+übersetzte Programm nennt man den {\bf Object code} oder das
+{\bf ausführbare Programm}.
+
+%(Prüfungsfrage: Interpreter / Compiler, anzahl von Dateien)
+
+Angenommen, wir schreiben unser erstes Programm in C.
+Wir können dafür einen ganz einfachen Texteditor benutzen,
+um das Programm aufzuschreiben (ein Texteditor ist ein ganz einfaches
+Textverarbeitungsprogramm, welches in der Regel nicht einmal
+verschiedene Schriftarten darstellen kann). 
+Wenn wir das Programm aufgeschrieben haben, müssen 
+wir es auf der Festplatte des Computers speichern, zum Beispiel unter
+dem Namen {\tt program.c}, wobei ``program''
+ein beliebiger, selbstgewählter Dateiname ist. Die Dateiendung {\tt .c} 
+ist wichtig, weil sie einen Hinweis darauf gibt, dass es sich bei dieser
+Datei um Quellcode in der Programmiersprache C handelt.
+
+Danach können wir den Texteditor schließen und den Compiler aufrufen
+(der genaue Ablauf hängt dabei von der verwendeten Programmierumgebung ab).
+Der Compiler ließt den Quelltext, übersetzt ihn und erzeugt eine neue
+Datei mit dem Namen {\tt program.o}, welches den Objektcode enthält,
+oder die Datei {\tt program.exe}, welche das ausführbare Programm enthält. 
+
+\myfig{figure=figs/compile.eps}
+
+Im nächsten Schritt können wir das Programm ausführen lassen. Dazu
+wird das Programm in den Hauptspeicher des Rechners geladen (von
+der Festplatte in den Arbeitsspeicher kopiert) und danach werden die 
+einzelnen Anweisungen des Programms ausgeführt.  
+
+Dieser Prozess klingt erst einmal sehr kompliziert. 
+Allerdings sind in den meisten Programmierumgebungen (auch
+Entwicklungsumgebungen genannt) viele dieser Schritte automatisiert.
+In der Regel schreibt man dort sein Programm, klickt mit der Maus auf einen 
+Bildschirmsymbol oder gibt ein einzelnes Kommando ein und das Programm
+wird übersetzt und ausgeführt.
+Allerdings ist es immer gut zu wissen, welche Schritte im Hintergrund
+stattfinden. So kann man, im Fall dass etwas schief geht, herausfinden,
+wo der Fehler steckt.
+
+% Leftover: when is compilation better than interpretation?
+% Übungsaufgabe: Vorteile von kompilierten Programmen:
+% Weitergabe des fertigen Programms, Unveränderbarkeit, Geschwindigkeit,...
+
+\section{Was ist ein Programm?}
+
+Ein Programm ist eine Abfolge von Befehlen (engl.: \emph{instructions}), welche
+angeben, wie eine Berechnung durchgeführt wird. 
+Diese Berechnung kann mathematischer Art sein, wie zum Beispiel
+das Lösen eines Gleichungssystems oder die Ermittlung der Quadratwurzel
+eines Polynoms. Es kann aber auch eine symbolische Berechnung
+sein, wie die Aufgabe, in einem Dokument einen bestimmten Text zu finden
+und zu ersetzen. Erstaunlicherweise kann dies auch das Kompilieren eines
+Programmes sein.
+
+\index{Anweisung}
+
+Die Programmbefehle, welche sich  {\bf Anweisungen} (engl.:  {\bf  \emph{statements}}) 
+nennen, sehen in unterschiedlichen Programmiersprachen verschieden aus.
+Es existieren aber in allen Sprachen die gleichen, wenigen Basiskategorien, 
+aus denen ein Computerprogramm aufgebaut ist. Es ist deshalb nicht schwer 
+eine neue Programmiersprache zu lernen, wenn man bereits eine andere gut
+beherrscht.
+Die meisten Programmiersprachen unterstützen die folgenden Befehlskategorien:
+
+\begin{description}
+
+\item[Input:] Daten von der Tastatur, aus einer Datei oder von einem angeschlossenen Gerät
+in das Programm einlesen.
+
+\item[Output:] Daten auf dem Monitor darstellen, in eine Datei schreiben oder an ein 
+angeschlossenes Gerät ausgeben. 
+
+\item[Mathematik:] Durchführen von grundlegenden mathematischen Operationen, wie zum
+Beispiel Addition und Multiplikation.
+
+\item[Testen und Vergleichen:] Überprüfen, ob bestimmte Bedingungen erfüllt sind
+und die Steuerung der Ausführung bestimmter Abfolgen von Anweisungen in Abhängigkeit
+von diesen Bedingungen. 
+
+\item[Wiederholung:] Bestimmte Aktionen werden mehrfach, manchmal mit geringen Änderungen,
+nacheinander ausgeführt. 
+
+\end{description}
+
+Das wäre dann schon fast alles.
+Jedes Programm, das wir in diesem Kurs kennenlernen, ist unabhängig von seiner
+Komplexität, aus einzelnen Anweisungen aufgebaut, welche diese Operationen unterstützen.
+Daher besteht ein Ansatz der Programmierung darin, einen großen komplizierten Prozess in
+immer kleinere und kleinere Unteraufgaben zu unterteilen, bis die einzelnen Aufgaben 
+so klein und unbedeutend werden, dass sie mit einem dieser grundlegenden Befehle
+ausgeführt werden kann.
+
+\section{Was ist \textit{debugging}?}
+\index{Debugging}
+\index{Bug}
+
+Programmieren ist ein komplexer Prozess, und da es von Menschen
+durchgeführt wird, ist es mehr als wahrscheinlich, dass 
+sich hier und dort Fehler einstellen.
+Programmierer bezeichnen einen Softwarefehler üblicherweise
+als  {\bf Error} oder auch {\bf Bug} und den Prozess des Aufspürens und Korrigierens
+des Fehlers als {\bf Debugging}.
+
+Es gibt verschiedene Arten von Fehlern, die in einem 
+Programm auftreten können. Es ist sinnvoll, die
+Unterscheidung zwischen diesen Arten zu kennen, um
+Fehler in eigenen Programmen schneller entdecken 
+und beheben zu können.
+Programmfehler können sich zu unterschiedlichen Zeiten
+bemerkbar machen. Man unterscheidet zwischen Fehlern 
+beim Kompilieren und beim Ausführen des Programms. 
+
+\subsection{Fehler beim Kompilieren (Compile-time errors)}
+\index{Compile-time error}
+\index{Error!compile-time}
+
+Der Compiler kann ein Programm nur übersetzen wenn dieses
+Programm den formalen Regeln der Programmiersprache
+entspricht. 
+Diese Regeln, die {\bf Syntax}, beschreiben die Struktur des 
+Programms und der darin enthaltenen Anweisungen.
+Ein Programm muss syntaktisch korrekt sein, anderenfalls 
+schlägt die Kompilierung fehl und das Programm
+kann nicht ausgeführt werden.
+
+
+\index{Syntax}
+
+So beginnt zum Beispiel jeder deutsche Satz mit einem großen 
+Buchstaben und endet mit einem Punkt.
+\emph{dieser Satz enthält einen Syntaxfehler. Dieser Satz ebenfalls}
+
+Für die meisten Menschen sind ein paar Syntaxfehler in einem
+Text kein größeres Problem. Wir können diese Texte trotzdem
+in ihrer Bedeutung verstehen, weil wir über Erfahrung und
+Weltwissen verfügen.
+
+Compiler sind nicht so tolerant. Selbst ein einzelner Syntaxfehler
+irgendwo in unserem Programm führt dazu, dass der Compiler
+eine Fehlermeldung (engl.: \emph{error message}) auf dem Bildschirm anzeigt
+und die weitere Arbeit des Übersetzens einstellt. Das erzeugte
+Programm kann nicht ausgeführt werden.
+
+Zu allem Überfluss gibt es sehr viele Syntaxregeln in C, 
+und die Fehlermeldungen des Compilers sind oft nicht besonders
+hilfreich für den Programmieranfänger. 
+Der berühmte Physiker Niels Bohr hat einmal gesagt: 
+``Ein Experte ist jemand, der in einem begrenzten Bereich 
+schon alle möglichen Fehler gemacht hat.'' 
+Während der ersten paar Wochen unserer Karriere als
+C-Programmiererin oder C-Programmierer werden wir voraussichtlich viel Zeit damit 
+zubringen, Syntaxfehler in selbst erstellten Programmen zu finden.
+In dem Maße wie unsere Erfahrung zunimmt, werden wir
+weniger Fehler machen und die gemachten Fehler schneller finden.
+
+
+
+\subsection{Fehler beim Ablauf des Programms (Run-time errors)}
+\label{run-time}
+\index{Run-time error}
+\index{Error!run-time}
+\index{Sprache!safe}
+
+Eine zweite Kategorie von Programmfehlern sind die so genannten Laufzeitfehler (engl.: \emph{run-time errors}).
+Sie werden so genannt, weil der Fehler erst auftritt, wenn unser Programm ausgeführt wird: zur Laufzeit.
+
+Auch wenn wir unser Programm syntaktisch richtig aufgeschrieben haben, können
+Fehler auftreten die zum Abbruch des Programms führen. 
+C ist keine  {\bf sichere} Sprache, wie zum Beispiel Java, wo Laufzeitfehler relativ 
+selten sind.
+C ist eine relativ hardwarenahe Programmiersprache. Vielleicht
+die hardwarenäheste von allen höheren Programmiersprachen.
+Die meisten Laufzeitfehler in C treten deshalb auf, weil die Sprache selbst
+keine Schutzmechanismen gegen den direkten Zugriff auf den Speicher des
+Computers bietet. So kann es vorkommen, dass unser Programm wichtige 
+Speicherbereiche versehentlich überschreibt.
+
+Die Hardwarenähe von C hat ihre guten, wie ihre schlechten Seiten.
+Viele Algorithmen sind dadurch in C besonders effizient und leistungsfähig 
+umsetzbar. Gleichzeitig sind wir als Programmierer selbst 
+dafür verantwortlich, dass unser Programm auch nur das tut, was
+wir beabsichtigen. Dafür müssen wir manchmal sorgfältiger arbeiten
+als Programmierer anderer Sprachen.
+
+Bei den einfachen Programmen, die wir in den nächsten Wochen schreiben
+werden, ist es allerdings unwahrscheinlich, dass wir in unserem Programm
+einen Laufzeitfehler provozieren.
+
+
+\subsection{Logische Fehler und Semantik}
+\index{Semantik}
+\index{Logische Fehler}
+\index{Fehler!Logische}
+
+Der dritte Fehlertyp, dem wir begegnen werden, ist der {\bf logische} 
+oder {\bf semantische} Fehler.  
+Wenn in unserem Programm ein logischer Fehler steckt, so wird
+es zunächst  kaum auffallen. Es lässt sich kompilieren und ausführen,
+ohne dass der Computer irgendwelche Fehlermeldungen produziert.
+Es wird aber leider nicht die richtigen Dinge tun. 
+Es wird einfach irgend etwas anderes tun, oder auch gar nichts.
+Insbesondere wird es nicht das tun, wofür wir das Programm
+geschrieben haben.
+
+Das  Programm, das wir geschrieben haben, ist nicht
+das Programm, das wir schreiben wollten. Die Bedeutung des 
+Programms - seine Semantik - ist falsch.
+Die Gründe dafür können vielfältig sein. Am Anfang sind es 
+vor allem unklare Vorstellungen darüber, was das Programm tun soll und
+wie ich das mit den Mitteln der Programmiersprache C erreichen kann.
+Es kann aber auch sein, dass unser Algorithmus fehlerhaft ist,
+oder wir nicht alle Voraussetzungen und Bedingungen vollständig geprüft haben.
+
+Logische Fehler zu finden ist meistens ziemlich schwer. Es erfordert
+Zeit und Geduld herauszufinden, wo der Fehler steckt. 
+Dazu kann es notwendig sein rückwärts zu arbeiten: Wir schauen
+uns die Resultate unseres Programms an und überlegen, was
+zu diesen Ergebnissen geführt haben kann.
+
+\subsection{Experimentelles Debugging}
+
+Eine der wichtigsten Fähigkeiten, die wir als angehende Programmierer
+erlernen müssen, ist das Debuggen von Programmen.
+Obwohl es gelegentlich auch frustrierend sein kann, so
+ist das Aufspühren von Programmfehlern ein intellektuell
+anspruchsvoller, herausfordernder und interessanter 
+Teil des Programmierens.
+
+In vielerlei Hinsicht ist Debugging mit der Arbeit eines Kriminalisten vergleichbar.
+Man muss Hinweisen nachgehen und  Zusammenhänge
+herstellen zwischen den Prozessen innerhalb des Programms
+und den Resultaten, die sichtbar sind.
+
+Debugging ist gleichfalls den experimentellen Wissenschaften
+ähnlich. Sobald wir eine Idee haben, was in unserem Programm
+falsch gelaufen sein sollte, verändern wir dieses und beobachten erneut.
+Wir bilden Hypothesen über das Verhalten des Programms.
+Stimmt unsere Hypothese, dann können wir das Ergebnis
+der Modifikation vorhersagen und wir sind dem Ziel, eines
+funktionsfähigen Programms, einen Schritt näher gekommen.
+
+Wenn unsere Hypothese falsch war, müssen wir eine neue bilden.
+Wie bereits Sherlock Holmes sagte,  ``...when you have eliminated the
+impossible, whatever remains, however improbable, must be the truth''
+(aus Arthur Conan Doyle, {\em Das Zeichen der Vier}).
+
+\index{Holmes, Sherlock}
+\index{Doyle, Arthur Conan}
+
+Einige Leute betrachten Programmieren und Debuggen als
+ein und dieselbe Sache.
+Man könnte auch sagen, Programmieren ist der Prozess, ein Programm 
+so lange zu debuggen bis am Ende ein funktionsfähiges
+Programm entstanden ist, das unseren Vorstellungen entspricht.
+Dahinter steckt die Idee, dass wir immer mit einem
+funktionsfähigen Programm starten, welches \emph{irgendeine} Funktion
+realisiert.
+Danach machen wir kleine Modifikationen, entfernen die Fehler und
+testen unser Programm, so dass wir zu jeder Zeit ein funktionsfähiges 
+Programm haben, welches am Ende eine neue Funktion realisiert. 
+ 
+So ist zum Beispiel Linux ein Betriebssystem, welches Millionen von 
+Programmzeilen enthält. Begonnen wurde es aber als ein einfaches
+Programm, dass Linus Torvalds benutzt hat um den Intel 80386 kennenzulernen.  
+So berichtet Larry Greenfield: 
+``One of Linus's earlier projects was a program that would switch
+between printing AAAA and BBBB.  This later evolved to Linux''
+(aus {\em The Linux Users' Guide}, Beta Version 1).
+
+\index{Linux}
+
+In späteren Kapiteln werde ich einige praktische Hinweise zum Debugging
+und anderen Programmierpraktiken geben. 
+
+\section{Formale und natürliche Sprachen}
+\index{Formale Sprache}
+\index{Natürliche Sprache}
+\index{Sprache!Formal}
+\index{Sprache!Natürliche}
+\index{Algorithmus}
+
+Als {\bf natürliche Sprachen} bezeichnen wir alle Sprachen, die
+von Menschen gesprochen werden, wie zum Beispiel Englisch, Spanisch 
+und Deutsch. Diese Sprachen wurden nicht von Menschen konstruiert 
+(obwohl Menschen versuchen ihnen Ordnung und Struktur zu verleihen),
+sie sind das Resultat eines natürlichen Evolutionsprozesses. 
+
+{\bf Formale Sprachen}  sind vom Menschen für spezielle 
+Anwendungszwecke konstruiert worden.
+So benutzen zum Beispiel Mathematiker spezielle 
+Notationsformen, um den Zusammenhang zwischen Symbolen, Zahlen
+und Mengen darzustellen. 
+Chemiker benutzen eine formale Sprache, um die chemische Struktur von Molekülen zu notieren.  Und
+für uns ganz wichtig:
+
+\begin{quote}
+{\bf Programmiersprachen sind formale Sprachen, mit denen man das 
+Verhalten einer Maschine steuert.}
+\end{quote}
+
+\begin{quote}
+Programmiersprachen dienen der Beschreibung von Berechnungen
+und der Formulierung von Algorithmen.
+Ein \textbf{Algorithmus} ist eine aus abzählbar vielen Schritten bestehende 
+eindeutige Handlungsanweisung zur Lösung einer Klasse von Problemen.
+\end{quote}
+
+Wie ich bereits angedeutet hatte, tendieren formale Sprachen dazu,
+strikte Syntaxregeln zu besitzen.
+So ist zum Beispiel $3+3=6$ ein syntaktisch korrekter mathematischer
+Ausdruck, $3=:6\$$ hingegen nicht.  $H_2O$ ist eine syntaktisch korrekte
+chemische Formel, $_2Zz$ ist es nicht.
+
+Syntaxregeln betreffen zwei Bereiche der Sprache: deren Symbole und Struktur.
+Die Symbole stellen die Basiselemente einer Sprache bereit, dazu gehören
+die Wörter und Bezeichner, Zahlen und chemische Elemente.
+Eines der Probleme mit dem Ausdruck {\tt 3=:6\$} ist, dass {\tt \$} kein
+legales Symbol in der Mathematik darstellt (so weit ich weiß, jedenfalls ...).  
+Gleichfalls ist, $_2Zz$ nicht legal, weil es kein chemisches Element mit
+der Abkürzung $Zz$ gibt.
+
+Der zweite Fall für die Anwendung von Syntaxregeln betrifft die Struktur
+eines Ausdrucks, das heißt die Art und Weise, wie die Symbole der Sprache
+angeordnet werden. 
+
+Der Ausdruck {\tt 3=:6\$} ist auch deshalb nicht korrekt, weil es nicht 
+erlaubt ist, ein Divisionszeichen unmittelbar nach einem Gleichheitsszeichen
+zu schreiben.
+In gleicher Weise werden in molekularen Formeln die Mengenverhältnisse
+eines Elements als tiefer gestellte Zahl nach dem Elementname angegeben
+und nicht davor.
+
+Wenn wir einen Satz in einer natürlichen Sprache wie Deutsch lesen, oder
+ einen Ausdruck in einer formalen Sprache erfassen wollen, müssen
+wir seine Struktur herausfinden (bei natürlichen Sprachen macht unser
+Gehirn, das meistens ganz unbewußt von selbst). Diesen Prozess 
+bezeichnen wir als {\bf Parsen}.
+
+\index{parsen}
+
+Wenn wir zum Beispiel den Satz hören  ``Die Würfel sind gefallen.'' 
+verstehen wir,  ``Die Würfel'' ist das Subjekt und ``sind gefallen'' das
+Verb.  
+Nachdem wir den Satz geparst haben, können wir herausfinden, was
+dieser Satz bedeutet. Wir können seine Bedeutung (seine Semantik)
+verstehen. Angenommen wir wissen,
+was ein Würfel ist und was es bedeutet zu fallen, so können wir damit
+die generelle Bedeutung dieses Satzes verstehen. 
+
+\subsection{Unterschiede formaler und natürlicher Sprachen}
+
+Obwohl formale und natürliche Sprachen viele Gemeinsamkeiten 
+aufweisen: Symbole, Struktur, Syntax und Semantik, so 
+existieren doch auch viele Unterschiede zwischen den Sprachen.
+
+\index{Vieldeutigkeit}
+\index{Redundanz}
+\index{Wortwörtlichkeit}
+
+\begin{description}
+
+\item[Vieldeutigkeit:] Natürliche Sprachen sind voll von Mehrdeutigkeiten. 
+Wir Menschen erkennen die Bedeutung von Aussagen in natürlicher Sprache 
+üblicherweise anhand von Hinweisen aus dem Kontext und unserem Erfahrungswissen.
+So ist zum Beispiel die Aussage ``wilde Tiere jagen'' nicht eindeutig. Es kann bedeuten,
+dass der Jäger wilde Tiere jagt, aber auch, dass wilde Tiere ihre Beute jagen.
+Formale Sprachen sind üblicherweise so konstruiert, dass sie keine Mehrdeutigkeiten
+aufweisen. Jede Aussage ist eindeutig interpretierbar. Aus {\tt 2+2}  lässt sich  
+immer und eindeutigerweise der Wert {\tt 4} ableiten. 
+Die Bedeutung (Semantik) einer Aussage ist nicht von ihrem Kontext abhängig.
+
+
+\item[Redundanz:] Um mit den vorhandenen Mehrdeutigkeiten in natürlichen
+Sprachen umzugehen und Missverständnisse zu reduzieren, verwenden
+diese Sprachen oft das Mittel der Redundanz. 
+Das heißt, Informationen werden mehrfach wiederholt, zum Teil in anderen
+Formulierungen, obwohl dies eigentlich für das Verständnis der Bedeutung
+nicht notwendig wäre. Als Resultat sind natürliche Sprachen oft wortreich und
+ausschweifend. Während formale Sprachen wenig oder keine Redundanz 
+aufweisen und dadurch knapp und präzise ausfallen.
+
+\item[Wortwörtlichkeit:] Natürliche  Sprachen beinhalten oft Redensarten und
+Metaphern.  Wenn ich sage, ``Die Würfel sind gefallen.'', dann sind  
+wahrscheinlich nirgends Würfel im Spiel, und es ist auch nichts heruntergefallen. 
+Formale Sprachen hingegen, meinen wortwörtlich genau das, was geschrieben steht.
+
+\end{description}
+
+Viele Menschen, die ganz selbstverständlich eine natürliche Sprache verwenden
+(wir alle), haben oft Schwierigkeiten im Umgang mit formalen Sprachen.
+In vieler Art ist der Unterschied zwischen formalen und natürlichen Sprachen
+wie der Unterschied zwischen Poesie und Prosa -- nur noch viel ausgeprägter: 
+
+
+\index{Poesie}
+\index{Prosa}
+
+\begin{description}
+
+\item[Poesie:] Wörter werden wegen ihrer Bedeutung, manchmal aber auch
+nur wegen ihres Klangs benutzt. Gedichte werden zum Teil wegen ihres
+Effekts oder der emotionalen Reaktion beim Leser geschrieben.
+Mehrdeutigkeiten kommen oft vor und werden vom Dichter stellenweise
+als Stilmittel bewusst eingesetzt.
+
+\item[Prosa:] Die wörtliche Bedeutung eines Textes ist von Bedeutung und
+seine Struktur trägt dazu bei, das Verständnis seiner Bedeutung zu erfassen.
+Prosatexte lassen sich leichter analysieren als Gedichte, trotzdem enthalten
+sie oft Mehrdeutigkeiten.
+
+\item[Programm:] Die Bedeutung eines Computerprogramms ist eindeutig,
+unzweifelhaft und wörtlich. Ein Programm lässt sich alleinig durch
+die Analyse der Symbole und der Struktur erfassen und verstehen. 
+
+\end{description}
+
+\subsection{Tipps zum Lesen von Programmen}
+\label{sec:program reading}
+
+Für das Erlernen einer Sprache ist es wichtig, nicht nur das Schreiben 
+zu lernen, sondern auch viele Texte in dieser Sprache zu lesen.
+Im Folgenden habe ich einige Vorschläge zusammengetragen, wie man an das Lesen
+von Programmen (und Texten in anderen formalen Sprachen) 
+herangehen sollte:
+
+Zuallererst ist zu beachten, dass Texte in formalen Sprachen
+viel kompakter  (wortärmer, weniger ausschweifend) sind als Texte natürlicher
+Sprachen, weil die Texte keine Redundanzen enthalten.
+Es dauert also in der Regel viel länger einen Text in einer formalen Sprache
+zu lesen, da dieser pro Texteinheit einfach viel mehr Information enthält.
+Hilfreich sind hier oft Anmerkungen der Programmierer die Erklärungen in 
+natürlicher Sprache enthalten. Sie sollten sich auch angewöhnen, selbst solche
+Anmerkungen zu verfassen.
+
+Wichtig ist auch die Struktur eines Programms. Es ist keine gute Idee,
+ein Programm als linearen Text von oben nach unten und links nach rechts
+durcharbeiten zu wollen. Größere Programme sind üblicherweise 
+in sinnvolle Module gegliedert, die nicht unbedingt in der Reihenfolge
+des Quelltextes ausgeführt werden. Wir müssen versuchen das Programm
+in seiner Struktur zu erfassen. Dazu müssen wir zuerst wichtige Symbole
+erfassen und erkennen und uns ein mentales Bild vom Zusammenspiel
+der einzelnen Elemente bilden. Dabei kann es hilfreich sein, sich
+diese Elemente und ihre Abhängigkeiten kurz zu skizzieren.
+
+Zum Schluss möchte ich noch darauf hinweisen, dass selbst kleine
+Details wichtig sind. Tippfehler und schwache Zeichensetzung, 
+Dinge, die in natürlichen Sprachen als Formfehler gelten, können
+in formalen Sprachen große Auswirkungen auf die Bedeutung eines
+Textes haben.
+
+
+\section{Das erste Programm}
+\label{hello}
+\index{Hello, World!}
+
+Die Tradition verlangt, dass man das erste Programm, welches 
+man in einer neuen Programmiersprache schreibt, ``Hello, World!'' nennt.
+Es ist ein einfaches Programm, welches nichts weiter tun soll, 
+als die Worte ``Hello, World!'' auf dem Bildschirm auszugeben. 
+In C sieht dieses Programm wie folgt aus:
+
+\begin{verbatim}
+  #include <stdio.h>
+  #include <stdlib.h>
+
+  /* main: generate some simple output */
+
+  int main(void)
+  {
+        printf("Hello, World!\n");
+        return EXIT_SUCCESS;
+  }
+
+\end{verbatim}
+%
+Manche Leute beurteilen die Qualität einer Programmiersprache danach,
+wie einfach es ist, das ``Hello, World!'' Programm zu erstellen. 
+Nach diesem Standard schlägt sich C noch vergleichsweise gut.  
+Allerdings enthält bereits dieses einfache Programm einige  
+Merkmale, die es schwierig machen das komplette Programme einem
+Programmieranfänger zu erklären.
+
+Deshalb werden wir an dieser Stelle erst einmal einige von ihnen ignorieren,
+wie zum Beispiel die ersten zwei Programmzeilen. 
+
+\index{Kommentar}
+\index{Anweisung!Kommentar}
+
+Die dritte Programmzeile fängt mit einem {\tt /*} an und endet mit  {\tt */}. 
+Das zeigt uns, dass es sich bei dieser Zeile um einen {\bf Kommentar} handelt.  
+Ein Kommentar ist eine kurze Anmerkungen zu einem Teil des Programms 
+(siehe Abschnitt \ref{sec:program reading}).
+Diese Anmerkung wird üblicherweise dazu benutzt, zu erklären, was das Programm
+tut. Kommentare können irgendwo im Quelltext des Programms stehen. 
+Wenn der Compiler ein {\tt /*} sieht, dann ignoriert er von da an alles bis er
+das dazugehörige {\tt */} findet. Die enthaltenen Anmerkungen sind daher 
+streng genommen nicht Teil unseres Programms.
+
+In der vierten Programmzeile fällt das Wort {\tt main} auf.  {\tt main} ist ein 
+spezieller Name, der angibt, wo in einem Programm die Ausführung der
+Befehle beginnt. Wenn das Programm startet, wird die
+jeweils erste {\bf Anweisung} in {\tt main} ausgeführt, danach werden der
+Reihe nach alle weiteren Anweisungen ausgeführt, bis das Programm zum
+letzten Programmbefehl kommt und beendet wird.
+
+
+\index{printf()}
+\index{Anweisung!printf}	
+
+Es existiert keine Beschränkung hinsichtlich der Anzahl von Anweisungen,
+die unser Programm in {\tt main} enthalten kann.
+In unserem Beispiel sind das nur zwei Anweisungen. 
+Die erste ist eine {\bf Ausgabeanweisung}. Sie wird dazu benutzt, eine 
+Nachricht auf dem Bildschirm anzuzeigen (zu ``drucken''). 
+In C wird die {\tt printf} Anweisung benutzt, um Dinge auf dem Bildschirm
+des Computers auszugeben. Die Zeichen zwischen den Anführungszeichen
+werden ausgegeben. 
+
+Auffällig ist dabei der {\tt \textbackslash n} am Ende der Nachricht. 
+Dabei handelt es sich um ein spezielles Zeichen, genannt \emph{newline}, 
+welches an das Ende einer Textzeile angefügt wird und den 
+Cursor veranlasst auf die nächste Zeile des Bildschirms zu wechseln.
+Wenn unser Programm jetzt das nächste Mal etwas ausgeben möchte,
+so erscheint der neue Text auf einer neuen Bildschirmzeile.
+Am Ende der Anweisung finden wir ein Semikolon ({\tt ;}).
+Damit wird die Anweisung abgeschlossen -- es muss am
+Ende jeder Anweisung stehen.
+
+Mit der letzten Anweisung verlassen wir das Programm und geben die
+Kontrolle an das Betriebssystem zurück. Die {\tt return} Anweisung 
+wird verwendet um einen Programmteil (in C Funktion genannt) zu beenden 
+und die Kontrolle an die Funktion zurückzugeben, welche die aktuelle Funktion
+gestartet (aufgerufen) hat.
+Dabei können wir eine Nachricht an die aufrufende Funktion 
+übergeben (in unserem Fall das Betriebssystem) und teilen mit, dass 
+das Programm erfolgreich beendet wurde. 
+
+Es gibt einige weitere Dinge, die wir über die Syntax von C-Programmen
+wissen müssen:\\
+C  benutzt geschweifte Klammern (\{ und
+\}) um Gruppen von Anweisungen zu bilden. 
+In unserem Programm befindet sich die Ausgabeanweisung {\tt printf} 
+innerhalb geschweifter Klammern. Damit wird angezeigt,
+dass sie sich {\em innerhalb} der Definition von {\tt main} befindet. 
+Wir stellen auch fest, dass die Anweisungen im Programm
+eingerückt sind. Dabei handelt es sich nicht um eine strikte
+Vorgabe des Compilers, sondern um eine Übereinkunft zwischen
+Programmierern, die uns das Lesen eines Programms erleichtern soll.
+So kann man leichter visuell erfassen, welche Programmteile 
+zusammengehören und von anderen Teilen abhängig sind.
+Im Anhang \ref{Coding Style} habe ich dazu einige wichtige Regeln
+zusammengetragen, die man möglichst von Anfang an berücksichtigen sollte.
+
+Zu diesem Zeitpunkt wäre es eine gute Idee sich an einen Computer
+zu setzen und das Programm zu kompilieren und auszuführen.
+Leider kann ich an dieser Stelle nicht genauer darauf eingehen, 
+wie man das macht, da sich die einzelnen Computersysteme 
+stark voneinander unterscheiden. Ich gehe davon aus, dass 
+ein Seminarbetreuer, Freund oder eine Internet-Suchmaschine
+hier weiterhelfen können.
+
+Wie ich bereits erwähnte, ist der C-Compiler sehr pedantisch, 
+wenn es um die Einhaltung der Syntaxregeln geht.
+Wenn wir auch nur den kleinsten Tippfehler bei der Eingabe
+des Programms machen, ist die Gefahr groß, dass sich das Programm
+nicht erfolgreich kompilieren lässt. Wenn wir zum Beispiel {\tt sdtio.h} statt
+{\tt stdio.h} eingegeben haben, werden wir eine Fehlermeldung 
+wie die folgende erhalten:
+
+\begin{verbatim}
+   hello_world.c:1:19: error: sdtio.h: No such file or directory
+\end{verbatim}
+%
+
+Diese Fehlermeldung enthält eine Vielzahl von Informationen, 
+leider sind sie in einem kompakten, schwer zu interpretierenden
+Format verfasst. Ein freund\-licherer Compiler würde statt dessen
+schreiben:
+
+\begin{quote}
+``In Zeile 1 des Quelltextes mit dem Dateinamen \texttt{hello\_world.c} haben
+Sie versucht eine Headerdatei mit dem Dateinamen  \texttt{sdtio.h} zu laden. 
+Ich konnte keine Datei mit diesem Namen finden, ich habe aber eine
+Datei mit dem Namen \texttt{stdio.h} gefunden. \\ Wäre es möglich, dass
+sie diese Datei gemeint haben?''
+\end{quote}
+
+Leider sind die wenigsten Compiler so nett zu Anfängern und so geschwätzig.
+Der Compiler ist noch dazu nicht besonders schlau. In den meisten Fällen
+gibt uns die Fehlermeldung nur einen ersten Hinweis auf das mögliche 
+Problem und manchmal liegt der Compiler mit seinem Hinweis auch gänzlich
+daneben und der Fehler steckt  an einer ganz anderen Stelle. Vorangegangene
+Fehler können Folgefehler produzieren. Es ist deshalb angeraten, die Fehler in 
+der Reihenfolge ihres Auftretens zu beheben.
+
+Dennoch kann der Compiler auch ein nützliches Werkzeug für das
+Erlernen der Syntax einer Programmiersprache sein.
+Wir beginnen mit einem funktionsfähigen Programm (wie \texttt{hello\_world.c}) 
+und modifizieren dieses auf verschiedene Art und Weise.
+Sollten wir bei unseren Versuchen eine Fehlermeldung  
+erhalten, so prägen wir uns die Nachricht des Compilers und die
+dazugehörige Ursache ein und falls derselbe Fehler wieder
+auftritt, wissen wir, was wir verändern müssen. Compiler kennen die Syntax einer
+Sprache sehr genau. 
+Es wird sicher einige Zeit brauchen, bevor Sie die Nachrichten 
+des Compilers richtig interpretieren können -- es lohnt sich aber.
+
+
+
+\section{Glossar}
+
+\begin{description}
+
+\item[Algorithmus (engl.: \emph{algorithm}):]  Eine detaillierte und explizite Vorschrift zur 
+schrittweisen Lösung eines Problems oder einer Klasse von Problemen mit folgenden Eigenschaften:
+\begin{itemize}
+\item besteht aus einzelnen Schritten
+\item jeder Schritt besteht aus einer einfachen und offensichtlichen Aktion
+\item zu jedem Zeitpunkt ist klar, welcher Schritt als nächstes ausgeführt wird
+\end{itemize}
+
+
+\item[Anweisung (engl.: \emph{statement}):] 
+Befehl oder Befehlsfolge zur Steuerung eines Computers (einzelner Schritt in einem
+Programm). In C werden Anweisungen durch das Semikolon (\texttt{;}) gekennzeichnet.
+
+%A part of a program that specifies an action
+%that will be performed when the program runs.  A print statement
+%causes output to be displayed on the screen.
+
+\item[Bug (engl.: \emph{bug}):]  Ein Fehler in einem Programm. Man unterscheidet Syntaxfehler, 
+Laufzeitfehler und logische Fehler.
+
+\item[Debugging (engl.: \emph{debugging}):]  Der Prozess der Fehlersuche und der Fehlerkorrektur
+in einem Programm.
+
+%\item[Problemlösen (engl.: \emph{problem-solving}):]  The process of formulating a problem, finding
+%a solution, and expressing the solution.
+
+\item[High-level Sprache (engl.: \emph{high-level language}):]  Eine Programmiersprache wie C, welche 
+für Menschen einfach zu lesen und zu schreiben ist. Hochsprachen müssen vor der Ausführung
+in Maschinensprache übersetzt werden und können üblicherweise auf verschiedenen Computersystemen
+laufen.
+
+\item[Maschinennahe Sprache (engl.: \emph{low-level language}):]  Eine Programmier\-sprache welche
+sich an den Befehlen und Fähigkeiten eines bestimmten Prozessors orientiert und vom Programmierer
+ein tiefes Verständnis des Aufbaus eines Computers verlangt (z.B. Assembler).  
+Maschinennahe Sprachen müssen ebenfalls noch in Maschinensprache übersetzt werden. Diese
+Übersetzung ist aber sehr einfach und direkt. Programme in Maschinensprache laufen nur auf einem
+bestimmten Computersystem.
+
+\item[Formale Sprache (engl.: \emph{formal language}):]  Eine künstliche Sprache, die von Menschen 
+ für spezielle Zwecke entworfen wurde. Mit formalen Sprachen lassen sich mathematische Ideen  oder
+Computerprogramme beschreiben.  Alle Programmiersprachen sind formale Sprachen.
+
+\item[Natürliche Sprache (engl.: \emph{natural language}):]  Eine der Sprachen die von Menschen gesprochen
+wird und die sich auf evolutionäre Weise entwickelt hat.
+
+\item[portabel (engl.: \emph{portability}):]  Der Begriff \emph{portabel} kennzeichnet die Eigenschaft eines Computerprogramms auf unterschiedlichen Computersystemen einsetzbar zu sein (Übertragbarkeit).
+
+\item[interpretieren (engl.: \emph{interpret}):]  Ein Programm ein einer Hochsprache ausführen, indem
+jede einzelne Programmzeile nacheinander durch einen \emph{Interpreter} übersetzt und ausgeführt wird.
+
+\item[compilieren (engl.: \emph{compile}):]  Ein Programm in einer Hochsprache mit Hilfe eines 
+\emph{Compilers} in ein Programm in Maschinensprache zu übersetzen.
+Es wird dabei das komplette Programm übersetzt und eine neue, ausführbare Datei erzeugt, die
+auf einem bestimmten Computersystem ausgeführt werden kann.
+
+\item[Quelltext (engl.: \emph{source code}):]  Ein Programm  in einer Hochsprache, bevor
+es compiliert wurde.
+
+\item[Objektcode (engl.: \emph{object code}):]  Das Produkt eines Compilers nach der Übersetzung des Quelltextes (Maschinencode).
+
+\item[Ausführbare Datei (engl.: \emph{executable}):]  Der Maschinencode inklusive aller Bibliotheken. Die Datei
+kann durch das Betriebssystem gestartet werden und führt dann das Programm aus.
+
+\item[Kommentar (engl.: \emph{comment}):] Ein Teil eines Programms, welcher Informationen für den
+Programmierer über das Programm beinhaltet. Kommentare haben keinen Einfluss auf die Ausführung
+des Programms.
+
+\item[Syntax (engl.: \emph{syntax}):]  Die Struktur eines Programms.
+
+\item[Syntaxfehler (engl.: syntax error):]  Ein Fehler in einem Programm, welches es dem Compiler unmöglich
+macht das Programm zu parsen (und somit zu übersetzen).
+
+\item[Semantik (engl.: \emph{semantics}):]  Die Bedeutung eines Programms.
+
+
+\item[Parsen (engl.: \emph{parse}):]  Ein Programm zu untersuchen und die syntaktische Struktur
+zu analysieren.
+
+
+
+\item[Logischer Fehler (engl.: \emph{logical error}):]  Ein Fehler in einem Programm welcher dazu führt, dass
+das Programm zwar abläuft, aber etwas anderes macht, als das was der Programmierer beabsichtigt hatte.
+
+
+%\index{Problemlösen}
+\index{High-level Sprache}
+\index{Low-level Sprache}
+\index{Formale Sprache}
+\index{Natürliche Sprache}
+\index{Interpretieren}
+\index{Kompilieren}
+\index{Syntax}
+\index{Semantik}
+\index{Parsen}
+\index{Error}
+\index{Fehler}
+\index{Programmfehler}
+\index{Debugging}
+\index{Anweisung}
+\index{Kommentar}
+\index{Logischer Fehler}
+\index{Syntaxfehler}
+
+\end{description}
+
+\section{Übungsaufgaben}
+
+\ifthenelse {\boolean{German}}{ \input{exercises/Exercise_1_german}}
+{\input{exercises/Exercise_1_english}}
+

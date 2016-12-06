@@ -1,0 +1,1193 @@
+%!TEX root = Main_german.tex
+
+% LaTeX source for textbook ``How to think like a computer scientist''
+% Copyright (C) 1999  Allen B. Downey
+
+% This LaTeX source is free software; you can redistribute it and/or
+% modify it under the terms of the GNU General Public License as
+% published by the Free Software Foundation (version 2).
+
+% This LaTeX source is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% General Public License for more details.
+
+% Compiling this LaTeX source has the effect of generating
+% a device-independent representation of a textbook, which
+% can be converted to other formats and printed.  All intermediate
+% representations (including DVI and Postscript), and all printed
+% copies of the textbook are also covered by the GNU General
+% Public License.
+
+% This distribution includes a file named COPYING that contains the text
+% of the GNU General Public License.  If it is missing, you can obtain
+% it from www.gnu.org or by writing to the Free Software Foundation,
+% Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+
+\chapter{Funktionen mit Ergebnissen}
+
+\section{Return-Werte}
+\index{return}
+\index{Anweisung!return}
+\index{Funktionen mit Ergebnissen}
+\index{return value}
+\index{Funktion!Rückgabewert}
+\index{Rückgabewert}
+\index{void}
+\index{Funktion!void}
+
+Wir haben ja bereits einige Erfahrung bei der Verwendung von 
+Funktionen in C. Bei einigen der Standardfunktionen, wie
+zum Beispiel den mathematischen Funktionen ist uns aufgefallen,
+das die Funktion einen Wert berechnet -- die Funktion hat ein 
+Resultat produziert.
+
+Mit diesem Wert kann unser Programm weiterhin arbeiten. Wir 
+können ihn in einer Variable speichern, auf dem 
+Bildschirm ausgeben oder als Teil eines Ausdrucks verwenden.  
+Zum Beispiel
+
+\index{Mathematische Funktion!exp()}
+\index{Mathematische Funktion!sin()}
+
+\begin{verbatim}
+    double e = exp (1.0);
+    double height = radius * sin (angle);
+\end{verbatim}
+%
+Allerdings waren alle unsere Funktionen, die wir bisher selbst
+geschrieben haben {\bf void} Funktionen, das heißt sie haben
+den Datentyp  {\bf void} und liefern kein Ergebnis zurück.
+
+Wenn wir  {\bf void} Funktionen aufrufen, steht der Funktionsaufruf
+üblicherweise für sich allein als Anweisung in einer Programmierzeile
+ohne dass dabei ein Wert zugewiesen oder erwartet wird:
+
+
+\begin{verbatim}
+    PrintLines (3);
+    Countdown (n-1);
+\end{verbatim}
+%
+In diesem Kapitel werden wir herausfinden, wie wir Funktionen 
+schreiben, welche eine Rückgabe an die aufrufende Funktion erzeugt.
+Weil mir ein guter Name dafür fehlt werde ich sie {\bf Funktionen mit Ergebnissen} 
+nennen. 
+
+Das erste Beispiel ist die Funktion {\tt CalculateCircleArea()}. Sie hat einen  {\tt
+double} Wert als Parameter und liefert die berechnete Fläche eines Kreises in Abhängigkeit vom
+gegebenen Radius:
+
+\index{Mathematische Funktion!acos()}
+\index{pi}
+
+\begin{verbatim}
+    double CalculateCircleArea (double radius) 
+    {
+        double pi = acos (-1.0);
+        double area = pi * radius * radius;
+        return area;
+    }
+\end{verbatim}
+%
+Beim Betrachten der Funktionsdefinition fällt  als erstes auf, dass die Funktion
+anders beginnt, als alle andern Funktionen, die wir bisher geschrieben haben.
+Der erste Begriff in einer Funktionsdefinition gibt den Datentyp der Funktion an.
+Anstelle von {\tt void} steht hier {\tt double}. Damit wird angezeigt, dass 
+der Rückgabewert der Funktion vom Typ {\tt double} ist.
+
+Immer, wenn wir mit Daten arbeiten, neue Werte berechnen, Funktionen aufrufen,
+oder Ein- undAusgaben erzeugen, müssen wir exakt angeben um welchen 
+Datentyp es sich dabei handelt. Nur so kann der Compiler prüfen, ob die
+tatsächlich verwendeten Daten dem richtigen Typ entsprechen und uns vor größeren
+Problemen bewahren. Das erscheint am Anfang vielleicht etwas ungewohnt und
+lästig, wird uns aber bald ganz selbstverständlich von der Hand gehen.
+
+Wenn wir uns die letzte Zeile anschauen, dann fällt auf, dass die 
+{\tt return}-Anweisung jetzt auch einen Wert enthält.
+Die Bedeutung dieser Anweisung ist die folgende:  
+``kehre unmittelbar zur aufrufenden Funktion zurück und verwende den 
+Wert des folgenden Ausdrucks als  Rückgabewert.'' 
+Der angegebene Ausdruck kann dabei von beliebiger Komplexität sein.
+Wir hätten also die Funktion auch sehr viel knapper zusammenfassen können:
+
+\begin{verbatim}
+    double Area (double radius) 
+    {
+        return acos(-1.0) * radius * radius;
+    }
+\end{verbatim}
+%
+Auf der anderen Seite erleichtert uns die Verwendung von {\bf temporäre} 
+Variablen wie {\tt area} die Suche nach Programmfehlern.
+Wichtig ist in jedem Fall, dass der Typ des Ausdrucks in der 
+{\tt return}-Anweisung mit dem angegebenen Typ der Funktion übereinstimmt.
+
+In anderen Worten, wenn wir in einer Funktionsdeklaration angeben
+das der Rückgabewert vom Typ {\tt double} ist, geben wir ein Versprechen
+die Funktion schließlich ein Ergebnis vom Typ {\tt double} produziert.
+Wenn wir keinen Wert zurückgeben ({\tt return} ohne Ausdruck benutzen)
+oder den falschen Typ zurückgeben ist das fast immer ein Fehler und der
+Compiler wird uns dafür zur Rede stellen. Allerdings gelten auch hier die
+Regeln der automatischen Typumwandlung.
+
+\index{Temporäre Variable}
+\index{Variable!tempräre}
+
+Manchmal ist es nützlich mehrere  {\tt return}-Anweisung in einer
+Funktion zu haben. Zum Beispiel eine für jede Programmverzweigung:
+
+\begin{verbatim}
+  double AbsoluteValue (double x) 
+    {
+        if (x < 0) 
+        {
+            return -x;
+        } 
+        else 
+        {
+            return x;
+        }
+    }
+\end{verbatim}
+%
+Da sich die {\tt return} -Anweisungen in alternativen Zweigen unseres 
+Programms befinden wird jeweils nur eine von ihnen auch ausgeführt.
+Obwohl es legal ist mehrere {\tt return}-Anweisungen in einer Funktion
+zu haben, ist es wichtig daran zu denken, dass eine davon ausgeführt wird,
+die Funktion beendet ist, ohne noch irgendwelche anderen Anweisungen
+auszuführen.
+
+Programmcode, welcher hinter einer {\tt return}-Anweisung steht, wird 
+nicht mehr ausgeführt und wird deshalb {\bf unereichbarer Code} genannt.
+Sollte eine Funktion also nicht das erwartete Ergebnis produzieren, so sollten
+Sie prüfen ob die Anweisungen auch wirklich ausgeführt werden. 
+Manche Compilers geben eine Warnung aus, wenn in einem Programm
+solche Codezeilen existieren.
+
+\index{Unerreichbarer Code}
+
+Wenn wir  {\tt return}-Anweisungen in Programmverzweigungen 
+benutzen, müssen wir garantieren, das  {\em jeder mögliche Pfad} durch
+das Programm auf eine  {\tt return}-Anweisung trifft.
+Zum Beispiel gibt es ein Problem im folgenden Programm:
+
+\begin{verbatim}
+  double AbsoluteValue (double x) 
+    {
+        if (x < 0) 
+        {
+            return -x;
+        } 
+        else if (x > 0) 
+        {
+            return x;
+        }                 /* Fehlendes return für x==0!! */
+    }
+\end{verbatim}
+%
+Dieses Programm ist nicht korrekt, weil im Fall, dass {\tt x} den Wert  0 hat, 
+keine der beiden Bedingungen zutrifft und die Funktion beendet wird,
+ohne auf eine  {\tt return}-Anweisung zu treffen.
+Unglücklicherweise können viele C Compilers diesen Fehler nicht
+finden. Es ist also häufig der Fall, dass sich das Programm kompilieren und
+ausführen lässt, aber der Rückgabewert für den Fall {\tt x==0} 
+nicht definiert ist. Wir können nicht voraussagen, welcher Wert letztendlich 
+zurückgegeben wird und es ist wahrscheinlich, dass es unterschiedliche
+Werte für unterschiedliche Umgebungen sein werden.
+
+\index{Absolutwert}
+\index{Error!compile-time}
+\index{Compile-time error}
+
+Mittlerweile haben Sie bestimmt schon die Nase voll davon Compiler-Fehler zu sehen.
+Allerdings kann ich versichern, dass es nur eine Sache gibt die schlimmer ist als 
+Compiler-Fehler zu erhalten -- und das ist {\em keine} Compiler-Fehler zu erhalten,
+wenn das Programm falsch ist.
+
+Ich beschreibe mal kurz was wahrscheinlich passieren wird: Sie testen {\tt
+AbsoluteValue()} mit mehreren verschiedenen Werten für {\tt x} und die
+Funktion scheint korrekt zu arbeiten.
+Dann geben Sie ihr Programm an jemand anderen weiter und er oder sie versucht es 
+in einer geänderten Umgebung (anderer Compiler oder Rechnerarchitektur) laufen zu lassen.
+Das Programm produziert plötzlich auf mysteriöse Art und Weise Fehler.\\
+Es wird mehrere Tage und viel Debugging-Aufwand kosten herauszufinden,
+dass die Implementierung von  {\tt AbsoluteValue()} fehlerhaft war - wie froh
+wären Sie gewesen, wenn Sie der Compiler doch nur gewarnt hätte!
+
+\index{Compile-time error}
+\index{Error!compile-time}
+\index{Debugging}
+
+Von jetzt an sollten wir nicht dem Compiler die Schuld geben, wenn er wieder
+auf einen Fehler in unserem Programm hinweist. 
+Im Gegenteil, wir sollten ihm danken, dass er einen Fehler so einfach gefunden
+hat und uns viel Zeit und Aufwand erspart hat den Fehler selbst aufspüren
+zu müssen. 
+Die meisten Compilers verfügen über eine Option mit der wir dem Compiler
+mitteilen können unser Programm besonders strikt und sorgfältig zu prüfen und
+alle Fehler zu melden die er nur finden kann. Sie sollten diese Option während
+der gesamten weiteren Programmentwicklung nutzen.
+
+\index{Mathematische Funktion!fabs()}
+
+Ach übrigens wollte ich nur kurz noch erwähnen, es gibt in der 
+mathematischen Bibliothek eine Funktion namens {\tt fabs()}.
+Sie berechnet den Absolutwert eines {\tt double} -- korrekt und einwandfrei.
+
+\section{Programmentwicklung}
+\label{distance}
+\index{Programmentwicklung}
+
+An diesem Punkt sollten wir in der Lage sein komplette C Funktionen
+lesen und erklären zu können.
+Es ist aber sicher noch nicht so klar, wie man vorgeht um eigene
+Funktionen zu entwerfen und aufzuschreiben.
+Ich möchte deshalb an dieser Stelle eine Technik vorstellen, die ich 
+{\bf inkrementelle Entwicklung} nenne.
+
+\index{Inkrementelle Entwicklung}
+\index{Programmentwicklung}
+
+Stellen wir uns folgende Beispielaufgabe vor: Wir wollen den Abstand
+zwischen zwei Punkten herausfinden, deren Position jeweils durch x- und y-Koordinaten
+bestimmt ist. Ein Punkt hat die Koordinaten $(x_1, y_1)$, der andere $(x_2, y_2)$.  
+Wir können den Abstand mit Hilfe der folgenden mathematischen Funktion ermitteln:
+\begin{equation}
+distance = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}
+\end{equation}
+%
+Wenn wir jetzt eine passende  {\tt Distance} Funktion in C
+entwerfen wollen, müssen wir im ersten Schritt überlegen,
+welche Eingaben (Parameter) und welche Ausgaben (Rückgabewerte)
+unsere Funktion für die Berechnung benötigt.
+
+In unserem Fall sind die Koordinaten der zwei Punkte die Parameter.
+Wir müssen einen Datentyp festlegen und es ist nur natürlich hierfür
+reelle Zahlen vorzusehen, wir verwenden also vier {\tt double}s.  
+Der Rückgabewert unserer Funktion ist die Entfernung zwischen den
+Punkten und ist vom gleichen Typ {\tt double}.
+
+Damit können wir bereits die Grundzüge unsere Funktion in C aufschreiben:
+%Already we can write an outline of the function:
+
+\begin{verbatim}
+    double Distance (double x1, double y1, double x2, double y2) 
+    {
+        return 0.0;
+    }
+\end{verbatim}
+%
+Die {\tt return}-Anweisung ist ein Platzhalter, so das sich die Funktion 
+kompilieren lässt und einen Wert zurückgibt, obwohl das natürlich
+nicht die richtige Antwort ist.
+
+An diesem Punkt tut die Funktion noch nichts sinnvolles, 
+aber es ist trotzdem eine gute Idee sie bereits einmal zu kompilieren
+um eventuell vorhandene Syntaxfehler zu finden, bevor wir
+weitere Anweisungen hinzufügen.
+
+Um die Funktion in einem Programm zu testen müssen wir sie mit
+Beispielwerten aufrufen. Irgendwo in {\tt main()} könnten folgende
+Anweisungen hinzufügen:
+
+\begin{verbatim}
+    double dist = Distance (1.0, 2.0, 4.0, 6.0);
+    printf  ("%f\n" dist);
+\end{verbatim}
+%
+Ich habe die Werte speziell ausgewählt, so dass der horizontale
+Abstand 3 und  der vertikale Abstand 4 ist; auf diese Weise ergibt
+der korrekte Abstand den Wert 5 ( die Hypotenuse eines 3-4-5 Dreiecks).
+Wenn wir die Rückgabewerte einer Funktion testen wollen, ist es eine
+gute Idee vorher die richtigen Antworten zu kennen.
+
+Nachdem wir überprüft haben, dass die Syntax der Funktionsdefinition 
+korrekt ist können wir anfangen weitere Codezeilen für die Berechnung
+hinzuzufügen.
+Nach jeder größeren Änderung kompilieren wir unser Programm 
+und führen es erneut aus. Auf diese Weise ist es sehr einfach 
+Fehler zu finden, die beim letzten Kompilieren noch nicht da waren.
+Sie müssen in den neu hinzugefügten Programmzeilen stecken!
+
+Der nächste Schritt der Berechnung ermittelt die Differenz zwischen
+$x_2 - x_1$ und $y_2 - y_1$.  Ich  werde diese Werte in 
+temporären Variablen mit Namen {\tt dx} und {\tt dy} speichern.
+
+\begin{verbatim}
+    double Distance (double x1, double y1, double x2, double y2) 
+    {
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        printf  ("dx is %f\n",  dx);
+        printf  ("dy is %f\n", dy;
+        return 0.0;
+    }
+\end{verbatim}
+%
+In der Funktion habe ich noch zwei Ausgabeanweisungen hinzugefügt,
+so dass ich erst einmal die Zwischenergebnisse überprüfen kann, bevor
+ich weitermache.
+Ich habe es bereits erwähnt, ich erwarte an
+dieser Stelle die Werte 3.0 und 4.0.
+
+\index{Debug-Code}
+
+Wenn die Funktion fertig ist werde ich die Ausgabeanweisungen wieder
+entfernen. Programmcode, der zu einem Computerprogramm hinzugefügt
+wird um bei der Programmentwicklung zu helfen, wird auch als {\bf Debug-Code}
+bezeichnet.
+Dieser Programmcode sollte in der Endversion unseres Programms nicht
+mehr enthalten sein. 
+Man kann Debug-Anweisungen auch im Quelltext eines Programms belassen und
+ihn zum Beispiel nur auskommentieren, dass heißt als Kommentar kennzeichnen.
+Auf diese Weise ist es einfach ihn später wieder zu aktivieren, wenn er
+gebraucht werden sollte. 
+
+\index{Mathematische Funktion!pow()}
+\index{Mathematische Funktion!sqrt()}
+Der nächste Schritt in unserer Berechnung ist die Quadrierung von {\tt dx} und {\tt dy}.
+Wir könnten dafür die {\tt pow()} Funktion von C benutzen, es ist aber an dieser
+Stelle einfacher und schneller jeden Term einfach mit sich selbst zu multiplizieren:
+
+\begin{verbatim}
+    double Distance (double x1, double y1, double x2, double y2)
+    {
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        double dsquared = dx*dx + dy*dy;
+        printf  ("d_squared is %f\n", dsquared);
+        return 0.0;
+    }
+\end{verbatim}
+%
+Es ist ratsam, an dieser Stelle das Programm erneut zu kompilieren und 
+auszuführen. Dabei sollten wir den Wert des Zwischenergebnis kontrollieren
+-- dieser sollte den Wert 25.0 haben.
+
+Zum Schluss benutzen wir die {\tt sqrt()} Funktion um das Endergebnis
+zu berechnen und geben dieses Resultat an die aufrufende Funktion
+zurück:
+
+\begin{verbatim}
+    double Distance (double x1, double y1, double x2, double y2) 
+    {
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        double dsquared = dx*dx + dy*dy;
+        double result = sqrt (dsquared);
+        return result;
+    }
+\end{verbatim}
+%
+In {\tt main()} sollten wir uns diesen Wert ausgeben lassen und erneut
+überprüfen, ob das Resultat mit unseren Erwartungen übereinstimmt.
+
+Im Laufe der Zeit, wenn wir unsere Programmiererfahrung verbessert haben,
+werden wir mehr und mehr Programmzeilen schreiben, bevor wir 
+überprüfen, ob unser Programm fehlerfrei läuft. Trotzdem ist der 
+inkrementelle Entwicklungsprozess auch dann noch sinnvoll und 
+kann Ihnen helfen eine Menge Zeit bei der Fehlersuche zu sparen.
+
+Die Schlüsselaspekte des Prozesses sind:
+
+\begin{itemize}
+
+\item Beginne die Programmentwicklung mit einem funktionsfähigen Programm
+und mache kleine, inkrementelle Änderungen. Kompiliere den Programmcode
+nach jeder Änderung. Jedes Mal wenn ein Fehler auftaucht ist sofort klar, wo
+dieser Fehler zu suchen ist.
+
+\item Benutze temporäre Variablen um Zwischenergebnisse zu speichern. 
+Nutze diese Variablen um sie auf dem Bildschirm auszugeben und ihre Werte zu überprüfen.
+
+\item Nachdem das komplette Programm funktioniert, sollten Debug-Anweisungen
+entfernt (auskommentiert, nicht mit übersetzt) werden und einzelne Anweisungen
+können zu komplexen Ausdrücken zusammengefasst werden. 
+Es sollte aber darauf geachtet werden, dass dabei das Programm leicht lesbar
+bleibt. Es ist generell zu empfehlen einfachere Ausdrücke zu bevorzugen
+und dem Compiler die Optimierung des Programms zu überlassen.
+
+\end{itemize}
+
+\section{Komposition}
+\index{Komposition}
+
+Wie wir bereits schon vermutet haben können wir, nachdem wir eine
+neue Funktion definiert haben, diese Funktion auch als Teil eines 
+Ausdrucks verwenden. Ebenso können wir neue Funktionen mit Hilfe
+bereits existierender Funktionen erstellen.
+
+Nehmen wir zum Beispiel an, dass uns jemand zwei Punkte nennt.
+Einer dieser Punkte sei der Mittelpunkt und der andere
+Punkt befindet sich auf dem Umkreis eines den Mittelpunkt umgebenden Kreises.
+Sie haben die Aufgabe aus diesen Angaben die Fläche des Kreises zu ermitteln.
+ 
+Die Koordinaten des  Mittelpunkts sollen in den Variablen {\tt xc}
+und {\tt yc} und die Koordinaten des Punkts auf dem Umkreis in {\tt xp} und
+{\tt yp} gespeichert sein.  
+Der erste Schritt der Flächenberechnung besteht darin den Radius des Kreises
+zu ermitteln, welcher sich aus dem Abstand der beiden Punkte ergibt.
+Glücklicherweise haben wir bereits eine Funktion  {\tt Distance()}, die genau das
+für uns tut:
+
+\begin{verbatim}
+    double radius = Distance (xc, yc, xp, yp);
+\end{verbatim}
+%
+Der zweite Schritt besteht darin den Kreisflächeninhalt auf der Basis des Radius zu
+berechnen und zurückzugeben (die Funktion  {\tt  AreaCircle()} müssen wir noch schreiben!):
+
+\begin{verbatim}
+    double result = AreaCircle (radius);
+    return result;
+\end{verbatim}
+%
+Wir können diese Schritte in einer neuen Funktion  {\tt  AreaFromPoints()} zusammenfassen:
+
+\begin{verbatim}
+    double AreaFromPoints (double xc, double yc, double xp, double yp) 
+    {
+        double radius = Distance (xc, yc, xp, yp);
+        double result = AreaCircle (radius);
+        return result;
+    } 
+\end{verbatim}
+%
+
+Die temporären Variablen {\tt radius} und {\tt area} sind nützlich für
+die Programmentwicklung und die Fehlersuche, aber nachdem unser
+Programm funktioniert können wir den Programmcode knapp und präzise 
+darstellen, indem wir die Funktionsaufrufe zu einem Ausdruck zusammenfassen:
+
+\begin{verbatim}
+    double AreaFromPoints (double xc, double yc, double xp, double yp) 
+    {
+        return AreaCircle (Distance (xc, yc, xp, yp));
+    } 
+\end{verbatim}
+
+%Overloading not supported in C!!!
+
+%\section{Overloading}
+%\label{overloading}
+%\index{overloading}
+
+%In the previous section you might have noticed that {\tt Fred}
+%and {\tt Area} perform similar functions---finding
+%the area of a circle---but take different parameters.  For
+%{\tt Area}, we have to provide the radius; for {\tt Fred}
+%we provide two points.
+
+%If two functions do the same thing, it is natural to give them
+%the same name.  In other words, it would make more sense if
+%{\tt Fred} were called {\tt Area}.
+
+%Having more than one function with the same name, which is called {\bf
+%overloading}, is legal in C {\em as long as each version takes
+%different parameters}.  So we can go ahead and rename {\tt Fred}:
+
+%\begin{verbatim}
+%  double Area (double xc, double yc, double xp, double yp) 
+%  {
+%      return Area (Distance (xc, yc, xp, yp));
+%  } 
+%\end{verbatim}
+%%
+%This looks like a recursive function, but it is not.  Actually,
+%this version of {\tt area} is calling the other version.
+%When you call an overloaded function, C knows which version you
+%want by looking at the arguments that you provide.  If you write:
+
+%\begin{verbatim}
+%    double x = Area (3.0);
+%\end{verbatim}
+%%
+%C goes looking for a function named {\tt area} that
+%takes a {\tt double} as an argument, and so it uses the
+%first version.  If you write
+
+%\begin{verbatim}
+%    double x = Area (1.0, 2.0, 4.0, 6.0);
+%\end{verbatim}
+%%
+%C uses the second version of {\tt area}.  
+
+%Many of the built-in C commands are overloaded, meaning that there
+%are different versions that accept different numbers or types of
+%parameters.
+
+%Although overloading is a useful feature, it should be used with
+%caution.  You might get yourself nicely confused if you are trying to
+%debug one version of a function while accidently calling a different
+%one.
+
+%Actually, that reminds me of one of the cardinal rules of debugging:
+%{\bf make sure that the version of the program you are looking at is
+%the version of the program that is running!}  Some time you may find
+%yourself making one change after another in your program, and seeing
+%the same thing every time you run it.  This is a warning sign that for
+%one reason or another you are not running the version of the program
+%you think you are.  To check, stick in an output statement (it
+%doesn't matter what it says) and make sure the behavior of the
+%program changes accordingly.
+
+\section{Boolesche Werte}
+\index{\_Bool}
+\index{Werte!boolesche}
+
+Die numerischen Datentypen die wir bisher kennengelernt haben können
+Werte in einem sehr großen Wertebereiche speichern. Wir können sehr viele
+ganze Zahlen und noch mehr Fließkommazahlen darstellen. Das ist auch
+notwendig da die Zahlenbereiche in der Mathematik unendlich sind.
+%todo: Wertebereiche / Datentypen / Darstellung der Speicherung im Computer
+Im Vergleich dazu ist die Menge der darstellbaren Zeichen vergleichsweise klein.
+Das hat Auswirkungen darauf, wie viel Speicherplatz ein Computer für die 
+Speicherung dieser Werte benötigt. So benötigt ein Wert vom Typ {\tt int} 2 bis 4 Byte,
+ein Wert vom Typ {\tt double} 8 Byte und ein Wert vom Typ {\tt char} 1 Byte Speicherplatz.
+%todo: Tabelle?
+
+Viele Programmiersprachen implementieren noch einen weiteren fundamentalen 
+Datentyp, der kleinste Informationseinheiten speichern kann und der noch viel kleiner
+ist. Es handelt sich dabei um so genannte {\bf boolesche Werte} für deren 
+Speicherung ein einzelnes Bit ausreicht.  Boolesche Werte können nur zwei
+Zustände unterscheiden und werden üblicherweise für die Darstellung der Wahrheitswerte
+\emph{true} und \emph{false} genutzt.
+
+
+Unglücklicherweise haben frühe Versionen des C Standards boolesche Werte nicht
+als separaten Datentyp implementiert. Sie benutzten statt dessen die ganzzahligen 
+(integer) Werte 0 und 1 für die Darstellung der Wahrheitswerte. Dabei steht die 0 für den
+Wert {\tt false} und die 1 für den Wert {\tt true}. 
+Genaugenommen interpretiert C jeden ganzzahligen Wert ungleich 0 als {\tt true}. 
+Das müssen wir beachten, wenn einen Wert auf  {\tt true} testen wollen. Wir dürfen
+ihn nicht mit {\tt 1} vergleichen sondern müssen überprüfen, ob er ungleich  {\tt !=} 0 ist.
+
+%todo: C99  {\tt \_Bool}, and
+
+%
+
+Ohne darüber nachzudenken, haben wir bereits im letzten Kapitel boolesche Werte 
+benutzt. Die Bedingung innerhalb einer {\tt if}-Anweisung ist ein boolescher Ausdruck.
+Die Vergleichsoperatoren liefern uns einen booleschen Wert als Resultat:
+
+\begin{verbatim}
+    if (x == 5) 
+    {
+        /* do something*/
+    }
+\end{verbatim}
+%
+Der Operator {\tt ==} vergleicht zwei ganze Zahlen und erzeugt einen
+Wahrheitswert (boolescher Wert). 
+
+\index{Operator!Vergleich}
+\index{Vergleichsoperator}
+\index{Präprozessor!\#define}
+\index{\#define}
+
+%todo Pre C99 has no keywords for the expression of {\tt true} or {\tt false}.
+Da frühere C Standards auch keine Schlüsselwörter für die Angabe von 
+{\tt true} oder {\tt false} kennen, verwenden viele Programme den 
+C Präprozessor um sich selbst entsprechende Konstanten zu definieren.
+Diese können dann überall verwendet werden, wo ein boolescher Ausdruck
+gefordert ist.
+
+Zum Beispiel:
+
+\begin{verbatim}
+    #define FALSE 0
+    #define TRUE 1
+     ...
+    if (x != FALSE) 
+    {
+        /* wird ausgeführt, wenn x ungleich 0 ist  */
+    }
+\end{verbatim}
+%
+%todo: is a standard idiom for a loop that should run forever (or
+%until it reaches a {\tt return} or {\tt break} statement).
+
+\section{Boolesche Variablen}
+\index{Typ!{\tt \_Bool}}
+\index{Typ!{\tt short}}
+
+Boolesche Werte werden in vielen C Versionen nicht direkt unterstützt. Mit dem C99 Standard wurde
+das geändert und der Datentyp {\tt \_Bool} eingeführt. 
+Es gibt aber weiterhin viele Programme, deren Programmcode viel älter ist und auch nicht alle Compiler
+unterstützen den C99 Standard komplett. 
+%Wenn sich also  keine Variablen vom Datentyp {\tt boole} deklarieren können, 
+Viele Programmierer benutzen statt dessen den Datentyp {\tt short}  in Kombination mit
+den bereits erwähnten Präprozessordefinitionen um Wahrheitswerte zu speichern.
+In Variablen vom Datentyp {\tt short} können wie bei {\tt int} Ganze Zahlen gespeichert
+werden. Es aber weniger Bit zur Speicherung der Daten benutzt, das heißt, der Wertebereich
+von {\tt short} ist kleiner als der von {\tt int}. 
+
+\begin{verbatim}
+    #define FALSE 0
+    #define TRUE 1
+     ...
+    short fred;
+    fred = TRUE;
+    short testResult = FALSE;
+\end{verbatim}
+%
+Die erste Anweisung des Programms ist eine einfache Variablendeklaration. Wir benutzen den
+Datentyp {\tt short} um Speicherplatz zu sparen, wir hätten auch {\tt int} verwenden können.
+Danach folgt eine Zuweisung, gefolgt von einer Kombination aus Deklaration und 
+Zuweisung -- eine so genannte Initialisierung.
+
+\index{Initialisierung}
+\index{Anweisung!Initialisierung}
+
+Wie ich bereits erwähnte, liefern uns die Vergleichsoperatoren einen Wahrheitswert als
+Ergebnis. Das Resultat eines Vergleichs lässt sich in einer Variable speichern:
+
+
+\begin{verbatim}
+  short evenFlag = (n%2 == 0);     /* true if n is even */
+  short positiveFlag = (x > 0);    /* true if x is positive */
+\end{verbatim}
+%
+So dass wir es später als Teil einer bedingten Anweisung nutzen können:
+\begin{verbatim}
+  if (evenFlag) 
+  {
+      printf("n was even when I checked it");
+  }
+\end{verbatim}
+%
+Eine Variable die wir in dieser Art nutzen wird als {\bf Flag} bezeichnet,
+weil sie uns die Anwesenheit oder Abwesenheit einer Bedingung markiert (\emph{engl.:} to flag).
+
+\index{Flag}
+
+\section{Logische Operatoren}
+\label{Logical Operators}
+\index{Logischer Operator}
+\index{Operator!logischer}
+\index{Rangfolge der Operatoren}
+
+Es existieren drei {\bf logische Operatoren} in C: AND, OR und NOT,
+welche durch die Symbol {\tt \&\&}, {\tt ||} und
+{\tt !} dargestellt werden.  
+Die Bedeutung (Semantik) dieser Operatoren leitet sich aus der Booleschen
+Algebra ab. Die logischen Operatoren haben eine geringere Priorität 
+als  arithmetischen Operatoren und Vergleichsoperatoren, dass heißt, sie werden erst
+nach der Auswertung von Vergleichen und Berechnungen angewendet.
+
+\begin{description}
+\item[AND-Operator] Im folgenden Ausdruck werden zuerst die Vergleiche durchgeführt
+und danach werden die Wahrheitswerte der Vergleiche durch den  {\tt AND}-Operator miteinander
+verknüpft:  
+
+\begin{verbatim}
+x > 0 && x < 10
+\end{verbatim}
+
+Der gesamte Ausdruck ist dann \emph{true}, wenn {\tt x} größer als Null und 
+(AND) kleiner als 10 ist.
+
+\index{Semantik}
+
+\item[OR-Operator] 
+Der {\tt OR}-Operator  wird folgendermaßen verwendet: 
+\begin{verbatim}
+evenFlag || number%3 == 0
+\end{verbatim}
+ 
+Der Ausdruck ist \emph{true}, wenn {\em entweder}
+das {\tt evenFlag} einen Wert ungleich Null hat oder (OR) die Variable
+ {\tt number} ohne Rest durch 3 teilbar ist. Aus Gründen der besseren Lesbarkeit empfiehlt es sich
+ auch hier Klammern zu verwenden. Wir hätten den Ausdruck auch folgendermaßen aufschreiben
+ können: 
+\begin{verbatim}
+ evenFlag || (number%3 == 0)
+\end{verbatim}
+
+
+\item[NOT-Operator] 
+Der  {\tt NOT}-Operator kehrt den Wahrheitswert eines booleschen Ausdrucks in 
+sein Gegenteil um (er negiert den Ausdruck).
+Damit lässt sich in unserem vorigen Beispiel die Bedingung umkehren:
+\begin{verbatim}
+!(number%3 == 0)
+\end{verbatim}
+
+Der Ausdruck wäre dann wahr, wenn  {\tt number} nicht  (NOT) durch 3 teilbar ist. 
+
+\end{description}
+
+\index{Verschachtelte Bedingungen}
+
+Logische Operatoren werden oft dazu verwendet verschachtelte Programmverzweigungen
+zu vereinfachen. So könnte man in dem folgenden Beispiel das Programm
+so vereinfachen, dass nur eine einzige  {\tt if}-Anweisung benutzt wird. Könnten
+Sie dazu die Bedingung aufschreiben?
+
+\begin{verbatim}
+    if (x > 0) 
+    {
+        if (x < 10) 
+        {
+            printf ("x is a positive single digit.\n");
+        }
+    }
+\end{verbatim}
+
+\section{Boolesche Funktionen}
+\label{bool}
+\index{bool}
+\index{Funktion!boolesch}
+
+Es ist manchmal angebracht, dass eine Funktion einen Wahrheitswert
+an die aufrufende Funktion zurückgibt, so wie wir das bei anderen Datentypen 
+auch tun.
+Das ist insbesondere dann vorteilhaft, wenn in der Funktion komplexe
+Tests durchgeführt werden und der aufrufenden Funktion nur mitgeteilt
+werden soll, ob der Test erfolgreich war oder nicht.
+
+Zum Beispiel:
+\begin{verbatim}
+    int IsSingleDigit (int x)
+    {
+        if (x >= 0 && x < 10) 
+        {
+            return TRUE;
+        } 
+        else 
+        {
+            return FALSE;
+        }
+    }
+\end{verbatim}
+%
+Der Name der Funktion lautet {\tt IsSingleDigit()}. Es ist üblich 
+solchen Testfunktionen einen Namen zu geben, der wie eine
+Ja/Nein Frage formuliert ist.
+Der Rückgabewert der Funktion ist {\tt int}, das bedeutet, dass
+wir erneut der Übereinkunft folgen, dass  0 -- {\tt false} und 1 -- {\tt true} 
+darstellt. Jede {\tt return}-Anweisung muss diese
+Konvention befolgen und wir verwenden dazu wieder die bereits
+bekannten Präprozessordefinitionen.
+
+Der Programmcode ist unkompliziert, wenngleich etwas länger als
+eigentlich nötig. Wir  können versuchen ihn noch weiter zusammenfassen.
+Erinnern wir uns, der Ausdruck {\tt x >= 0 \&\& x < 10}
+wird zu einem booleschen Wert ausgewertet. Es ist daher ohne weiteres möglich 
+den Wert des Ausdrucks direkt an die aufrufende Funktion zurückzugeben
+und auf die {\tt if}- Anweisungen komplett zu verzichten:
+
+\begin{verbatim}
+    int IsSingleDigit (int x)
+    {
+        return (x >= 0 && x < 10);
+    }
+\end{verbatim}
+%
+In {\tt main} können wir die Funktion in der üblichen Weise aufrufen:
+
+\begin{verbatim}
+
+    printf("%i\n", IsSingleDigit (2));
+    short bigFlag = !IsSingleDigit (17);
+
+\end{verbatim}
+%
+Die erste Zeile gibt den Wert \emph{true} aus, weil 2 eine einstellige positive Zahl ist.
+Unglücklicherweise sehen wir bei der Ausgabe von Wahrheitswerten in C
+nicht die Worte {\tt TRUE} und {\tt FALSE} auf dem Bildschirm, sondern
+die Zahlen  {\tt 1} und {\tt 0}.
+
+%Unfortunately, when C outputs {\tt boolean} values, it
+%does not display the words {\tt TRUE} and {\tt FALSE}, but rather the
+%integers {\tt 1} and {\tt 0}.
+%\footnote{There is a way to fix that
+%using the {\tt boolalpha} flag, but it is too hideous to mention.}
+
+Die zweite Zeile ist eine Zuweisung. Der Variablen  {\tt bigFlag} wird
+der Wert {\tt true} zugewiesen, wenn das Argument der Funktion 
+keine positive einstellige Zahl ist.
+
+Boolesche Funktionen werden sehr häufig für die Auswertung der
+Bedingungen in Programmverzweigungen genutzt:
+
+\begin{verbatim}
+    if (IsSingleDigit (x)) 
+    {
+        printf("x is little\n");
+    } 
+    else 
+    {
+        printf("x is big\n");
+    }
+\end{verbatim}
+
+\section {Rückgabewerte in der {\tt main()}-Funktion}
+
+Nachdem wir jetzt wissen, dass Funktionen Werte zurückgeben
+können, ist es an der Zeit, dass wir uns etwas genauer mit
+der Funktion der {\tt return}-Anweisung in der {\tt main}-Funktion
+beschäftigen. 
+Wenn wir uns die Definition der Funktion anschauen stellen wir fest, dass sie einen
+ganzzahligen Wert (integer) zurückgeben sollte :
+
+\begin{verbatim}
+    int main (void)
+\end{verbatim}
+
+Der übliche Rückgabewert aus {\tt main} ist 0. Damit wird angezeigt,
+dass das Programm in seiner Ausführung erfolgreich war und genau das
+getan hat wozu es programmiert wurde.
+Wenn während der Ausführung des Programms irgend ein Fehler auftritt
+ist es üblich -1 oder einen anderen Wert, der angibt um welchen Fehler
+es sich handelt, zurückzugeben. 
+
+\index{Bibliothek!stdlib.h}
+\index{<stdlib.h>}
+\index{Header-Datei!stdlib.h}
+\index{Bibliothek!stdlib.h}
+C stellt in der Standardbibliothek zwei Konstanten zur Verfügung
+ {\tt EXIT\_SUCCESS} und {\tt EXIT\_FAILURE}, die wir in der Rückgabeanweisung
+ nutzen können. Dafür müssen  {\tt stdlib.h} in unser Programm einbinden:
+
+
+\begin{verbatim}
+    #include <stdlib.h>
+
+    int main (void)
+    {
+        return EXIT_SUCCESS;   /*program terminated successfully*/
+    }  
+\end{verbatim}
+%
+\index{Betriebssystem}
+
+Natürlich werden Sie sich fragen wer diese Rückgabewerte empfängt,
+weil wir die {\tt main}-Funktion niemals selbst irgendwo aufrufen.
+Es stellt sich heraus, dass dafür das Betriebssystem unseres Rechners
+verantwortlich ist. Jedes Mal, wenn das Betriebssystem ein Programm
+startet, ruft es {\tt main} auf, so wie wir selbst in unserem Programm 
+eigene Funktionen aufrufen. Ist das Programm beendet, erhält das 
+Betriebssystem eine Mitteilung, ob das Programm erfolgreich war und
+könnte darauf reagieren (zum Beispiel einen Fehlerbericht verfassen).
+
+Es ist sogar möglich in der {\tt main}-Funktion Parameter zu verwenden,
+um beim Programmstart bereits Daten an das Programm zu übergeben.
+Leider können wir darauf an dieser Stelle noch nicht genauer eingehen.
+
+
+%\section {More recursion}
+%\index{recursion}
+%\index{language!complete}
+
+%So far we have only learned a small subset of C, but you
+%might be interested to know that this subset is now
+%a {\bf complete} programming language, by which I
+%mean that anything that can be computed can be expressed in this
+%language.  Any program ever written could be rewritten
+%using only the language features we have used so far (actually, we
+%would need a few commands to control devices like the keyboard, mouse,
+%disks, etc., but that's all).
+
+%\index{Turing, Alan}
+
+%Proving that claim is a non-trivial exercise first
+%accomplished by Alan Turing, one of the first computer scientists
+%(well, some would argue that he was a mathematician, but a lot of the
+%early computer scientists started as mathematicians).  Accordingly, it
+%is known as the Turing thesis.  If you take a course on the Theory of
+%Computation, you will have a chance to see the proof.
+
+%To give you an idea of what you can do with the tools we have learned
+%so far, we'll evaluate a few recursively-defined
+%mathematical functions.  A recursive definition is similar to a
+%circular definition, in the sense that the definition contains a
+%reference to the thing being defined.  A truly circular definition is
+%typically not very useful:
+
+%\begin{description}
+
+%\item[frabjuous:] an adjective used to describe
+%something that is frabjuous.
+
+%\index{frabjuous}
+
+%\end{description}
+
+%If you saw that definition in the dictionary, you might be
+%annoyed.  On the other hand, if you looked up the definition
+%of the mathematical function {\bf factorial}, you might
+%get something like:
+
+%\begin{eqnarray*}
+%&&  0! = 1 \\
+%&&  n! = n \cdot (n-1)!
+%\end{eqnarray*}
+
+%(Factorial is usually denoted with the symbol $!$, which is
+%not to be confused with the C logical operator {\tt !} which
+%means NOT.)  This definition says that the factorial of 0 is 1,
+%and the factorial of any other value, $n$, is $n$ multiplied
+%by the factorial of $n-1$.  So $3!$ is 3 times $2!$, which is 2 times
+%$1!$, which is 1 times 0!.  Putting it all together, we get
+%$3!$ equal to 3 times 2 times 1 times 1, which is 6.
+
+%If you can write a recursive definition of something, you can usually
+%write a C program to evaluate it.  The first step is to decide what
+%the parameters are for this function, and what the return type is.
+%With a little thought, you should conclude that factorial takes an
+%integer as a parameter and returns an integer:
+
+%\begin{verbatim}
+%  int factorial (int n)
+%  {
+%  }
+%\end{verbatim}
+%%
+%If the argument happens to be zero, all we have to do is
+%return 1:
+
+%\begin{verbatim}
+%  int Factorial (int n)
+%  {
+%      if (n == 0) 
+%      {
+%          return 1;
+%      }
+%  }
+%\end{verbatim}
+%%
+%Otherwise, and this is the interesting part, we have to make
+%a recursive call to find the factorial of $n-1$, and then
+%multiply it by $n$.
+
+%\begin{verbatim}
+%  int Factorial (int n)
+%  {
+%      if (n == 0) 
+%      {
+%          return 1;
+%      } 
+%      else 
+%      {
+%          int recurse = Factorial (n-1);
+%          int result = n * recurse;
+%          return result;
+%      }
+%  }
+%\end{verbatim}
+%%
+%If we look at the flow of execution for this program,
+%it is similar to {\tt nLines} from the previous chapter.
+%If we call {\tt factorial} with the value 3:
+
+%Since 3 is not zero, we take the second branch and calculate
+%the factorial of $n-1$...
+
+%\begin{quote}
+%Since 2 is not zero, we take the second branch and calculate
+%the factorial of $n-1$...
+
+%\begin{quote}
+%Since 1 is not zero, we take the second branch and calculate
+%the factorial of $n-1$...
+
+%\begin{quote}
+%Since 0 {\em is} zero, we take the first branch and return
+%the value 1 immediately without making any more recursive
+%calls.
+
+%\end{quote}
+
+%The return value (1) gets multiplied by {\tt n}, which is 1,
+%and the result is returned.
+
+%\end{quote}
+
+%The return value (1) gets multiplied by {\tt n}, which is 2,
+%and the result is returned.
+
+%\end{quote}
+
+%\noindent The return value (2) gets multiplied by {\tt n}, which is 3,
+%and the result, 6, is returned to {\tt main}, or whoever
+%called {\tt Factorial (3)}.
+
+%\index{stack}
+%\index{diagram!state}
+%\index{diagram!stack}
+
+%Here is what the stack diagram looks like for this sequence of
+%function calls:
+
+%\vspace{0.1in}
+%\centerline{\epsfig{figure=figs/stack3.eps}}
+%\vspace{0.1in}
+%%
+%The return values are shown being passed back up the stack.
+
+%Notice that in the last instance of {\tt factorial}, the local
+%variables {\tt recurse} and {\tt result} do not exist because
+%when {\tt n=0} the branch that creates them does not execute.
+
+%\section{Leap of faith}
+%\index{leap of faith}
+
+%Following the flow of execution is one way to read programs, but as
+%you saw in the previous section, it can quickly become labarynthine.
+%An alternative is what I call the ``leap of faith.''  When you come to
+%a function call, instead of following the flow of execution, you
+%{\em assume} that the function works correctly and returns the
+%appropriate value.
+
+%In fact, you are already practicing this leap of faith
+%when you use built-in functions.  When you call {\tt cos}
+%or {\tt exp}, you don't examine the implementations of 
+%those functions.  You just assume that they work, because the people
+%who wrote the built-in libraries were good programmers.
+
+%Well, the same is true when you call one of your own functions.
+%For example, in Section~\ref{bool} we wrote a function called
+%{\tt IsSingleDigit} that determines whether a number is between
+%0 and 9.  Once we have convinced ourselves that this function
+%is correct---by testing and examination of the code---we can
+%use the function without ever looking at the code again.
+
+%The same is true of recursive programs.  When you get to the recursive
+%call, instead of following the flow of execution, you should {\em
+%assume} that the recursive call works (yields the correct result), and
+%then ask yourself, ``Assuming that I can find the factorial of $n-1$,
+%can I compute the factorial of $n$?''  In this case, it is clear that
+%you can, by multiplying by $n$.
+
+%Of course, it is a bit strange to assume that the function works
+%correctly when you have not even finished writing it, but that's why
+%it's called a leap of faith!
+
+%\section{One more example}
+%\index{factorial}
+
+%In the previous example I used temporary variables to spell out the
+%steps, and to make the code easier to debug, but I could have saved a
+%few lines:
+
+%\begin{verbatim}
+%  int Factorial (int n) 
+%  {
+%      if (n == 0) 
+%      {
+%          return 1;
+%      } 
+%      else 
+%      {
+%          return n * Factorial (n-1);
+%      }
+%  }
+%\end{verbatim}
+%%
+%From now on I will tend to use the more concise version, but
+%I recommend that you use the more explicit version while you
+%are developing code.   When you have it working, you can
+%tighten it up, if you are feeling inspired.
+
+%After {\tt Factorial}, the classic example of a recursively-defined
+%mathematical function is {\tt Fibonacci}, which has the
+%following definition:
+
+%\begin{eqnarray*}
+%&& fibonacci(0) = 1 \\
+%&& fibonacci(1) = 1 \\
+%&& fibonacci(n) = fibonacci(n-1) + fibonacci(n-2);
+%\end{eqnarray*}
+%%
+%Translated into C, this is
+
+%\begin{verbatim}
+%  int Fibonacci (int n) 
+%  {
+%      if (n == 0 || n == 1) 
+%      {
+%          return 1;
+%      } 
+%      else 
+%      {
+%          return Fibonacci (n-1) + Fibonacci (n-2);
+%      }
+%  }
+%\end{verbatim}
+%%
+%If you try to follow the flow of execution here, even for fairly small
+%values of {\tt n}, your head explodes.  But according to the leap of
+%faith, if we assume that the two recursive calls (yes, you can make
+%two recursive calls) work correctly, then it is clear that we get the
+%right result by adding them together.
+
+\section{Glossar}
+%(engl: \emph{})
+
+\begin{description}
+
+
+\item[Rückgabewert (engl: \emph{return value}):]  Der Wert der bei der Rückkehr aus einer
+Funktion an die aufrufende Funktion zurückgegeben wird.
+
+\item[Rückgabetyp (engl: \emph{return type}):]  Der Typ des Werts der bei der Rückkehr aus einer
+Funktion an die aufrufende Funktion zurückgegeben wird.
+
+\item[Unerreichbarer Code (engl: \emph{dead code}):]  Der Teil des Programmcodes der
+niemals ausgeführt wird, zum Beispiel weil sich der Code hinter einer {\tt return} Anweisung
+befindet.
+
+\item[Debug Code (engl: \emph{debug code}):]  Anweisungen innerhalb eines Programms,
+welche dazu genutzt werden das Programm während der Entwicklung zu testen.
+Diese Anweisungen sollten im fertigen Programm deaktiviert werden.
+
+\item[void (engl: \emph{void}):]  Ein spezieller Typ, der verwendet wird um zu kennzeichnen,
+dass eine Funktion keinen Wert zurückliefert, und/oder keine Parameter besitzt.
+
+%NO overloading in C!
+
+%\item[overloading:]  Having more than one function with the same name
+%but different parameters.  When you call an overloaded function,
+%C knows which version to use by looking at the arguments you
+%provide.
+
+\item[Boolesche Variable (engl: \emph{boolean}):]  Eine Variable, welche einen von
+zwei möglichen Zuständen annehmen kann, oft mit $true$ und $false$ bezeichnet. 
+In C werden boolsche Werte überwiegend in Variablen vom Type {\tt int oder \tt short} 
+gespeichert und mit Hilfe des Präprozessors definiert. \\(z.B. \texttt{\#define TRUE 1} )
+
+\item[Flag (engl: \emph{flag}):]  Eine Variable, welche eine Bedingung oder einen
+Statuscode speichert (meistens ein boolscher Wert).
+
+\item[Vergleichsoperator (engl: \emph{comparison operator}):]  Ein Operator, welcher 
+zwei Werte vergleicht und als Ergebnis einen Wahrheitswert liefert, welcher die Beziehung
+der Operanden des Ausdrucks charakterisiert.
+
+\item[Logischer Operator (engl: \emph{logical operator}):]  Ein Operator, der die Operanden
+auf Basis einer logischen Verknüfung (UND, ODER, NICHT) auswertet und einen Wahrheitswert
+zurückliefert. 
+
+\index{Rückgabewert}
+\index{Rückgabetyp}
+\index{dead code}
+\index{Unerreichbarer Code}
+\index{Debug Code}
+\index{void}
+\index{boolean}
+\index{Boolsche Variable}
+\index{Operator!vergleichender}
+\index{Operator!logischer}
+\index{Vergleichsoperator}
+\index{Logischer Operator}
+
+\end{description}
+
+\section{Übungsaufgaben}
+\setcounter{exercisenum}{0}
+
+\ifthenelse {\boolean{German}}{ \input{exercises/Exercise_5_german}}
+{\input{exercises/Exercise_5_english}}
+

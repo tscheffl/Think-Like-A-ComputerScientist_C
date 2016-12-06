@@ -1,0 +1,350 @@
+% LaTeX source for textbook ``How to think like a computer scientist''
+% Copyright (C) 1999  Allen B. Downey
+
+% This LaTeX source is free software; you can redistribute it and/or
+% modify it under the terms of the GNU General Public License as
+% published by the Free Software Foundation (version 2).
+
+% This LaTeX source is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% General Public License for more details.
+
+% Compiling this LaTeX source has the effect of generating
+% a device-independent representation of a textbook, which
+% can be converted to other formats and printed.  All intermediate
+% representations (including DVI and Postscript), and all printed
+% copies of the textbook are also covered by the GNU General
+% Public License.
+
+% This distribution includes a file named COPYING that contains the text
+% of the GNU General Public License.  If it is missing, you can obtain
+% it from www.gnu.org or by writing to the Free Software Foundation,
+% Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+
+\documentclass[a4paper]{book}
+\usepackage[ngerman, english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{epsfig}
+\usepackage{makeidx}
+\usepackage{url}
+\usepackage{fancyhdr}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{ifthen}
+\usepackage{boxedminipage}
+\usepackage{marginnote}
+\usepackage{eso-pic}
+\usepackage{todonotes}
+%\usepackage[disable]{todonotes}
+\usepackage{paralist} 
+
+%\usepackage{calc}
+%\newsavebox{\fcolbox} \newlength{\fcolwidth}
+%\newenvironment{boxedminipage}[2][c]
+%  {\setlength{\fcolwidth}{#2-2\fboxsep-2\fboxrule}%
+%   \begin{lrbox}{\fcolbox}%
+%   \begin{minipage}[#1]{\fcolwidth}}
+%  {\end{minipage}\end{lrbox}\fbox{\usebox{\fcolbox}}}
+
+% conditional compilation of the document for different languages
+
+\newboolean{German}
+\setboolean{German}{true}
+\selectlanguage{ngerman}
+
+\renewcommand{\marginnotevadjust}{-3em} 
+\newcommand{\hint}{\marginnote{ \includegraphics[width=30pt]{figs/Hint.pdf}}}
+
+% the exercise environment
+
+\newcounter{exercisenum}                                                  
+     
+% by default, the exercise number includes the chapter number             
+% this way, an exercise label is a complete, unique exercise id           
+     
+\renewcommand{\theexercisenum}{{\thechapter}.\arabic{exercisenum}}  
+
+% Standard font size for exercise/problem text                            
+
+\newenvironment{exercisesize}{\begin{small}}{\end{small}}                 
+
+\newcommand{\exerciseheader}[2]{                                          
+     
+  \begin{exercisesize}                                                    
+     
+  % Use alphabetic chars for subparts of exercises,                            
+  % and roman numerals for subparts of them.
+     
+  \def\theenumi{\alph{enumi}}                                             
+  \def\labelenumi{\theenumi.}                                             
+  \def\theenumii{\roman{enumii}}                                          
+  \def\labelenumii{\theenumii.}
+  
+  \ifthenelse {\boolean{German}}{{\bf Übung {#1}{#2}}\hspace{0.1in}  }{{\bf Exercise {#1}{#2}}\hspace{0.1in}}
+                                        
+%  {\bf Exercise {#1}{#2}}\hspace{0.1in}                 
+}                                                                         
+
+\newcommand{\startexercise}[1]{%
+  \refstepcounter{exercisenum}                                            
+  \exerciseheader{\theexercisenum}{#1}                                    
+}                                                                         
+
+\newcommand{\stopexercise}{%                                                   
+  {\hfill}                                                               
+  \end{exercisesize}      
+}                                                         
+     
+\newcommand{\normaldif}{}                                                 
+     
+\newcommand{\bigdif}{\dag{}}                                              
+     
+\newcommand{\verybigdif}{\ddag{}}             
+
+\newenvironment{exercise}{\startexercise{\normaldif{}}}{\stopexercise}    
+     
+\newenvironment{hardexercise}{\startexercise{\bigdif{}}}{\stopexercise}   
+     
+%% end of the exercise environment
+
+
+%%------------------------------------------------------------
+% formatting commands
+
+\sloppy
+\setlength{\topmargin}{0.125in}
+\setlength{\oddsidemargin}{0.875in}
+\setlength{\evensidemargin}{0.875in}
+
+\setlength{\headsep}{3ex}
+\setlength{\textheight}{8in}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{1.7ex plus 0.5ex minus 0.5ex}
+\renewcommand{\baselinestretch}{1.02}
+
+% see LaTeX Companion page 62
+\setlength{\topsep}{-0.0\parskip}
+\setlength{\partopsep}{-0.5\parskip}
+\setlength{\itemindent}{0.0in}
+\setlength{\listparindent}{0.0in}
+
+% see LaTeX Companion page 26
+% these are copied from /usr/local/teTeX/share/texmf/tex/latex/base/book.cls
+% all I changed is afterskip
+
+\makeatletter
+\renewcommand{\section}{\@startsection 
+    {section} {1} {0mm}%
+    {-3.5ex \@plus -1ex \@minus -.2ex}%
+    {0.7ex \@plus.2ex}%
+    {\normalfont\Large\bfseries}}
+\renewcommand\subsection{\@startsection {subsection}{2}{0mm}%
+    {-3.25ex\@plus -1ex \@minus -.2ex}%
+    {0.3ex \@plus .2ex}%
+    {\normalfont\large\bfseries}}
+\renewcommand\subsubsection{\@startsection {subsubsection}{3}{0mm}%
+    {-3.25ex\@plus -1ex \@minus -.2ex}%
+    {0.3ex \@plus .2ex}%
+    {\normalfont\normalsize\bfseries}}
+
+\makeatother
+
+\newcommand{\beforeverb}{\vspace{0.6\parskip}}
+\newcommand{\afterverb}{\vspace{0.6\parskip}}
+
+\newcommand{\adjustpage}[1]{\enlargethispage{#1\baselineskip}}
+\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
+\newcommand{\blankpage}{\pagestyle{empty}\vspace*{1in}\newpage}
+
+\newcommand{\beforefig}{\vspace{1.3\parskip}}
+\newcommand{\afterfig}{\vspace{-0.2\parskip}}
+\newcommand{\myfig}[1]{
+    \beforefig
+    \centerline{\epsfig{#1,scale=0.8}}
+    \afterfig
+}
+
+\newcommand{\beforechapter}{
+%    \clearemptydoublepage 
+    \cleardoublepage 
+    \setcounter{exercisenum}{0}
+}
+
+\pagestyle{fancyplain}
+
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}{}}
+
+\lhead[\fancyplain{}{\bfseries\thepage}]%
+      {\fancyplain{}{\bfseries\rightmark}}
+\rhead[\fancyplain{}{\bfseries\leftmark}]%
+      {\fancyplain{}{\bfseries\thepage}}
+\cfoot{}
+
+% turn off the rule under the header
+%\setlength{\headrulewidth}{0pt}
+
+% the following is a brute-force way to prevent the headers
+% from getting transformed into all-caps
+\renewcommand\MakeUppercase{}
+
+
+\sloppy
+\setlength{\topmargin}{0.75in}
+\setlength{\headsep}{0.5in}
+\setlength{\oddsidemargin}{1.0in}
+\setlength{\evensidemargin}{.95in}
+\makeindex
+
+
+%%-----------------------------------------------------------
+% beginning of the document
+
+\begin{document}
+
+%\title {How to think like a computer scientist}
+%\author {Allen B. Downey, Thomas Scheffler}
+%\date {C Version, First Edition}
+%\maketitle
+
+%\vspace{2in}
+%\begin{center}
+%{\Large How to think like a computer scientist}
+
+%C Version, First Edition
+%\vspace{0.25in}
+
+
+%\begin{flushright}
+%\vspace*{2.5in}
+
+%{\huge How to Think Like a Computer Scientist}
+
+%\vspace{1in}
+
+%{\LARGE C Version}
+
+%\vfill
+
+%\end{flushright}
+
+%--verso------------------------------------------------------
+
+%\clearemptydoublepage
+%\cleardoublepage
+
+%%--title page--------------------------------------------------
+%\pagebreak
+\thispagestyle{empty}
+
+\begin{flushright}
+\vspace*{2.5in}
+
+{\huge How to Think Like a Computer Scientist}
+
+\vspace{0.25in}
+
+{\LARGE C Version}
+
+\vspace{1in}
+
+{\Large Allen B. Downey, Thomas Scheffler}
+
+{ C-Version und deutsche Übersetzung: Thomas Scheffler}
+
+\vspace{1in}
+
+{\Large Version 0.9.5}
+
+{\small 6. Dezember 2016}
+\todo{Flowchart!}
+\vfill
+
+\end{flushright}
+
+
+
+Copyright (C) 1999  Allen B. Downey, 2016 Thomas Scheffler
+%\end{center}
+\vspace{0.25in}
+
+This book is an Open Source Textbook (OST).  Permission is
+granted to reproduce, store or transmit the text of this
+book by any means, electrical, mechanical, or biological,
+in accordance with the terms of the GNU General Public License as
+published by the Free Software Foundation (version 2).
+
+This book is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+The original form of this book is LaTeX source code.
+Compiling this LaTeX source has the effect of generating
+a device-independent representation of a textbook, which
+can be converted to other formats and printed.  All intermediate
+representations (including DVI and Postscript), and all printed
+copies of the textbook are also covered by the GNU General
+Public License.
+
+The LaTeX source for this book, and more information about
+the Open Source Textbook project, is available from
+
+%\begin{verbatim}
+     \url{https://prof.beuth-hochschule.de/scheffler/}
+%\end{verbatim}
+
+or by writing to Allen B. Downey, 5850 Mayflower Hill,
+Waterville, ME 04901.
+
+The GNU General Public License is available from
+www.gnu.org or by writing to the Free Software Foundation,
+Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+This book was typeset by the author using LaTeX and dvips,
+which are both free, open-source programs.
+
+\selectlanguage{ngerman}
+\frontmatter
+\tableofcontents
+
+\mainmatter
+\include{Chapter1_german}
+\include{Chapter2_german}
+\include{Chapter3_german}
+\include{Chapter4_german}
+\include{Chapter5_german}
+%\include{Chapter6_Iteration}
+%\include{Chapter7_Array}
+%\include{Chapter8_String}
+%\include{Chapter9_Struct}
+\include{Chapter6_Iteration_german}
+\include{Chapter7_Array_german}
+\include{Chapter8_String_german}
+\include{Chapter9_Struct_german}
+\include{Chapter10_Hardware_german}
+%\include{Chapter11}
+%\include{Chapter12}
+%\include{Chapter13}
+%\include{Chapter14}
+
+\appendix
+%\include{Append1}
+\include{Append1_german}
+\include{ASCII_german}
+\clearpage
+\renewcommand{\indexname}{Stichwortverzeichnis}
+\addcontentsline{toc}{chapter}{Stichwortverzeichnis}
+\renewcommand{\seename}{siehe}
+\printindex
+
+\end{document}
+
+
+

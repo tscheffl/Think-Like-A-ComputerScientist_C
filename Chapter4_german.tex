@@ -1,0 +1,652 @@
+%!TEX root = Main_german.tex
+
+% LaTeX source for textbook ``How to think like a computer scientist''
+% Copyright (C) 1999  Allen B. Downey
+
+% This LaTeX source is free software; you can redistribute it and/or
+% modify it under the terms of the GNU General Public License as
+% published by the Free Software Foundation (version 2).
+
+% This LaTeX source is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% General Public License for more details.
+
+% Compiling this LaTeX source has the effect of generating
+% a device-independent representation of a textbook, which
+% can be converted to other formats and printed.  All intermediate
+% representations (including DVI and Postscript), and all printed
+% copies of the textbook are also covered by the GNU General
+% Public License.
+
+% This distribution includes a file named COPYING that contains the text
+% of the GNU General Public License.  If it is missing, you can obtain
+% it from www.gnu.org or by writing to the Free Software Foundation,
+% Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+
+\chapter{Abhängigkeiten und Rekursion}
+\label{condrecursion}
+
+
+\section{Bedingte Abarbeitung}
+\index{Abhängigkeit}
+\index{Anweisung!Verzweigung}
+
+Unsere bisherigen Programme hatten eine Gemeinsamkeit.
+Es wurden alle Befehle in strenger Reihenfolge nacheinander abgearbeitet.
+Solche Programme haben die Eigenschaft, dass sie jedes mal genau
+die gleichen Aktionen durchführen und die gleichen Ergebnisse produzieren.
+
+Für die meisten realen Anwendungen brauchen wir aber auch die Möglichkeit
+das Vorliegen bestimmter Bedingungen überprüfen zu können und
+die Abarbeitungsreihenfolge der Befehle (das Verhalten unseres Programms) 
+an die jeweiligen äußeren und inneren Bedingungen anpassen zu können.
+  
+%In order to write useful programs, we almost always need the ability
+%to check certain conditions and change the behavior of the program
+%accordingly.  
+{\bf Bedingte Anweisungen} geben uns diese Möglichkeit.  Die einfachste 
+Form ist dabei die {\tt if}-Anweisung:
+
+\begin{verbatim}
+    if (x > 0) 
+    {
+        printf ("x ist positiv\n");
+    }
+\end{verbatim}
+%
+Der angegebene Ausdruck in Klammern ist die Bedingung.
+Wenn er \emph{wahr} ist,  werden die Anweisungen zwischen den den geschweiften
+Klammern ausgeführt. Die öffnende und schließende geschweifte Klammer bildet
+einen so genannten {\bf Anweisungsblock} oder einfach {\bf Block}. Was das genau ist 
+erkläre ich im nächsten Abschnitt genauer. Einfach gesagt handelt es sich dabei um
+eine Gruppierung von Anweisungen. 
+
+Wenn die Bedingung \emph{falsch} ist, wird das Programm mit dem nächsten
+Befehl nach dem Block fortgesetzt. In unserem Beispiel passiert gar nichts.
+
+
+\index{Operator!Vergleich}
+\index{Vergleichsoperator}
+
+Die Bedingung  kann die folgenden {\bf Vergleichsoperatoren} enthalten:
+
+\begin{verbatim}
+    x == y               /* x ist gleich y */
+    x != y               /* x ist nicht gleich (ungleich) y */
+    x > y                /* x ist größer als y */
+    x < y                /* x ist kleiner als y */
+    x >= y               /* x ist größer als oder gleich y */
+    x <= y               /* x ist kleiner als oder gleich y */
+\end{verbatim}
+%
+Diese Operationen sollten aus dem Bereich der Mathematik bereits bekannt sein.
+Allerdings benutzt C eine Syntax die von den gebräuchlichen mathematischen
+Symbolen abweicht, wo wir $=$, $\neq$, $\ge$ und $\le$ verwenden. Ein oft gemachter
+Fehler ist die Verwendung eines einzelnen {\tt =} anstelle des doppelten {\tt ==} 
+für den Ausdruck der Gleichheit zweier Operanden.  
+Erinnern wir uns, {\tt =} ist der Zuweisungsoperator und {\tt ==} ist
+ein Vergleichsoperator.  Bitte auch beachten: {\tt =<} or {\tt =>} sind keine gültigen
+Operatoren.
+
+WICHTIG: Die Ausdrücke auf den beiden Seiten des Vergleichsoperators sollten
+vom gleichen Typ sein. Wir können zwar {\tt int}s mit {\tt double}s  vergleichen,
+es wird eine automatische Typumwandlung durchgeführt. Man sollte aber darauf achten,
+nicht auf Gleichheit zu testen ({\tt ==}) sobald ein Operator als Fließkommazahl dargestellt wird.
+Das gilt auch, wenn {\tt double}s mit {\tt double}s verglichen werden.
+
+Unglücklicherweise, kennen wir derzeit noch keine Methode um Strings (Zeichenketten) zu 
+vergleichen!  Es gibt einen Weg das zu tun, aber wir müssen leider noch einige Kapitel
+darauf warten.
+
+\section{Anweisungsblöcke}
+\index{Anweisungsblöcke}
+\index{Block}
+
+Die Anweisung stellt einen einzelnen Befehl oder Abarbeitungsschritt in einem Programm
+dar. Anstelle einer einfachen Anweisung kann in einem C Programm aber immer auch eine 
+zusammengesetzte Anweisung, ein
+so genannter {\bf Block}, geschrieben werden.
+
+Einen Anweisungsblock wird mit Hilfe der geschweiften Klammern {\tt \{} und {\tt \}} gebildet.
+C behandelt einen Anweisungsblock so, als wäre es eine einzelne Anweisung. Das ist
+besonders wichtig bei der bedingten und wiederholten Abarbeitung von Programmteilen.
+Wir können damit mehrere Anweisungen zusammenfassen und diese in Abhängigkeit von
+der zu überprüfenden Bedingungen ausführen lassen. Im folgenden Beispiel werden alle
+Anweisungen zwischen den geschweiften Klammern ausgeführt, wenn die Variable  {\tt x}
+größer als Null ist. Wenn  {\tt x} kleiner oder gleich Null ist, wird der komplette Block nicht
+ausgeführt:
+
+\begin{verbatim}
+    if (x > 0) 
+    {
+        printf ("x hat den Wert %i\n", x);
+        printf ("x ist positiv\n");
+    }
+\end{verbatim}
+
+Einzelne Anweisungen werden mit einen Semikolon ({\tt ;}) abgeschlossen. 
+Eine Blockanweisung wird durch schließende Klammer  {\tt \}} beendet. 
+Wir müssen daher am Ende eines Blocks kein zusätzliches Semikolon anfügen.
+
+%Eigene Variablen definieren. 
+
+\section{Der Modulo-Operator}
+\index{Modulorechnung}
+\index{Operator!Modulo}
+
+Der Modulo-Operator kann auf ganzzahlige Werte (und ganzzahlige Ausdrücke)
+angewendete werden und liefert uns den {\em ganzzahligen  Divisionsrest} wenn
+wir den ersten Operanden durch den zweiten Operanden teilen.
+In C wird der Modulo-Operator durch das Prozentzeichen
+{\tt \%} dargestellt.  Die Syntax ist genau die gleiche wie bei anderen mathematischen 
+Operatoren mit zwei Operanden:
+
+\begin{verbatim}
+    int quotient = 11 / 4;
+    int rest     = 11 % 4;
+\end{verbatim}
+%
+Das Ergebnis der ersten Berechnung (Ganzzahldivision!) ist 2.  Die zweite
+Berechnung liefert das Ergebnis 3, denn 11 geteilt durch 4 ergibt 2 mit dem Rest~3.
+
+Die Modulorechnung kann erstaunlich nützlich sein. So kann man zum Beispiel 
+auf einfache Weise überprüfen, ob eine Zahl durch eine andere Zahl teilbar ist.
+Wenn {\tt x \% y} den Rest Null liefert, dann ist {\tt x} durch {\tt y} teilbar.
+
+Weiterhin können wir die Modulorechnung dafür verwenden um die 
+rechts stehenden Ziffern einer Zahl zu extrahieren. 
+So liefert uns die Operation {\tt x \% 10} die Einerstelle des in der Variable {x} gespeicherten Werts im Dezimalsystem.
+Mit der Operation {\tt x \% 100} lassen sich die letzten zwei Ziffern extrahieren.
+
+% you can use the modulus operator to extract the rightmost
+%digit or digits from a number.  For example, {\tt x \% 10} yields
+%the rightmost digit of {\tt x} (in base 10).  Similarly
+%{\tt x \% 100} yields the last two digits.
+
+\section {Alternative Ausführung}
+\label{alternative}
+\index{Bedingung!alternative}
+
+Eine zweite Form der bedingten Ausführung ist die alternative Ausführung
+bei der zwei Möglichkeiten existieren und die Bedingung festlegt, welche
+davon zur Ausführung kommt. Die Syntax sieht folgendermaßen aus:
+
+\begin{verbatim}
+    if (x%2 == 0)
+    {
+        printf ("x ist gerade\n");
+    } 
+    else 
+    {
+        printf ("x ist ungerade\n");
+    }
+\end{verbatim}
+%
+Wenn das Ergebnis der Division von {\tt x} durch 2 Null ergibt, dann wissen
+wir das {\tt x} gerade ist. 
+Unser Programm gibt dann die Nachricht  {\tt x ist gerade} auf dem Bildschirm aus.
+
+Wenn die Bedingung falsch ist, wird der zweite Anweisungsblock ausgeführt. 
+Da die Bedingung nur wahr oder falsch sein kann, wird genau eine der 
+beiden Alternativen ausgeführt. Es ist nicht notwendig im zweiten Anweisungsblock die
+Bedingung erneut zu überprüfen.
+
+So nebenbei, wenn wir den Eindruck haben, dass wir in unserem Programm
+die Parität (Geradzahligkeit, Ungeradzahligkeit) von Zahlen öfters überprüfen müssen,
+dann kann es sinnvoll sein diesen Code in eine Funktion einzubetten:
+
+\begin{verbatim}
+    void PrintParity (int x) 
+    {
+        if (x%2 == 0) 
+        {
+            printf ("x ist gerade\n");
+        } 
+        else 
+        {
+            printf ("x ist ungerade\n");
+        }
+    }
+\end{verbatim}
+%
+Wir haben jetzt eine Funktion {\tt PrintParity()} die uns auf dem Bildschirm 
+anzeigt, ob ein übergebener Integerwert gerade oder ungerade ist.
+Wir können die Funktion in {\tt main()} wie folgt aufrufen:
+
+\begin{verbatim}
+     PrintParity (17);
+\end{verbatim}
+%
+Wir müssen immer daran denken, dass, wenn wir eine Funktion {\em aufrufen}
+der Typ der Argumente nicht mit angeben wird.
+C kennt den Typ der verwendeten Variablen und Konstanten. Wir machen einen
+Fehler, wenn wir die Funktion in der folgenden Weise aufrufen:
+
+\begin{verbatim}
+    int number = 17;
+    PrintParity (int number);         /* WRONG!!! */
+\end{verbatim}
+
+\section {Mehrfache Verzweigung}
+\index{Verzweigung!mehrfache}
+
+Manchmal kommt es vor, dass wir eine ganze Reihe von
+zusammengehörigen Bedingungen überprüfen und eine
+Auswahl aus mehreren möglichen Aktionen treffen wollen.
+
+Es gibt verschiedene Möglichkeiten das zu erreichen. Eine davon
+ist die {\bf Verkettung} einer Serie von {\tt if}s und {\tt else}s:
+
+\begin{verbatim}
+    if (x > 0) 
+    {
+        printf ("x is positive\n");
+    } 
+    else if (x < 0) 
+    {
+        printf ("x is negative\n");
+    } 
+    else 
+    {
+        printf ("x is zero\n");
+    }
+\end{verbatim}
+%
+Diese Kette kann so lang werden wie wir wollen, allerdings
+wird es immer schwerer die Übersicht zu behalten, je länger
+sie wird. Eine Möglichkeit die Lesbarkeit zu erhöhen, besteht
+darin, mit Formatierungen durch Einrückungen zu arbeiten.
+Wenn wir alle Anweisungen und geschweiften Klammern
+an der gleichen Stelle untereinander schreiben, kommt
+es viel seltener vor, dass wir einen Syntaxfehler machen und
+falls es doch passiert, wir würden wir ihn viel schneller finden. 
+
+\section{Verschachtelte Abhängigkeiten}
+\index{Abhängigkeiten!verschachtelte}
+
+Zusätzlich zur Verkettung können wir  %Bedingungen
+Abhängigkeiten auch ineinander verschachteln.  Wir hätten
+das vorige Beispiel auch in dieser Form schreiben können:
+
+\begin{verbatim}
+    if (x == 0) 
+    {
+        printf ("x is zero\n");
+    } 
+    else 
+    {
+        if (x > 0) 
+        {
+            printf ("x is positive\n");
+        }
+        else 
+        {
+            printf ("x is negative\n");
+        }
+    }
+\end{verbatim}
+%
+Es gibt jetzt eine äußere Bedingung die eine Verzweigungen erzeugt.  
+Der erste Zweig enthält eine einfache Ausgabeanweisung.
+Der zweite Zweig enthält  eine weitere {\tt if}-Anweisung, welche wiederum
+eine Verzweigung erzeugt.  Glücklicherweise sind deren Zweige 
+Ausgabeanweisungen, es hätten aber durchaus auch weitere bedingte Anweisungen
+folgen können.
+
+Auch hier ist es wichtig, dass wir die Struktur des Programms durch
+Einrückungen sichtbar machen. Allerdings ist es prinzipiell so, dass ab
+einer bestimmten Verzweigungstiefe der Überblick verloren geht. 
+Man sollte sich deshalb gut überlegen, ob die tiefe Verschachtelung 
+von bedingten Anweisungen im eigenen Programm unbedingt nötig ist.
+\index{Verschachtelte Struktur}
+Auf der anderen Seite finden wir ineinander {\bf verschachtelte Strukturen} 
+in einer Reihe von Programmen wieder, so dass es eine gute Idee ist, sich
+an dieses Programmierkonzept zu gewöhnen.
+
+%Prüfung: optimieren von if/else if /else Strukturen (nicht immer wieder neu prüfen!)
+
+\section{Die {\tt return}-Anweisung}
+\index{return}
+\index{Anweisung!return}
+
+Die {\tt return} Anweisung erlaubt es uns die Ausführung einer Funktion zu
+beenden, ohne dass alle Anweisungen der Funktion bis zum Ende ausgeführt
+werden müssen. Der Einsatz der  {\tt return}-Anweisung ist zum Beispiel dann
+sinnvoll, wenn unser Programm eine Fehlerbedingung erkannt hat:
+
+\index{Mathematische Funktion!log}
+\begin{verbatim}
+    #include <math.h>
+
+    void PrintLogarithm (double x) 
+    {
+        if (x <= 0.0) 
+        {
+            printf ("Positive numbers only, please.\n");
+            return;
+        }
+
+       double result = log (x);
+       printf ("The log of x is %f\n", result);
+    }
+\end{verbatim}
+%
+Wir definieren eine Funktion namens {\tt PrintLogarithm()} mit dem
+Parameter~{\tt x} vom Typ {\tt double}. 
+Die Funktion überprüft zu allererst, ob  {\tt x} kleiner oder gleich Null ist.
+In diesem Falle würde die Funktion eine Fehlermeldung anzeigen und
+die Funktion mittels {\tt return} beenden. 
+Die Abarbeitung des Programms wird in der aufrufenden Funktion fortgesetzt.
+Die übrigen Programmzeilen der Funktion werden in diesem Fall nicht ausgeführt.
+
+Ich habe einen Fließkommawert auf der rechten Seite der Bedingung 
+benutzt, weil  die Variable auf der linken Seite vom Typ {\tt  double} ist.
+%used a floating-point value on the right side of the condition
+%because there is a floating-point variable on the left.
+
+\index{Mathematische Bibliothek}
+WICHTIG: Jedes mal wenn wir eine Funktion aus der mathematischen Bibliothek 
+benutzen, müssen wir die Headerdatei {\tt math.h} in unser Programm einbinden.
+\hint
+
+\section{Rekursion}
+\label{recursion}
+\index{Rekursion}
+
+Ich habe im letzten Kapitel erwähnt, dass es völlig legal ist, dass eine Funktion
+ eine andere Funktion aufzurufen kann und wir haben bereits einige 
+Beispiele für dieses Verhalten gesehen.
+Ich habe nicht erwähnt, dass eine Funktion sich auch selbst aufrufen kann -- das möchte ich
+jetzt nachholen.
+ 
+In der Tat ist es möglich und erlaubt, dass eine Funktion sich selbst aufruft. 
+Es mag nicht offensichtlich sein, wofür das gut sein sollte, aber dabei handelt
+es sich  um eines der merkwürdigsten und interessantesten Verhalten
+die ein Programm besitzen kann.
+%It may not be obvious why that is a good thing, but it turns out to be
+%one of the most magical and interesting things a program can do.
+
+%Original/Kopie: Code / Instanz
+
+Schauen wir uns die folgende Funktion an:
+
+\begin{verbatim}
+    void Countdown (int n) 
+    {
+        if (n == 0) 
+        {
+            printf ("Start!");
+        }
+        else
+        {
+            printf ("%i", n);
+            Countdown (n-1);
+        }
+    }
+\end{verbatim}
+%
+Der Name der Funktion ist {\tt Countdown()} und sie besitzt einen
+einzelnen Parameter vom Typ {\tt  int}.  Wenn der Parameter den Wert Null hat, 
+wird das Wort ``Start!'' ausgegeben. Anderenfalls wird der Wert des Parameters 
+auf dem Bildschirm ausgegeben und eine Funktion mit dem Namen 
+{\tt Countdown()} --die gleiche Funktion-- aufgerufen und {\tt n-1} als Argument übergeben.
+
+Was passiert wenn wir diese Funktion in der folgenden Weise aufrufen?
+
+\begin{verbatim}
+    int main (void)
+    {
+         Countdown (3);
+         return EXIT_SUCCESS;
+    }
+\end{verbatim}
+%
+Die Ausführung von {\tt Countdown()} beginnt mit {\tt n=3} und
+weil {\tt n} nicht Null ist, wird der Wert 3 ausgegeben und dann ruft die
+Funktion {\tt Countdown()} erneut auf...
+
+\begin{quote}
+Die Ausführung von {\tt Countdown()} beginnt mit {\tt n=2} und
+weil {\tt n} nicht Null ist, wird der Wert 2 ausgegeben und dann ruft die
+Funktion {\tt Countdown()} erneut auf...
+
+\begin{quote}
+Die Ausführung von {\tt Countdown()} beginnt mit {\tt n=1} und
+weil {\tt n} nicht Null ist, wird der Wert 1 ausgegeben und dann ruft die
+Funktion {\tt Countdown()} erneut auf...
+
+\begin{quote}
+Die Ausführung von {\tt Countdown()} beginnt mit {\tt n=0} und
+weil {\tt n} jetzt den Wert Null hat, wird das Wort ``Start!''
+ausgegeben. Danach ist die Funktion beendet und die 
+Abarbeitung des Programms wird in der aufrufenden Funktion fortgesetzt.
+\end{quote}
+
+Die Funktion {\tt Countdown()}, welche {\tt n=1} als Argument erhalten hat,
+ist beendet und die Abarbeitung des Programms wird in der 
+aufrufenden Funktion fortgesetzt.
+
+\end{quote}
+
+Die Funktion {\tt Countdown()}, welche {\tt n=2} als Argument erhalten hat,
+ist beendet und die Abarbeitung des Programms wird in der 
+aufrufenden Funktion fortgesetzt.
+
+\end{quote}
+
+Die Funktion {\tt Countdown()}, welche {\tt n=3} als Argument erhalten hat,
+ist beendet und die Abarbeitung des Programms wird in der 
+aufrufenden Funktion fortgesetzt.
+
+\noindent Und dann ist unser Programm zurück in {\tt main()} (was für eine Reise).  
+Die gesamte Ausgabe sieht folgendermaßen aus:
+
+\begin{verbatim}
+    3
+    2
+    1
+    Start!
+\end{verbatim}
+%
+
+\index{Instanz}
+In der Umgangssprache der Programmierer sagt man \emph{eine Funktion ruf sich selbst
+auf}. Viele Programmieranfänger (und nicht nur die) haben Probleme damit sich das vorstellen und erklären
+zu können. 
+
+Erinnern wir uns. Wir haben gelernt, dass, wenn eine Funktion 
+aufgerufen wird, eine neue Instanz des Programmcodes erzeugt wird. Eine Instanz 
+ist also eine Kopie des Programmcodes. 
+Unsere {\tt Countdown()} Funktion erzeugt mehrere Kopien des gleichen
+Programmcodes. Allerdings sind diese Instanzen nicht komplett gleich, sondern 
+unterscheiden sich in ihren Parameterwerten. Genau genommen ist es also falsch 
+und irreführend zu sagen, dass eine Funktion sich selbst aufruft. Sie ruft nur den gleichen Code auf.
+
+
+Schauen wir uns als zweites Beispiel erneut die Funktionen
+{\tt PrintNewLine()} und {\tt PrintThreeLines()} an:
+
+\begin{verbatim}
+    void PrintNewLine () 
+    {
+        printf ("\n");
+    }
+
+    void PrintThreeLines () 
+    {
+        PrintNewLine ();  PrintNewLine ();  PrintNewLine ();
+    }
+\end{verbatim}
+%
+Wir können die Funktionen mit unserem neuen Wissen verbessern, 
+so dass wir so viele Zeilen ausgeben lassen können wie wir wollen,
+seien es 2 oder 106:
+
+\begin{verbatim}
+    void PrintLines (int n) 
+    {
+        if (n > 0) 
+        {
+            printf ("\n");
+            PrintLines (n-1);
+        }
+    }
+\end{verbatim}
+%
+Das Programm ist ähnlich wie {\tt Countdown()} aufgebaut. So lange
+{\tt n} größer als Null ist wird eine Leerzeile ausgegeben und dann
+wird die gleiche Funktion aufgerufen um weitere {\tt n-1} Leerzeilen auszugeben. 
+Somit ergibt sich die Gesamtzahl der auszugebenden Leerzeilen
+aus {\tt 1 + (n-1)}, was näherungsweise {\tt
+n} entspricht.
+
+\index{Rekursion}
+\index{newline}
+
+Der Vorgang einer sich selbst aufrufenden Funktion wird als {\bf Rekursion} bezeichnet -- 
+Funktionen welche diese Eigenschaft aufweisen sind {\bf rekursive} Funktionen.
+
+\section {Unendliche Rekursion}
+
+In unseren Beispielen im letzten Abschnitt fällt auf, dass bei jedem 
+rekursiven Funktionsaufruf das Funktionsargument um den Wert 1 verringert
+wird, bis am Ende die Funktion mit dem Wert Null aufgerufen wird.
+In diesem Fall wird die Funktion beendet, ohne einen weiteren 
+Funktionsaufruf durchzuführen.
+Dieser Fall --wenn die Funktion beendet wird ohne einen weiteren rekursiven
+Funktionsaufruf zu machen-- nennt man die {\bf Abbruchbedingung}.
+
+Wenn eine Rekursion niemals die Abbruchbedingung erreicht, würde 
+sich die rekursive Funktion (theoretisch) unendlich oft selbst aufrufen und
+das Programm würde nie beendet. Diesen Fall bezeichnet man auch
+als {\bf unendliche Rekursion} und ist generell keine gute Idee.
+Dieser Fehler kann auch auftreten wenn eine Abbruchbedingung zwar
+vorhanden ist, aber während der Abarbeitung des Programms nicht erreicht 
+werden kann. 
+
+\index{Rekursion!Abbruchbedingung}
+\index{Rekursion!unendliche}
+\index{Unendliche Rekursion}
+\index{Run-time error}
+
+
+In den meisten Fällen wird ein Programm mit unendlich rekursiven 
+Funktionen nicht wirklich für immer laufen. Die Ressourcen
+eines Computers sind endlich und früher oder später wird unser
+Progamm mit einer Fehlermeldung beendet werden.
+Einen Programmfehler dieser Art bezeichnet man als \emph{Run-time error} oder 
+\emph{Laufzeitfehler}
+(ein Fehler der erst in Erscheinung tritt, wenn das Programm ausgeführt wird --
+zur 'Laufzeit' eines Programms)
+Die Nichtexistenz einer Abbruchbedingung ist ein Beispiel für diese Art von Fehlern.
+
+\begin{description}
+\item [AUFGABE 1:]  Schreiben Sie ein kleines Programm, welches immer wieder
+die gleiche Funktion aufruft, ohne abzubrechen und beobachten Sie das
+Verhalten dieses Programms.
+
+\item [AUFGABE 2:]
+Was passiert wenn wir die Funktion {\tt Countdown()} mit dem Argument -1 aufrufen?
+Wie können wir diesen Fehler vermeiden?
+\end{description}
+
+
+
+
+\section {Stack Diagramme für rekursive Funktionen}
+\index{Stack}
+\index{Diagramm!Zustand}
+\index{Diagramm!Stack}
+
+Im vorigen Kapitel haben wir ein Stackdiagramm verwendet um
+den Zustand eines Programms und seiner Funktionen während 
+eines Funktionsaufrufs darzustellen.
+
+Wir können ein Stackdiagramm auch dazu verwenden um uns
+noch einmal verständlich zu machen, was während eines rekursiven
+Funktionsaufrufs in unserem Programm vorgeht.
+
+Es ist für das Verständnis wichtig, dass wir uns erinnern, dass jedes
+Mal wenn eine Funktion aufgerufen wird eine neue Instanz des 
+Programmcodes und der lokalen Variablen und Parameter dieser
+Funktion erzeugt wird.
+
+Die Abbildung zeigt und das Stackdiagramm für die Funktion 
+{\tt Countdown()}, wenn sie in der Hauptfunktion {\tt main()}mit dem 
+Argument {\tt n = 3} wie folgt aufgerufen wird:
+
+\index{Diagramm!Stack}
+\index{Stackdiagramm}
+
+\begin{verbatim}
+    Countdown(3);
+\end{verbatim}
+
+\vspace{0.1in}
+\centerline{\epsfig{figure=figs/stack2.pdf,width=6cm}}
+\vspace{0.1in}
+
+Es existiert genau eine Instanz von {\tt main()} und vier Instanzen von
+{\tt Countdown}, jede mit einem unterschiedlichen Parameterwert für 
+{\tt n}.  Das unterste Element des Stapels, {\tt Countdown()} mit {\tt n=0}
+ist die Abbruchbedingung. An dieser Stelle wird kein weiterer rekursiver
+Funktionsaufruf durchgeführt, so dass keine weiteren Instanzen von 
+{\tt Countdown()} erzeugt werden.
+%todo: Stack ist von oben nach unten gezeichnet (entgegen intuition)
+Die Instanz von {\tt main()} ist leer, weil in {\tt main()} keine Parameter
+oder lokalen Variablen definiert sind.
+
+Versuche Sie doch einmal  ein Stackdiagramm für {\tt PrintLines()} 
+zu zeichnen, wenn es mit dem Parameter {\tt n=4} aufgerufen wird!
+
+
+\section{Glossar}
+
+\begin{description}
+
+\item[Anweisungsblock (engl: \emph{block}):] Eine Gruppe von Anweisungen die durch eine
+öffnende und schließende geschweifte Klammer gebildet wird. Die Anweisungen werden
+gemeinsam ausgeführt und vom Compiler wie eine einzige Anweisung behandelt.
+
+\item[Modulo (engl: \emph{modulus}):]  Der Modulo-Operator berechnet den
+ganzzahligen Divisionsrest bei einer Division von ganzen Zahlen.  In C
+wird der Operator durch das Prozentzeichen dargestellt ({\tt \%}).
+
+\item[Bedingte Anweisung (engl: \emph{conditional}):]  Ein Anweisungsblock der nur dann ausgeführt wird,
+wenn eine bestimmte Bedingung erfüllt ist.
+
+\item[Mehrfache Verzweigung (engl: \emph{chaining}):]  Durch die verbundene  Abfrage mehrer
+Bedingungen lassen sich Fallunterscheidungen durchführen. Es wird nur ein Programmabschnitt
+von mehreren Alternativen ausgeführt. 
+
+\item[Verschachtelte Abhängigkeiten (engl: \emph{nesting}):] werden erzeugt in dem man eine
+weitere Fallunterscheidung in einem Zweig einer bedingten Anweisung durchführt.
+
+\item[Rekursion (engl: \emph{recursion}):]  Wird aus einer Funktion heraus die gleiche Funktion
+erneut aufgerufen bezeichnet man dies als Rekursion. Der Aufruf erfolgt üblicherweise mit
+geänderten Argumenten und sollte zu einem definierten Ende führen. Anderenfalls droht die
+
+\item[Unendliche Rekursion (engl: \emph{infinite recursion}):]  Eine Funktion ruft sich wiederholt
+selbst auf, ohne die Abbruchbedingung zu erreichen. Diese Verhalten belegt den kompletten Stack-Speicher
+und führt zu einem Laufzeitfehler.
+
+\index{Modulo}
+\index{Bedingte Anweisung}
+\index{Verzweigung!mehrfache}
+\index{Mehrfache Verzweigung}
+\index{Bedingung!verschachtelt}
+\index{Rekursion}
+\index{Rekursion!endlose}
+\index{Unendliche Rekursion}
+
+\end{description}
+
+
+\section{Übungsaufgaben}
+\setcounter{exercisenum}{0}
+
+\ifthenelse {\boolean{German}}{ \input{exercises/Exercise_4_german}}
+{\input{exercises/Exercise_4_english}}
+

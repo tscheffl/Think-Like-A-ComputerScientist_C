@@ -1,0 +1,651 @@
+%!TEX root = Main_german.tex
+
+% LaTeX source for textbook ``How to think like a computer scientist''
+% Copyright (C) 1999  Allen B. Downey
+
+% This LaTeX source is free software; you can redistribute it and/or
+% modify it under the terms of the GNU General Public License as
+% published by the Free Software Foundation (version 2).
+
+% This LaTeX source is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% General Public License for more details.
+
+% Compiling this LaTeX source has the effect of generating
+% a device-independent representation of a textbook, which
+% can be converted to other formats and printed.  All intermediate
+% representations (including DVI and Postscript), and all printed
+% copies of the textbook are also covered by the GNU General
+% Public License.
+
+% This distribution includes a file named COPYING that contains the text
+% of the GNU General Public License.  If it is missing, you can obtain
+% it from www.gnu.org or by writing to the Free Software Foundation,
+% Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+
+\chapter{Hardwarenahes Programmieren}
+\label{Binary}
+
+
+\section{Operatoren für die Arbeit mit Bits}
+\index{binäre Darstellung von Werten}
+
+
+Es ist hin und wieder notwendig, nicht nur auf einzelne Variablen im
+Speicher des Computers zuzugreifen, sondern sogar die einzelnen Bits
+dieser Werte abzufragen, zu verarbeiten oder zu verändern.
+Speziell wenn man mit Microcontrollern arbeitet, um 
+Regelungs- und Steuerungsaufgaben zu automatisieren, kann es nötig
+sein, den Zustand angeschlossener Geräte und Sensoren bitgenau zu kennen, 
+auszuwerten und gegebenenfalls zu ändern. 
+
+C bietet dafür eine Reihe von sogenannten \emph{Bitoperatoren} die 
+allerdings trotz ihres Namens nicht direkt mit einzelnen Bitwerten arbeiten
+sondern immer auf mehrere Bits gleichzeitig angewendet werden.
+Daran ist der Aufbau moderner Computersysteme schuld, welche die Daten
+immer parallel zwischen Prozessor und Hauptspeicher übertragen und anschließend
+auch verarbeiten. Es wäre viel zu langsam jedes Bits einzeln aus dem Hauptspeicher 
+zu laden und in einer Operation des Prozessors zu verarbeiten.
+Weiterhin ist es nicht möglich einzelne Bits überhaupt sinnvoll zu adressieren.
+Der kleinste direkt adressierbare Speicherbereich ist ein Byte und dieses 
+besteht aus einer Folge von 8 Bit.
+\index{Bit}
+\index{Byte}
+
+Es hat sich eingebürgert, die zwei Zustände eines einzelnen Bits durch die
+numerischen Werte 0 oder 1 darzustellen. Daraus ableitend, kann der Wert
+eines Bytes entsprechend der Bit-Wertigkeit im Dualsystem als 
+dezimaler Wert interpretiert werden.
+
+So entspricht die folgende Binärdarstellung des Byte A dem dezimalen Wert \texttt{105} ($2^6+2^5+2^3+2^0$):
+
+% (int, char, long)
+% lsb, msb
+
+
+\unitlength0.1cm
+
+\begin{picture}(80,12)
+
+\put(10,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(17,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(24,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(59,0){\framebox(7,7){\textbf{\textsf{1}}}}
+
+\put(13,8.5){{\scriptsize \texttt{$2^7$}}}
+\put(20,8.5){{\scriptsize \texttt{$2^6$}}}
+\put(27,8.5){{\scriptsize \texttt{$2^5$}}}
+\put(34,8.5){{\scriptsize \texttt{$2^4$}}}
+\put(41,8.5){{\scriptsize \texttt{$2^3$}}}
+\put(48,8.5){{\scriptsize \texttt{$2^2$}}}
+\put(55,8.5){{\scriptsize \texttt{$2^1$}}}
+\put(62,8.5){{\scriptsize \texttt{$2^0$}}}
+
+\put(70,1.5){{\large \texttt{Byte \textbf{A}}}}
+
+\end{picture}
+
+\section{Operatoren für die Arbeit mit Bits}
+\index{Bitperatoren}
+\index{Operatoren!bitweise}
+
+Die binären Operatoren ähneln in ihrer Funktion stellenweise
+den logischen Operatoren aus Kapitel \ref{Logical Operators}.
+So existieren in C die drei {\bf Bitoperatoren} \emph{AND} ({\tt \&}), \emph{OR} ({\tt |}) und \emph{NOT}
+(\texttt{\textasciitilde}).  
+
+Im Gegensatz zu den logischen Operatoren, arbeiten die binären Operatoren allerdings 
+auf der Ebene der einzelne Bits. So liefert
+zum Beispiel der Operator für die \emph{bitweise Negation}  \texttt{\textasciitilde}
+das folgende Bitmuster:
+
+\begin{picture}(80,20)
+
+\put(10,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,10){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(13,18.5){{\scriptsize \texttt{$2^7$}}}
+\put(20,18.5){{\scriptsize \texttt{$2^6$}}}
+\put(27,18.5){{\scriptsize \texttt{$2^5$}}}
+\put(34,18.5){{\scriptsize \texttt{$2^4$}}}
+\put(41,18.5){{\scriptsize \texttt{$2^3$}}}
+\put(48,18.5){{\scriptsize \texttt{$2^2$}}}
+\put(55,18.5){{\scriptsize \texttt{$2^1$}}}
+\put(62,18.5){{\scriptsize \texttt{$2^0$}}}
+
+\put(70,11.5){{\large \texttt{Byte \textbf{A}}}}
+
+\put(10,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(17,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(24,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(31,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(38,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(45,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(52,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(59,0){\framebox(7,7){\textbf{\textsf{1}}}}
+
+\put(70,1.5){{\large \texttt{Byte \texttt{\textasciitilde}\textbf{A}}}}
+
+\end{picture}
+
+
+An jeder Stelle wo zuvor eine 1 stand, steht jetzt eine 0 und
+umgekehrt.
+
+Mit Hilfe des \emph{bitweise AND} Operators \texttt{\&} können
+die Bitfolgen zweier Operanden UND-verknüpft werden:
+
+\begin{picture}(80,31)
+
+\put(10,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,20){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(13,28.5){{\scriptsize \texttt{$2^7$}}}
+\put(20,28.5){{\scriptsize \texttt{$2^6$}}}
+\put(27,28.5){{\scriptsize \texttt{$2^5$}}}
+\put(34,28.5){{\scriptsize \texttt{$2^4$}}}
+\put(41,28.5){{\scriptsize \texttt{$2^3$}}}
+\put(48,28.5){{\scriptsize \texttt{$2^2$}}}
+\put(55,28.5){{\scriptsize \texttt{$2^1$}}}
+\put(62,28.5){{\scriptsize \texttt{$2^0$}}}
+
+\put(70,21.5){{\large \texttt{Byte \textbf{A}}}}
+
+\put(10,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(24,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(38,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(45,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(59,10){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,11.5){{\large \texttt{Byte \textbf{B}}}}
+
+\put(10,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(45,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(59,0){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,1.5){{\large \texttt{Byte \textbf{A \& }\textbf{B}}}}
+
+\end{picture}
+
+Wie wir erkennen können, werden die einzelnen
+Bits von Byte A und Byte B UND-verknüpft.
+Das Ergebnis der bitweisen UND-Verknüpfung 
+unterscheidet sich also stark von der logischen 
+UND-Verknüpfung.
+
+
+Mit Hilfe des \emph{bitweise OR} Operators \texttt{|} können
+die Bitfolgen zweier Operanden ODER-verknüpft werden:
+
+\begin{picture}(80,31)
+
+\put(10,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,20){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(13,28.5){{\scriptsize \texttt{$2^7$}}}
+\put(20,28.5){{\scriptsize \texttt{$2^6$}}}
+\put(27,28.5){{\scriptsize \texttt{$2^5$}}}
+\put(34,28.5){{\scriptsize \texttt{$2^4$}}}
+\put(41,28.5){{\scriptsize \texttt{$2^3$}}}
+\put(48,28.5){{\scriptsize \texttt{$2^2$}}}
+\put(55,28.5){{\scriptsize \texttt{$2^1$}}}
+\put(62,28.5){{\scriptsize \texttt{$2^0$}}}
+
+\put(70,21.5){{\large \texttt{Byte \textbf{A}}}}
+
+\put(10,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(24,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(38,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(45,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(59,10){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,11.5){{\large \texttt{Byte \textbf{B}}}}
+
+\put(10,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(38,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,0){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,1.5){{\large \texttt{Byte \textbf{A | }\textbf{B}}}}
+
+\end{picture}
+
+
+
+
+
+\section{Verschiebeoperatoren}
+\index{Operatoren!bitweise}
+
+Es ist weiterhin möglich alle Bits in einer Bitfolge
+nach links oder nach rechts zu schieben.
+
+Dafür kommen die Operatoren \texttt{<<} und \texttt{>>} zum Einsatz.
+Der \texttt{<<} Operator schiebt alle Bits entsprechend des Werts \texttt{n}
+des zweiten Operanden nach links. Die Operation entspricht
+einer binären Multiplikation mit $2^n$. 
+
+\begin{picture}(80,20)
+
+\put(10,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(17,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,10){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(13,18.5){{\scriptsize \texttt{$2^7$}}}
+\put(20,18.5){{\scriptsize \texttt{$2^6$}}}
+\put(27,18.5){{\scriptsize \texttt{$2^5$}}}
+\put(34,18.5){{\scriptsize \texttt{$2^4$}}}
+\put(41,18.5){{\scriptsize \texttt{$2^3$}}}
+\put(48,18.5){{\scriptsize \texttt{$2^2$}}}
+\put(55,18.5){{\scriptsize \texttt{$2^1$}}}
+\put(62,18.5){{\scriptsize \texttt{$2^0$}}}
+
+\put(70,11.5){{\large \texttt{Byte \textbf{A} (42)}}}
+
+\put(10,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(59,0){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,1.5){{\large \texttt{Byte \textbf{A << 2 } (168)}}}
+
+\end{picture}
+
+
+Der \texttt{>>} Operator schiebt alle Bits entsprechend des Werts \texttt{n}
+des zweiten Operanden nach rechts. Die Operation entspricht
+einer binären Division mit $2^n$. 
+
+
+
+
+\begin{picture}(80,20)
+
+\put(10,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(17,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(38,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(45,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(59,10){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(13,18.5){{\scriptsize \texttt{$2^7$}}}
+\put(20,18.5){{\scriptsize \texttt{$2^6$}}}
+\put(27,18.5){{\scriptsize \texttt{$2^5$}}}
+\put(34,18.5){{\scriptsize \texttt{$2^4$}}}
+\put(41,18.5){{\scriptsize \texttt{$2^3$}}}
+\put(48,18.5){{\scriptsize \texttt{$2^2$}}}
+\put(55,18.5){{\scriptsize \texttt{$2^1$}}}
+\put(62,18.5){{\scriptsize \texttt{$2^0$}}}
+
+\put(70,11.5){{\large \texttt{Byte \textbf{A} (48)}}}
+
+\put(10,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(17,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(31,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(52,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(59,0){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,1.5){{\large \texttt{Byte \textbf{A >> 2 } (12)}}}
+
+\end{picture}
+
+
+\section{Anwendung binärer Operatoren}
+
+
+Wenn wir Byte A mit dem negierten Byte A UND-verknüpfen
+ist die resultierende Bitfolge komplett auf 0 gesetzt:
+
+\begin{picture}(80,20)
+
+\put(10,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,10){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(13,18.5){{\scriptsize \texttt{$2^7$}}}
+\put(20,18.5){{\scriptsize \texttt{$2^6$}}}
+\put(27,18.5){{\scriptsize \texttt{$2^5$}}}
+\put(34,18.5){{\scriptsize \texttt{$2^4$}}}
+\put(41,18.5){{\scriptsize \texttt{$2^3$}}}
+\put(48,18.5){{\scriptsize \texttt{$2^2$}}}
+\put(55,18.5){{\scriptsize \texttt{$2^1$}}}
+\put(62,18.5){{\scriptsize \texttt{$2^0$}}}
+
+\put(70,11.5){{\large \texttt{Byte \textbf{A}}}}
+
+\put(10,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(17,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(31,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(45,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(59,0){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,1.5){{\large \texttt{Byte \textbf{A \&} \texttt{\textasciitilde}\textbf{A}}}}
+
+\end{picture}
+
+
+Wir können diese Eigenschaft benutzen um aus einer
+Bitfolge einzelne Bits zu isolieren. Wir benutzen dafür
+eine sogenannte \emph{Bitmaske}. Das ist eine
+Bitfolge, bei der das für uns interessante Bit den
+Wert 1 und alle nicht interessanten Bits den Wert 
+0 besitzen. Das resultierende Ergebnis hängt damit
+nur vom Zustand des über die Maske ausgewählten
+Bits ab:
+
+\begin{picture}(80,31)
+
+\put(10,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,20){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(13,28.5){{\scriptsize \texttt{$2^7$}}}
+\put(20,28.5){{\scriptsize \texttt{$2^6$}}}
+\put(27,28.5){{\scriptsize \texttt{$2^5$}}}
+\put(34,28.5){{\scriptsize \texttt{$2^4$}}}
+\put(41,28.5){{\scriptsize \texttt{$2^3$}}}
+\put(48,28.5){{\scriptsize \texttt{$2^2$}}}
+\put(55,28.5){{\scriptsize \texttt{$2^1$}}}
+\put(62,28.5){{\scriptsize \texttt{$2^0$}}}
+
+\put(70,21.5){{\large \texttt{Byte \textbf{A}}}}
+
+\put(10,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(17,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(45,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(59,10){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,11.5){{\large \texttt{Maske $\mathbf{2^5}$ (32)}}}
+
+\put(10,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(17,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(45,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(59,0){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,1.5){{\large \texttt{Byte \textbf{A \& }\textbf{32}}}}
+
+\end{picture}
+
+\pagebreak
+Wenn wir Byte A mit dem negierten Byte A ODER-verknüpfen
+ist die resultierende Bitfolge komplett auf 1 gesetzt.:
+
+\begin{picture}(80,20)
+
+\put(10,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,10){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(13,18.5){{\scriptsize \texttt{$2^7$}}}
+\put(20,18.5){{\scriptsize \texttt{$2^6$}}}
+\put(27,18.5){{\scriptsize \texttt{$2^5$}}}
+\put(34,18.5){{\scriptsize \texttt{$2^4$}}}
+\put(41,18.5){{\scriptsize \texttt{$2^3$}}}
+\put(48,18.5){{\scriptsize \texttt{$2^2$}}}
+\put(55,18.5){{\scriptsize \texttt{$2^1$}}}
+\put(62,18.5){{\scriptsize \texttt{$2^0$}}}
+
+\put(70,11.5){{\large \texttt{Byte \textbf{A}}}}
+
+\put(10,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(24,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(38,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(52,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,0){\framebox(7,7){\textbf{\textsf{1}}}}
+
+\put(70,1.5){{\large \texttt{Byte \textbf{A | }\texttt{\textasciitilde}\textbf{A}}}}
+
+\end{picture}
+
+
+Wir können diese Eigenschaft benutzen um innerhalb einer
+Bitfolge einzelne Bits gezielt zu setzen. 
+Indem wir in einer Bitfolge die zu setzenden 
+Bits mit dem Wert 1 und alle nicht zu verändernden Bits
+mit dem Wert 0 kodieren lässt sich der Wert
+einzelner Bits gezielt setzen:
+
+\begin{picture}(80,31)
+
+\put(10,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,20){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(13,28.5){{\scriptsize \texttt{$2^7$}}}
+\put(20,28.5){{\scriptsize \texttt{$2^6$}}}
+\put(27,28.5){{\scriptsize \texttt{$2^5$}}}
+\put(34,28.5){{\scriptsize \texttt{$2^4$}}}
+\put(41,28.5){{\scriptsize \texttt{$2^3$}}}
+\put(48,28.5){{\scriptsize \texttt{$2^2$}}}
+\put(55,28.5){{\scriptsize \texttt{$2^1$}}}
+\put(62,28.5){{\scriptsize \texttt{$2^0$}}}
+
+\put(70,21.5){{\large \texttt{Byte \textbf{A}}}}
+
+\put(10,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(17,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(31,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(38,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(45,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(59,10){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,11.5){{\large \texttt{Setze Bit $\mathbf{2^4}$(16)}}}
+
+\put(10,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(38,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,0){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,1.5){{\large \texttt{Byte \textbf{A | }\textbf{16}}}}
+
+\end{picture}
+
+Wir benötigen also immer eine Art Bitmaske um
+auf das betreffende Bit zuzugreifen. Diese Maske
+können wir entweder als konstanten Wert in
+unserem Programm speichern, oder wir erzeugen
+uns diese Maske in dem wir das benötigte Bitmuster
+durch die Verschiebung eines einzelnen Bits selbst erzeugen:
+
+\begin{verbatim}
+    unsigned int mask = mask | (1 << x);
+\end{verbatim}
+
+That will set bit x. Counting starts with 0! \hint
+
+Clearing a bit
+
+Use the bitwise AND operator (\&) to clear a bit.
+
+\begin{verbatim}
+    number = number & ~(1 << x);
+\end{verbatim}
+
+That will clear bit x. You must invert the bit string with the bitwise NOT operator (~), then AND it.
+
+Toggling a bit
+
+The XOR operator (\^) can be used to toggle a bit.
+
+\begin{verbatim}
+    number = number ^ (1 << x);
+\end{verbatim}
+
+That will toggle bit x.
+
+Checking a bit
+
+To check a bit, AND it with the bit you want to check:
+
+\begin{verbatim}
+    bit = number & (1 << x);
+\end{verbatim}
+
+That will put the value of bit x into the variable bit.
+
+\section{Glossar}
+
+\begin{description}
+
+\item[Bit (engl: \emph{bit}):]  Ein Bit (\emph{binary digit}) ist die kleinste Informationseinheit.
+Ein Bit kann zwei Zustände annehmen, die üblicherweise
+durch die Werte 0 und 1 dargestellt werden und die Grundlage
+des binären Zahlensystems bilden. In Computerprogrammen 
+werden üblicherweise mehrere Bits gleichzeitig bearbeitet.
+
+\item[Byte (engl: \emph{byte}):] Ein Byte ist üblicherweise eine Folge von 8 Bit und
+stellt die kleinste adressierbare Einheit in einem Computersystem
+dar. Die Festlegung der Größe eines Bytes auf 8 Bit hat historische
+Gründe, weil sich damit die Buchstaben des lateinischen Alphabets 
+sowie Ziffern und Sonderzeichen darstellen lassen.
+
+%\item[Dualsystem]
+
+\index{Bit}
+\index{Byte}
+
+\end{description}
+
+\section{Übungsaufgaben}
+
+\begin{exercise}
+
+Es ist folgendes Programm gegeben, welches eine Zahl von der Tastatur einliest und
+überprüft, ob es sich um eine gerade oder eine ungerade Zahl handelt:
+
+\begin{verbatim}
+  #include <stdio.h>
+  #include <stdlib.h>
+  
+  int main(void)
+  {
+      int eingabe;
+      int test;
+  
+      printf("Geben Sie eine Zahl ein: ");
+      test = scanf("%i",&eingabe);
+      if (test == 0)
+      {
+          printf("Fehler: Es wurde keine Zahl eingegeben\n");
+          return EXIT_FAILURE;
+      }
+  
+      if (eingabe & 1) 
+      {
+          printf("ungerade Zahl\n");
+      }
+      else printf("gerade Zahl\n");
+      return EXIT_SUCCESS;
+  }      
+\end{verbatim}
+
+
+\begin{enumerate}
+	\item
+	Erklären Sie, wie das Programm herausfindet ob die eingegebene Zahl gerade oder ungerade ist.
+	\item
+	Was passiert wenn der Benutzer anstelle einer \emph{Zahl} einen \emph{Buchstaben} auf der Tastatur eingibt?
+	Welche Bedeutung hat dabei die Variable \emph{test} im Programm?
+	\item
+	Versehen Sie das Programm mit geeigneten Kommentaren für spätere Entwickler.
+\end{enumerate} 
+
+
+
+\end{exercise}
+
+
+

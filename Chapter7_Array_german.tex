@@ -1,0 +1,1214 @@
+%!TEX root = Main_german.tex
+
+% LaTeX source for textbook ``How to think like a computer scientist''
+% Copyright (C) 1999  Allen B. Downey
+
+% This LaTeX source is free software; you can redistribute it and/or
+% modify it under the terms of the GNU General Public License as
+% published by the Free Software Foundation (version 2).
+
+% This LaTeX source is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% General Public License for more details.
+
+% Compiling this LaTeX source has the effect of generating
+% a device-independent representation of a textbook, which
+% can be converted to other formats and printed.  All intermediate
+% representations (including DVI and Postscript), and all printed
+% copies of the textbook are also covered by the GNU General
+% Public License.
+
+% This distribution includes a file named COPYING that contains the text
+% of the GNU General Public License.  If it is missing, you can obtain
+% it from www.gnu.org or by writing to the Free Software Foundation,
+% Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+\chapter{Arrays}
+\label{arrays}
+\index{Arrays}
+\index{Typ!Array}
+
+Ein {\bf Array} steht für eine Menge von Werten, wobei jeder Wert durch eine
+Zahl (genannt Index) identifiziert und referenziert wird.
+Der Vorteil von Arrays besteht darin, dass wir eine (möglicherweise)
+sehr große Anzahl von Werten unter dem gleichen Namen ansprechen
+können. 
+
+Nehmen wir an, wir wollen in unserem Programm 
+die Tagestemperaturen der letzten 10 Jahre auswerten -- wenn wir 
+die Werte in einzelnen Variablen speichern wollten, müssten wir dafür
+mindestens 3652 Variablen anlegen. Wenn wir Arrays benutzen brauchen wir nur eins.
+ 
+
+Wenn wir ein Array deklarieren, müssen wir angeben wie viele Elemente in dem
+Array gespeichert werden sollen. Ansonsten sieht die Deklaration ähnlich wie für andere
+Variablentypen aus:
+
+\begin{verbatim}
+    int c[4];
+    double values[10];
+\end{verbatim}
+
+
+%
+Syntaktisch sehen Array-Variablen wie andere C Variablen aus, außer dass ihnen mit {\tt [ANZAHL\_DER\_ELEMENTE]}  
+die  Anzahl der Elemente  des Arrays in eckigen Klammern folgt. 
+Die erste Zeile in unserem Beispiel, {\tt int c[4];} ist vom Typ  ``Array von Ganzen Zahlen'' und erzeugt ein 
+Array mit vier {\tt int} Werten. Das Array hat den Namen {\tt c}.
+Die zweite Zeile, {\tt double values[10];} hat den Typ  ``Array von Fließkommazahlen'' und
+erzeugt ein Array mit zehn Werten. 
+
+
+%The number
+%of elements in {\tt values} depends on {\tt size}. You can use any
+%integer expression to determine the size of an array.
+%!!! Not in C
+%this would be dynamic arrays, that can not be initialised at definition time!!!
+
+%
+
+In C können wir die Elemente eines Array während der Deklaration 
+sofort initialisieren.
+Die Werte der einzelnen Elemente werden dabei in geschwungenen Klammern 
+{\tt \{\}} und durch Komma getrennt angegeben:
+
+\begin{verbatim}
+    int c[4] = {0, 0, 0, 0};
+\end{verbatim}
+
+Diese Anweisung deklariert ein Array mit vier Elementen und initialisiert
+alle Werte des Arrays mit Null.
+Die folgende Abbildung zeigt wie Arrays in Zustandsdiagrammen dargestellt werden:
+
+%\myfig{figure=figs/array.eps}
+
+\unitlength0.1cm
+
+\begin{picture}(40,10)(-30,-5)
+%\put(-4,1.5){{\Large \texttt{c}}}
+%\put(0,1.5){\framebox(2,2)}
+%\thicklines
+%\put(2,2.5){\vector(1,0){8}}
+%\thinlines
+\put(5,1.5){{\Large \texttt{c}}}
+\put(10,0){\framebox(7,5){\textbf{\textsf{0}}}}
+\put(17,0){\framebox(7,5){\textbf{\textsf{0}}}}
+\put(24,0){\framebox(7,5){\textbf{\textsf{0}}}}
+\put(31,0){\framebox(7,5){\textbf{\textsf{0}}}}
+
+\put(10.5,-4){{\scriptsize \texttt{c[0]}}}
+\put(17.5,-4){{\scriptsize \texttt{c[1]}}}
+\put(24.5,-4){{\scriptsize \texttt{c[2]}}}
+\put(31.5,-4){{\scriptsize \texttt{c[3]}}}
+
+\end{picture}
+
+\index{Zustandsdiagramm}
+
+Die fett gedruckten Zahlen innerhalb der Kästchen sind die Werte der {\bf Elemente} des
+Arrays. Die kleinen Zahlen außerhalb der Kästchen geben die Indizes 
+an, über die wir auf die einzelnen Elemente des Arrays zugreifen können.
+Wenn wir ein neues Array deklarieren, ohne es zu
+initialisieren, dann enthalten die Elemente des Arrays 
+beliebige, nicht vorher bestimmbare Werte. 
+Wir müssen das Array mit sinnvollen Werten initialisieren,
+bevor wir sie verwenden können.
+
+Wenn wir bei der Deklaration bereits alle Werte angeben, so können 
+wir auf die Angabe der Größe des Arrays verzichten. Der Compiler ermittelt
+die benötigte Anzahl selbst: 
+
+\begin{verbatim}
+    int c[] = {0, 0, 0, 0};
+\end{verbatim}
+
+Die angegebene Syntax für die Zuweisung von Werten an das Array ist nur gültig
+zum Zeitpunkt der Deklaration. Wenn wir später in unserem Programm
+die Werte des Arrays neu setzen wollen, müssen wir das einzeln für jedes Element des Arrays
+tun.
+
+
+\textbf{WICHTIG:}  Ein Array kann aus Elementen beliebigen Datentyps bestehen, wie zum
+Beipiel {\tt int} und {\tt double}. Es können  in einem Array aber 
+immer nur Elemente gleichen Typs gespeichert werden. Wir können 
+die Typen innerhalb eines Arrays nicht mischen. \hint
+%and user-defined types like {\tt Point} and {\tt Time}.
+
+
+%%
+\section{Inkrement und Dekrement-Operatoren}
+\index{Operator!inkrement}
+\index{Operator!dekrement}
+\index{Inkrement}
+\index{Dekrement}
+\index{Heraufzählen|see {Inkrement}}
+\index{Herunterzählen|see {Dekrement}}
+
+Einen Wert herauf- oder herunterzuzählen 
+sind solche häufig vorkommenden Operationen in Programmen, dass C
+dafür spezielle Operatoren zur Verfügung stellt.  
+Der {\tt ++} Operator zählt einen {\tt int}, {\tt char} oder {\tt double} Wert um eins herauf (inkrement).
+Der {\tt -}{\tt -} Operator subtrahiert (dekrementiert) den Wert um 1.  
+%Neither operator works on {\tt apstring}s,
+%and neither {\em should} be used on {\tt bool}s.
+
+Es ist technisch legal eine Variable in einem Ausdruck zu verwenden
+und sie gleichzeitig zu inkrementieren.
+Ein Beispiel könnte folgendermaßen aussehen:
+
+\begin{verbatim}
+    printf ("%i\n ", i++);
+\end{verbatim}
+%
+Wenn wir uns den Code anschauen, so ist nicht unmittelbar klar,
+ob der Wert um eins erhöht wird bevor oder nachdem er auf dem Bildschirm 
+ausgegeben wird.
+Weil solche Ausdrücke verwirrend sein können, möchte ich von ihrer
+Verwendung abraten.
+Ich möchte Sie sogar noch mehr entmutigen, indem ich das Resultat nicht verraten
+werde.
+Wenn Sie es wirklich 
+wissen wollen, können Sie es ja einfach selbst ausprobieren.
+
+Mit Hilfe des Inkrement-Operators können wir die {\tt PrintMultTable()}-Funktion aus 
+Abschnitt Section~\ref{More generalization} folgendermaßen schreiben:
+
+\begin{verbatim}
+    void PrintMultTable(int high) 
+    { 
+        int i = 1; 
+        while (i <= high) 
+        { 
+            PrintMultiples(i); 
+            i++; 
+        } 
+    }
+\end{verbatim}
+%
+Ein weit verbreiteter Anfängerfehler besteht darin folgenden
+Code zu schreiben:
+
+\begin{verbatim}
+    index = index++;             /* FALSCH!! */
+\end{verbatim}
+%
+Unglücklicherweise ist diese Anweisung syntaktisch legal, so 
+dass der Compiler uns nicht warnen wird.  
+Der unangenehme Effekt dieser Anweisung besteht darin, 
+dass der Wert von  {\tt index} unverändert gelassen wird.  
+Das ist ein Fehler der in einem Programm möglicherweise nur schwer zu finden ist.
+
+\textbf{HINWEIS:} Entweder schreiben wir {\tt index = index + 1;}  oder  {\tt index++;}\\ 
+Wir dürfen beide Ausdrücke  nicht miteinander mischen! 
+
+\hint
+
+%%
+\section{Zugriff auf Elemente eines Arrays}
+\index{Element}
+\index{Array!Element}
+\index{Array!Index}
+Der {\tt []} Operator erlaubt es uns einzelne Elemente eines Arrays zu lesen und
+zu schreiben.
+Dazu wird innerhalb der eckigen Klammern der Index des Elements angegeben.
+Hierbei müssen wir besonders aufpassen. Der Index zählt nämlich bei Null beginnend,
+das heißt, das erste Element im Array ist {\tt c[0]}.  
+Das Element {\tt c[1]} ist bereits das zweite Element des Arrays!
+
+%\renewcommand{\marginnotevadjust}{-3em} 
+\hint
+Wir können den 
+{\tt []} Operator in jedem beliebigen Ausdruck verwenden:
+
+
+\begin{verbatim}
+    c[0] = 7;
+    c[1] = c[0] * 2;
+    c[2]++;
+    c[3] -= 60;
+\end{verbatim}
+%
+Alle diese Zuweisungen sind erlaubt. Hier ist das Ergebnis dargestellt:
+
+
+%\myfig{figure=figs/array2.eps}
+
+\unitlength0.1cm
+
+\begin{picture}(40,10)(-30,-5)
+%\put(-11,1.5){\texttt{count}}
+%\put(0,1.5){\framebox(2,2)}
+%\thicklines
+%\put(2,2.5){\vector(1,0){8}}
+%\thinlines
+\put(5,1.5){{\Large \texttt{c}}}
+
+\put(10,0){\framebox(7,5){\textbf{\textsf{7}}}}
+\put(17,0){\framebox(7,5){\textbf{\textsf{14}}}}
+\put(24,0){\framebox(7,5){\textbf{\textsf{1}}}}
+\put(31,0){\framebox(7,5){\textbf{\textsf{-60}}}}
+
+\put(10.5,-4){{\scriptsize \texttt{c[0]}}}
+\put(17.5,-4){{\scriptsize \texttt{c[1]}}}
+\put(24.5,-4){{\scriptsize \texttt{c[2]}}}
+\put(31.5,-4){{\scriptsize \texttt{c[3]}}}
+
+\end{picture}
+
+Aus unserem Beispiel sollte klar geworden sein, dass die vier Elemente
+des Arrays über einen Indexwert identifiziert werden, der von 0 bis
+3 reicht. In unserem Array gibt es kein Element mit dem Index 4.
+
+Es ist trotzdem ein weit verbreiteter und häufiger Fehler die Grenzen eines
+Arrays zu überschreiten.
+Modernere Programmiersprachen, wie zum Beispiel Java oder C\#, produzieren
+eine Fehlermeldung oder brechen das Programm ab, wenn versucht wird
+auf Elemente zuzugreifen, die außerhalb der Grenzen eines Arrays liegen.
+C hingegen überprüft die Grenzen eines Arrays nicht, so dass ein Programm
+auf Speicherstellen außerhalb des Arrays zugreifen kann, so als wären diese
+Elemente des Arrays. Sollte sich ihr Programm so verhalten, so ist das in
+den allermeisten Fällen falsch und kann zu folgenschweren Fehlern in dem
+Programm führen.
+
+
+\index{Array!Grenzen}
+\begin{quote}
+{\bf Es ist daher notwendig das Sie, als der Programmierer,
+darauf achten und sichergehen, dass der Programmcode ihres Programms die Grenzen der Arrays
+korrekt einhält!}\hint
+
+\end{quote}
+
+
+
+\index{Laufzeitfehler|see{Run-time error}}
+\index{Run-time error}
+\index{Index}
+\index{Ausdruck}
+
+Wir können beliebige Ausdrücke als Index benutzen, solange sie vom Typ 
+{\tt int} sind. Meistens verwenden wir eine spezielle \emph{Schleifenvariable} um ein
+Array zu indizieren:
+
+\begin{verbatim}
+    int i = 0;
+    while (i < 4) 
+    {
+        printf ("%i\n", c[i]);
+        i++;
+    }
+\end{verbatim}
+
+%
+Wir benutzen die {\tt while}-Schleife um den Wert der Schleifenvariable {\tt i} schrittweise
+zu erhöhen.
+Wenn die Schleifenvariable {\tt i} den Wert 4 erreicht, schlägt die
+Auswertung der Prüfbedingung fehl und die Schleife wird
+abgebrochen. Der Schleifenkörper wird also nur dann
+ausgeführt, wenn {\tt i} den Wert 0, 1, 2 und 3 hat.
+\index{Schleife}
+\index{Schleifenvariable}
+\index{Variable!Schleife}
+Bei jedem Schleifendurchlauf benutzen wir 
+{\tt i} als Index für das Array und geben das 
+{\tt i}-te Element auf dem Bildschirm aus.  
+
+Wenn wir Arrays verwenden, werden wir also immer wieder auch
+mit Schleifen arbeiten, denn es kommt oft vor, dass ein Array von ersten bis zum letzten
+Element durchlaufen werden muss. 
+
+
+
+%%
+\section{Kopieren von Arrays}
+\index{Array!kopieren}
+
+Mit Arrays lassen sich eine Reihe von Programmieraufgaben 
+sehr einfach lösen. Zum Beispiel können wir auf diese
+Weise sehr einfach große Datenmengen speichern und weiterverarbeiten. 
+
+Allerdings müssen wir uns daran gewöhnen, dass C sehr wenige Dinge 
+automatisch von allein erledigt. Es ist zum Beispiel nicht möglich allen
+Elementen eines Arrays gleichzeitig einen neuen Wert zuzuweisen.
+Es ist auch nicht möglich die Werte eines Array direkt einem anderen
+Array zuzuweisen selbst wenn die Anzahl und der Typ der Elemente 
+beider Arrays übereinstimmen:
+
+
+\begin{verbatim}
+    double a[3] = {1.0, 1.0, 1.0};
+    double b[3];
+
+    a = 0.0;     /* Wrong! */
+    b = a;       /* Wrong! */
+\end{verbatim}
+%
+
+Um diese Aufgaben trotzdem auszuführen, müssen wir die Werte eines
+Arrays Element für Element bearbeiten. 
+Das heißt, wir müssen jedem einzelnen Element eines Arrays  einen neuen Wert
+zuweisen. Wenn wir den Inhalt eines Arrays in ein anderes Array kopieren wollen,
+müssen wir wieder elementweise die Werte kopieren und dazu verwenden wir
+am Besten eine Schleife:
+
+% 
+%In order to set all of the elements of an array to some value, you must do so element by element.
+%To copy the contents of one array to another, you must again do so, by copying each element from
+%one array to the other.
+
+\begin{verbatim}
+    int i = 0;
+    while (i < 3) 
+    {
+        b[i] = a[i];
+        i++;
+    }
+\end{verbatim}
+
+%%
+\section{{\tt for} Schleifen}
+
+Die Schleifen, die wir bisher benutzt haben, weisen einige Gemeinsamkeiten 
+auf. Vor der Ausführung der Schleife wird eine Schleifenvariable initialisiert, danach
+wird eine Schleifenbedingung getestet, welche von der Schleifenvariable abhängt.
+Im Schleifenkörper wird dann die Schleifenvariable verändert, indem man sie zum
+Beispiel heraufzählt (inkrementiert).
+
+
+%
+%The loops we have written so far have a number of elements
+%in common.  All of them start by initializing a variable;
+%they have a test, or condition, that depends on that variable;
+%and inside the loop they do something to that variable,
+%like increment it.
+
+\index{Schleife!for}
+\index{for}
+\index{Anweisung!for}
+
+Dieser Schleifentyp ist so verbreitet dass es dafür eine eigene
+Schleifenanweisung gibt, mit der man diesen Ablauf 
+kürzer und klarer darstellen kann: die \mbox{{\tt for}-Schleife}.\\
+Die Syntax der {\tt for}-Schleife sieht folgendermaßen aus:
+
+\begin{verbatim}
+    for (INITIALIZER; CONDITION; INCREMENTOR) 
+    {
+        BODY;
+    }
+\end{verbatim}
+%
+Diese Anweisung ist äquivalent zu:
+
+\begin{verbatim}
+    INITIALIZER;
+    while (CONDITION) 
+    {
+        BODY;
+        INCREMENTOR;
+    }
+\end{verbatim}
+%
+
+Ich finde die {\tt for}-Schleife übersichtlicher, weil 
+jetzt alle Anweisungen, die für die Steuerung der Schleife
+nötig sind, in einer Anweisung zusammengefasst sind.
+Allerdings haben gerade Anfänger teilweise Probleme die
+Arbeitsweise der {\tt for}-Schleife zu verstehen. Es ist
+wichtig zu wissen, wann die einzelnen Ausdrücke der
+Schleifenanweisung ausgeführt werden!
+
+Der INITIALIZER Ausdruck wird in der Schleife nur \emph{\textbf{ein
+einziges Mal}} ganz am Anfang ausgeführt und damit die 
+Schleifenvariable initialisiert. 
+
+Die Schleifenbedingung CONDITION
+wird \emph{\textbf{vor jedem Durchlauf}} durch die Schleife geprüft. Wenn
+die Bedingung \emph{wahr} ist, wird die Schleife durchlaufen,
+wenn sie \emph{falsch} ist, wird die Schleife abgebrochen.
+Da die Bedingung geprüft wird, bevor die Schleife ein erstes
+Mal ausgeführt wird, kann es passieren, dass die Schleife überhaupt
+nicht ausgeführt wird, weil bereits vor der ersten Ausführung
+der Test der Schleifenbedingung fehlschlägt.
+
+Der INCREMENTOR Ausdruck wird \emph{\textbf{nach jedem Durchlauf}} 
+durch den Schleifenkörper einmal ausgeführt. In den meisten Fällen
+wird dann die Schleifenvariable heraufgezählt (inkrementiert).
+Es ist aber genauso gut möglich eine Schleife 'rückwärts' zu durchlaufen.
+In diesem Fall müssten wir die Schleifenvariable herabzählen.
+
+So ist zum Beispiel:
+
+\begin{verbatim}
+    int i;
+    for (i = 0; i < 4; i++) 
+    {
+        printf("%i\n", c[i]);
+    }
+\end{verbatim}
+%
+äquivalent zu:
+
+\begin{verbatim}
+    int i = 0;
+    while (i < 4) 
+    {
+        printf("%i\n", c[i]);
+        i++;
+    }
+\end{verbatim}
+
+%%
+\section{Die Länge eines Arrays}
+\label{Array length}
+\index{Länge!Array}
+\index{Array!Länge}
+\index{sizeof()}
+\index{Operator!sizeof}
+
+C bietet uns keinen bequemen Weg an, mit dessen Hilfe wir
+die Größe eines Arrays in unserem Programm ermitteln können.
+Die Länge des Arrays ist zum Beispiel dann wichtig, wenn wir
+mit Hilfe einer Schleife das Array elementweise durchgehen und 
+die Schleife nach dem letzten Element beenden wollen. 
+
+Um die Länge des Arrays zu ermitteln könnten wir den {\tt sizeof()}
+Operator benutzen. Dieser liefert uns allerdings die Größe der Datentypen in Bytes.
+Die meisten Datentypen in C benutzen mehrere Bytes um einen
+Wert zu speichern und je nach nach verwendeter Rechnerarchitektur
+können diese Werte sogar für den gleichen Datentyp unterschiedlich sein.
+
+Um jetzt die korrekte Größe, das heißt die Anzahl der Elemente, eines
+Arrays zu ermitteln müssen wir die ermittelte Arraygröße noch durch die 
+Anzahl der Bytes teilen die ein einzelnes Element eines Arrays belegt.
+Dazu benutzen wir sinnvollerweise das Element mit dem Index 0.
+
+
+\begin{verbatim}
+    sizeof(ARRAY)/sizeof(ARRAY_ELEMENT)
+\end{verbatim}
+
+Es ist eine gute Idee diesen Wert und keine Konstante als die obere Grenze 
+für die Schleifenvariable zu benutzen. Auf diese Weise 
+können wir sicherstellen, dass wenn sich irgendwann einmal 
+die Größe eines Arrays ändern sollte, wir nicht das gesamte Programm
+durchforsten müssen um alle Schleifen zu ändern. Die Schleife
+für jede Arraygröße korrekt arbeiten:
+
+\begin{verbatim}
+    int i, length;
+    length = sizeof (c) / sizeof (c[0]);
+
+    for (i = 0; i < length; i++) 
+    {
+        printf("%i\n", c[i]);
+    }
+\end{verbatim}
+%
+Besonders wichtig ist die korrekte Angabe der Schleifenbedingung.
+Wir erinnern uns, der Index der Elemente eines Arrays beginnt mit
+\texttt{0}.
+In unserer Schleife wird die Schleifenvariable {\tt i} so lange erhöht, bis 
+sie den Wert {\tt length - 1} hat. Dies entspricht genau dem 
+Index des letzten Element des Arrays. Anschließend
+wird {\tt i} ein weiteres Mal erhöht und hat damit den gleichen
+Wert wie {\tt length}. Die Bedingung unserer Schleife ist damit \emph{falsch}
+und die Schleife wird abgebrochen. Würde die Schleife an dieser 
+Stelle weiter machen, würde das Programm auf Speicherbereiche zugegreifen die nicht
+mehr Teil des Arrays sind und unser Programm wäre fehlerhaft.
+%
+%The last time the body of the loop gets executed, the value of
+%is , which is the index of the last element.  When
+%{\tt i} is equal to, the condition fails and the body
+%is not executed, which is a good thing, since it would access a
+%memory location that is not part of the array.
+
+\section{Zufallszahlen}
+\label{Random numbers}
+\label{random}
+\label{pseudorandom}
+\index{Zufallszahlen}
+\index{deterministisch}
+\index{pseudozufällig}
+
+Die meisten Computerprogramme verhalten sich bei
+jeder Ausführung des Programms stets gleich. Man nennt dieses 
+Verhalten {\bf deterministisch}.  
+Normalerweise ist das deterministische Verhalten eine gute
+Sache, denn gleiche Berechnungen sollen auch immer  gleiche
+Ergebnisse liefern.
+Es gibt aber auch einige Anwendungsgebiete wo sich das 
+Verhalten des Computers nicht vorhersagen lassen soll, zum
+Beispiel bei Computerspielen.
+
+Es ist ziemlich schwierig ein Computerprogramm dazu zu
+bringen \emph{echte} Zufallswerte zu erzeugen. Es gibt aber eine
+Möglichkeit  es so aussehen lassen, als würde unser Programm 
+zufällige Werte erzeugen.
+Der Computer kann so genannte  \textbf{pseudozufällige Zahlen} 
+(engl: pseudorandom numbers) erzeugen und im Programmablauf verwenden.
+Pseudozufällig Zahlen sind im mathematischen Sinne nicht wirklich zufällig,
+sie haben aber ähnliche Eigenschaften und können für viele 
+Anwendungen anstelle von echten Zufallszahlen verwendet werden.
+
+\index{Bibliothek!stdlib.h}
+\index{Header-Datei!stdlib.h}
+\index{<stdlib.h>}
+C stellt eine Funktion mit dem Namen {\tt rand()} bereit, welche pseudozufällige
+Zahlen erzeugt. Die Funktion ist in der {\tt stdlib.h} -Bibliothek definiert.
+Diese Bibliothek stellt eine Vielzahl von Standardfunktionen bereit und 
+wird deshalb als \emph{Standardbibliothek} (engl: standard library) bezeichnet.
+
+Der Rückgabewert der {\tt rand()} -Funktion ist eine ganze Zahl (\texttt{int}) zwischen \texttt{0} und {\tt
+RAND\_MAX}, wobei {\tt RAND\_MAX} eine große Zahl ist ($\approx$ 2 Milliarden
+auf meinem Computer) welche in der gleichen Headerdatei definiert ist. 
+Jedes mal, wenn wir {\tt rand()} aufrufen, berechnet die Funktion eine andere 
+pseudozufällige Zahl.  Um ein Beispiel zu sehen können wir die folgende
+Schleife ausführen:
+
+\begin{verbatim}
+    for (i = 0; i < 4; i++) 
+    {
+        int x = rand();
+        printf("%i\n", x);
+    }
+\end{verbatim}
+%
+\newpage
+Auf meinem Computer wird die folgende Ausgabe erzeugt:
+
+\begin{verbatim}
+    1804289383
+    846930886
+    1681692777
+    1714636915
+\end{verbatim}
+%
+Wenn Sie das Programm ausführen, sollte das so ähnlich aussehen, es werden ihnen  
+aber wahrscheinlich andere Zahlen angezeigt.
+
+Natürlich wollen wir nicht immer mit gigantisch großen Zahlen arbeiten.
+Meistens benötigen wir Zufallszahlen zwischen  \texttt{0} und
+einer oberen Grenze. 
+Eine einfache Möglichkeit solche Zahlen zu erzeugen besteht darin den 
+Modulo-Operator zu verwenden:
+
+\begin{verbatim}
+    int x = rand ();
+    int y = x % upperBound;
+\end{verbatim}
+%
+So ist {\tt y} der ganzzahlige Divisionsrest  wenn {\tt x} durch
+{\tt upperBound} geteilt wird. Die möglichen Werte für {\tt y}
+liegen damit zwischen 0 und {\tt upperBound - 1}, inklusive beider
+Grenzwerte. Wir müssen beachten, dass {\tt y} niemals
+den Wert von {\tt upperBound} erreichen kann.
+
+Manchmal benötigen wir zufällige Fließkommazahlen in unserem
+Programm. Wir können diese erzeugen, indem wir das Ergebnis 
+von \texttt{rand()} durch  {\tt RAND\_MAX} teilen und vorher eine 
+Typumwandlung (engl: cast) für einen der Operanden durchführen:
+
+\begin{verbatim}
+    int x = rand ();
+    double y = (double) x / RAND_MAX;
+\end{verbatim}
+%
+Diese Programmzeilen weisen {\tt y} einen zufälligen Wert im Bereich zwischen
+0.0 und 1.0 zu. Die Werte 0.0 und 1.0 sind in diesen Bereich eingeschlossen.
+
+\begin{description}
+\item [AUFGABE:] 
+Überlegen Sie sich eine Möglichkeit, wie man zufällige Fließkommazahlen
+in einem beliebigen Bereich erzeugen kann. 
+Erstellen Sie ein Programm welches Zufallszahlen zwischen 100.0 und 200.0
+erzeugt. 
+\end{description}
+
+%%
+%\pagebreak
+\section{Statistiken}
+\index{Statistiken}
+\index{Verteilung}
+\index{Durchschnitt}
+
+Die Zahlen die wir mit {\tt rand()} erzeugen sollten eigentlich
+gleichverteilt sein. Das heißt, die Wahrscheinlichkeit mit
+der ein Wert aus dem Wertebereich gezogen wird, ist für alle
+Werte gleich.
+Wenn wir also das Vorkommen eines jedes möglichen Wertes zählen,
+sollten wir annähernd die gleiche Anzahl für alle Werte erhalten
+unter der Voraussetzung, dass wir eine sehr große Anzahl von
+Werten untersuchen.
+
+In den nächsten Abschnitten werden wir ein Programm entwickeln, 
+welches eine Folge von Zufallszahlen erzeugt und überprüft, ob
+diese Eigenschaft gegeben ist.
+
+%%
+\section{Arrays mit Zufallszahlen}
+\label{Array of random numbers}
+
+Der erste Schritt besteht darin eine große Anzahl von Zufallszahlen
+zu erzeugen und diese in einem Array zu speichern.
+Ich werde dazu erst einmal mit der  ``großen Zahl'' von 20 Zufallszahlen beginnen.  
+Es ist eigentlich immer eine gute Idee mit einer überschaubaren
+Anzahl von Werten zu starten. Das macht es einfacher das Programm zu
+durchschauen und mögliche Fehler zu finden. Wir können dann später
+die Anzahl sehr einfach weiter erhöhen.
+
+Die folgende Funktion hat die Aufgabe ein Array von {\tt int}s 
+mit zufälligen Werten im Bereich von 0 bis {\tt upperBound-1} zu füllen.
+Die Funktion besitzt 3 Parameter, ein Array von ganzen Zahlen (int), 
+die Größe des Arrays und einen oberen Grenzwert (upperBound) für den
+Wertebereich der Zufallszahlen. 
+
+\begin{verbatim}
+    void RandomizeArray (int array[], int length, int upperBound) 
+    {
+        int i;
+        for (i = 0; i < length; i++) 
+        {
+            array[i] = rand() % upperBound;
+        }
+    }
+\end{verbatim}
+%
+Der Rückgabewert der Funktion ist {\tt void}, was bedeutet, dass die
+Funktion keinen Wert an die aufrufende Funktion zurückgibt.
+Um diese Funktion zu testen, ist es bequem eine weitere Funktion 
+zu schreiben, welche den Inhalt eines Arrays auf dem Bildschirm ausgibt:
+
+\begin{verbatim}
+    void PrintArray (int array[], int length) 
+    {
+        int i;
+        for (i = 0; i < length; i++) 
+        {
+            printf ("%i ",  array[i]);
+        }
+        printf ("\n");
+    }
+\end{verbatim}
+%
+Die folgenden Programmzeilen erzeugen ein Array welches mit zufälligen Werten 
+gefüllt wird und geben den Inhalt des Arrays auf dem Bildschirm aus:
+
+\begin{verbatim}
+    int r_array[20];
+    int upperBound = 10;
+    int length = sizeof(r_array) / sizeof(r_array[0]);
+  
+    RandomizeArray (r_array, length, upperBound);
+    PrintArray (r_array, length);
+\end{verbatim}
+
+%
+Auf meinem Computer sieht die Ausgabe folgendermaßen aus
+
+\begin{verbatim}
+    3 6 7 5 3 5 6 2 9 1 2 7 0 9 3 6 0 6 2 6 
+\end{verbatim}
+\nopagebreak%
+und scheint auf den ersten Eindruck schon ziemlich zufällig zu sein.
+
+Wenn diese Zahlen wirklich zufällig verteilt sind, dann 
+erwarten wir, dass jede Zahl gleich häufig auftritt. 
+In der ermittelten Folge kommt aber die Zahl 6 fünf mal vor, die Zahl 4
+und 8 hingegen überhaupt nicht.
+
+Heißt das jetzt, das unsere Zahlenfolge keine wirklich Zufallsfolge ist?
+Mit so einer kleinen Stichprobe lässt sich das schwer sagen.
+Nur für eine sehr große Anzahl von Versuchen können wir davon 
+ausgehen, die erwartete Gleichverteilung der Werte auch feststellen
+zu können.
+
+Um unsere Theorie zu testen wollen wir daher einige Programme
+schreiben, die das Vorkommen jedes Werts zählen, so dass 
+wir überprüfen können was passiert, wenn wir die Anzahl der Elemente
+erhöhen. 
+%
+%To test this theory, we'll write some programs that count the
+%number of times each value appears, and then see what happens
+%when we increase the number of elements in our array.
+
+%%
+\section{Ein Array an eine Funktion übergeben}
+\label{Passing an array to a function}
+\index{call by reference}
+\index{call by value}
+\index{Arrays als Parameter}
+Schauen wir uns zuerst aber die {\tt RandomizeArray()} Funktion noch einmal etwas genauer
+an. Etwas an dieser Funktion ist ungewöhnlich:
+Wir übergeben ein Array an die Funktion und auf irgend eine Art und
+Weise ist es der Funktion gelungen das Array mit zufälligen 
+Werten zu füllen ohne das die Funktion einen Wert zurückgibt, der 
+Rückgabewert der Funktion ist nämlich {\tt void}.
+
+%You probably have noticed that our {\tt RandomizeArray()} function 
+%looked a bit unusual. We pass an array to this function and expect 
+%to get a a randomized array back. Nevertheless, we have declared it to 
+%be a {\tt void} function, and miraculously the function appears to have 
+%altered the array.
+
+Dieses Verhalten widerspricht allem, was ich bisher über die
+Verwendung von Variablen in Funktionen gesagt habe.
+C benutzt für die Argumente einer Funktion die sogenannte {\bf call-by-value} 
+Auswertung des angegebenen Ausdrucks.
+Das heißt, es wird der Wert des Ausdruck in der aufrufenden Funktion ermittelt
+und anschließend in die Parametervariable der aufgerufenen Funktion kopiert.
+Der selbe Vorgang läuft in der umgekehrten Richtung ab, wenn eine Funktion
+einen Wert zurückgibt.
+Veränderungen in den internen Variablen der aufgerufenen Funktion haben
+keine Auswirkungen auf die externen Wert der aufrufenden Funktion.
+
+%If you pass a value to a function it gets copied from
+%the calling function to a variable in the called function. The same
+%is true if the function returns a value.
+%Changes to the internal variable in the called function do not affect the external 
+%values of the calling function.
+
+Wenn wir allerdings ein Array an eine Funktion übergeben, so lässt sich nur
+schwer das gesamte Array als ein Wert an die aufgerufene Funktion übergeben.
+Dazu müsste das gesamte Array aus der aufrufenden Funktion an die
+aufgerufene Funktion kopiert und am Ende der Funktion vielleicht auch wieder
+zurückkopiert werden.
+
+C übergibt deshalb nur einen Verweis (engl: reference) auf die Speicherstelle des Arrays
+an die Funktion. Die aufgerufene Funktion kann dann mit Hilfe des Verweises
+auf das originale Array zugreifen und dort direkt alle notwendigen Änderungen vornehmen.
+Dieses Verhalten ist auch der Grund dafür, dass unsere Funktion keinen
+Rückgabewerte hat. Die Änderungen an den Daten 
+wurden ja bereits vorgenommen und müssen nicht noch einmal gespeichert werden.
+Eine solche Art der Übergabe der Funktionsargumente  nennt man {\bf call-by-reference}.
+
+%When we pass an array to a function this behaviour changes to
+%something called {\bf call-by-reference} evaluation.
+%C does not copy the array to an internal array --  it rather generates a
+%reference to the original array and any operations in the called function 
+%directly affects the original array.
+%This is also the reason why we do not have to return anything from our 
+%function. The changes have already taken place. 
+
+Call-by-reference macht es notwendig, dass wir der aufgerufenen Funktion die
+Länge des Arrays explizit mitteilen müssen. Wenn wir nämlich den {\tt sizeof}
+Operator in der aufgerufenen Funktion benutzen um die Arraygröße zu ermitteln
+werden wir feststellen, dass dieser uns nur die Größe des Verweises liefert.
+Die aufgerufene Funktion hat keine Information darüber wie unser Array in der
+aufrufenden Funktion definiert wurde.
+
+%would determine the size of the reference
+%and not the original array.
+
+%!!!Reference to later chapter needed!!!
+Wir werden die Aufrufstrategien  {\bf call-by-reference} und {\bf call-by-value} im 
+Kapitel~\ref{Pointers and Addresses}, Kapitel~\ref{Call by value} und
+\ref{Call by reference} noch genauer diskutieren.
+
+%%
+\section{Zählen der Elemente eines Arrays}
+\label{counting}
+\index{Array!durchsuchen}
+\index{Schleife!Zähler}
+\index{Zähler}
+
+In unserem aktuellen Progammbeispiel wollen wir eine möglicherweise sehr große
+Menge von Elementen durchsuchen und dabei zählen, wie oft 
+ein bestimmter Wert darin vorkommt.
+% current example we want to examine a potentially large set
+%of elements and count the number of times a certain value appears.
+Dieses Programm entspricht einem allgemeinem Muster,
+welches man ``Durchsuchen und Zählen'' nennen kann. 
+Das Musters hat folgende Teilschritte:
+ 
+%You can think of this program as an example of a pattern called ``traverse
+%and count.''  The elements of this pattern are:
+
+\begin{itemize}
+
+\item Es existiert eine Menge von Daten, zum Beispiel ein Array, die von Anfang bis Ende durchsucht werden kann. 
+%set or container that can be traversed, like a string
+%or a array.
+
+\item Es gibt einen Test der auf jedes Element der zu durchsuchenden Menge angewandt wird.
+%that you can apply to each element in the container.
+
+\item Ein Zähler registriert wie viele Elemente den Test bestehen oder nicht bestehen.
+
+\end{itemize}
+
+Für unseren Anwendungsfall stelle ich mir eine Funktion mit dem Namen {\tt HowMany()} vor,
+die die Anzahl der Elemente in einem Array ermittelt die mit einem vorgegebenen Wert übereinstimmen.
+Die Parameter der Funktion sind das Array, die Länge des Arrays und der gesuchte Wert.
+Der Rückgabewert der Funktion ist die Anzahl des Vorkommens des gesuchten Werts im
+Array.
+%counts the number of elements in a array that are equal to a given value.
+%The parameters are the array, the length of the array and the integer value we are looking
+%for.  The return value is the number of times the value appears.
+
+\begin{verbatim}
+    int HowMany (int array[], int length, int value) 
+    {
+        int i; 
+        int count = 0;
+  
+        for (i=0; i < length; i++) 
+            {
+                if (array[i] == value) count++;
+            }
+        return count;
+    }
+\end{verbatim}
+
+Ein praktikables Vorgehen für die Lösung von solchen Programmierproblemen
+besteht darin sich einfache Funktionen auszudenken die eine 
+bestimmte Teilaufgabe erledigen und einfach zu schreiben und zu verstehen 
+sind. Anschließend nutzen wir dann mehrere dieser Funktionen um ein
+komplexeres Problem zu lösen. Diese Vorgehensweise wird auch 
+{\bf Bottom-up Entwurf} genannt.
+
+Natürlich ist es nicht einfach immer schon im voraus zu wissen, welche
+Art von Funktionen wir für die Lösung unseres Problems benötigen und
+es ist nicht immer offensichtlich welche Teilfunktionen einfach
+zu schreiben sind.
+Je mehr Erfahrung wir aber in der Programmierung bekommen um so
+leichter wird es uns fallen. 
+\index{Bottom-up Entwurf}
+\index{Software Entwicklung!Bottom-up}
+Ein guter Ansatz besteht darin nach Teilproblemen zu suchen die
+ein bestimmtes Muster aufweisen, welches auch für andere Arten
+von Problemen interessant und hilfreich sein kann.
+ 
+%Also, it is not always obvious what sort of things are easy to write,
+%but a good approach is to look for subproblems that fit a pattern you
+%have seen before.
+
+\index{Entwurfsmuster!Zähler}
+
+%Back in Section~\ref{loopcount} we looked at a loop that traversed a
+%string and counted the number of times a given letter appeared.  
+
+
+\section{Überprüfung aller möglichen Werte}
+
+{\tt HowMany()} zählt nur das Auftreten eines bestimmten
+Werts in einem Array. Wir wollen aber herausfinden, wie oft
+jeder mögliche Wert in dem Array vorkommt.
+Dazu können wir eine Schleife einsetzen:
+
+\begin{verbatim}
+    int i;
+    int r_array[20];
+    int upperBound = 10;
+    int length = sizeof(r_array) / sizeof(r_array[0]);
+  
+    RandomizeArray(r_array, length, upperBound);
+
+    printf ("value\tHowMany\n");
+    for (i = 0; i < upperBound; i++) 
+    {
+        printf("%i\t%i\n", i, HowMany(r_array, length, i));
+    }
+\end{verbatim}
+%
+
+%! ! ! Applies only to C++! ! !
+%Notice that it is legal to declare a variable inside a {\tt for}
+%statement.  This syntax is sometimes convenient, but you should
+%be aware that a variable declared inside a loop only exists
+%inside the loop.  If you try to refer to {\tt i} later, you
+%will get a compiler error.
+
+Diese Programmzeilen benutzen die Schleifenvariable als ein 
+Argument von {\tt HowMany()} um die Anzahl aller Werte 
+zwischen 0 und 9 in dem Array zu ermitteln, mit folgendem Resultat:
+
+\begin{verbatim}
+    value   HowMany
+    0       2
+    1       1
+    2       3
+    3       3
+    4       0
+    5       2
+    6       5
+    7       2
+    8       0
+    9       2
+\end{verbatim}
+%
+In dem Beispiel ist es immer noch schwierig zu ermitteln, ob die Ziffern
+wirklich gleichverteilt sind. Wir erhöhen daher die Anzahl der 
+Werte in unserem Array auf  100.000 und führen damit den Test
+durch:
+\begin{verbatim}
+    value   HowMany
+    0       10130
+    1       10072
+    2       9990
+    3       9842
+    4       10174
+    5       9930
+    6       10059
+    7       9954
+    8       9891
+    9       9958
+\end{verbatim}
+%
+Jetzt lässt sich feststellen, dass die Schwankungen der Häufigkeit jede Wert 
+circa 1\% des erwarteten Werts (10,000) betragen und
+unsere Zufallszahlen sehr wahrscheinlich gleichverteilt sind.
+
+\section {Ein Histogramm}
+\index{Histogramm}
+
+Es ist of nützlich die Tabellen aus dem vorigen Beispiel nicht
+nur auf dem Bildschirm auszugeben sondern diese im Computer
+für spätere Aufgaben vorzuhalten.
+Dafür müssen wir also 10 ganzzahlige Werte speichern.
+
+Wir könnten jetzt 10 Variablen vom Typ {\tt int} erstellen und
+ihnen Namen geben wie  {\tt howManyOnes},
+{\tt howManyTwos} und so weiter.  
+Das würde eine Menge Tipparbeit abgeben und es wäre
+ziemlich umständlich wollten wir später zum Beispiel den
+Bereich der zu überprüfenden Zahlenwerte ändern.
+
+Eine viel bessere Lösung besteht darin ein weiteres Array mit
+10 Elementen zu benutzen. 
+So können wir alle zehn Speicherplätze mit einem Mal erstellen
+und wir können per Index bequem auf die jeweilige Speicherstelle
+zugreifen ohne mit zehn verschiedenen Namen hantieren zu müssen.
+Hier ist das Ergebnis:
+
+\begin{verbatim}
+    #define UPPER_BOUND 10
+    int i;
+    int r_array[100000];
+    int histogram[UPPER_BOUND];
+    int length = sizeof(r_array) / sizeof(r_array[0]);
+  
+    RandomizeArray(r_array, length, UPPER_BOUND);
+
+    for (i = 0; i < UPPER_BOUND; i++) 
+    {
+        int count = HowMany(r_array, length, i);
+        histogram[i] = count;
+    }  
+\end{verbatim}
+%
+Ich habe das Array {\bf histogram} genannt, weil 
+das die Bezeichnung für eine statistische Häufigkeitsverteilung ist.
+In einem Histogramm werden Daten in Klassen eingeteilt und
+es wird erfasst, wie häufig die Ereignisse in jeder Klasse sind.
+
+\index{Histogramm}
+
+In unserem Programm ist ein kleiner Trick enthalten, denn
+ich benutze die Schleifenvariable für zwei verschiedene Zwecke.
+Zuerst wird sie als Argument der {\tt HowMany()} Funktion 
+verwendet um den Wert anzugeben für den wir uns interessieren.
+Weiterhin verwende ich die Schleifenvariable als Index das Element des
+Histogramms um anzugeben, wo das Ergebnis der Funktion gespeichert
+werden soll.
+
+\section{Eine optimierte Lösung}
+
+Die vorgestellte Lösung funktioniert, allerdings ist sie nicht
+besonders effizient.
+Jedes Mal, wenn wir die Funktion {\tt HowMany()} aufrufen
+durchsucht diese das gesamte Array von Anfang bis zum
+Ende. In unserem Beispiel müssen wir das Array zehn mal
+durchsuchen!
+
+%Although this code works, it is not as efficient as it could
+%be.  Every time it calls {\tt HowMany()}, it traverses the
+%entire array.  In this example we have to traverse the
+%array ten times!
+
+Unser Programm würde schneller arbeiten, wenn wir
+das Array nur ein einziges Mal durchsuchen müssten.
+Wir müssten nur einfach für jeden gefundenen Wert im
+Array den entsprechenden Zähler im Histogramm finden
+und inkrementieren.
+Da unser Histogramm die Verteilung der Werte von 0 bis 9
+darstellt, können wir die gefundenen Werte unseres Arrays direkt als
+Index für das Histogramm benutzen, wir müssen nur vorher
+alle Elemente des Histogramms auf den Wert {\tt 0} setzen:
+% 
+%It would be better to make a single pass through the array.
+%For each value in the array we could find the corresponding
+%counter and increment it.  In other words, we can use the
+%value from the array as an index into the histogram.  Here's
+%what that looks like:
+
+\begin{verbatim}
+    #define UPPER_BOUND 10
+    int i;
+    int r_array[100000];
+    int histogram[UPPER_BOUND] = {0};
+    int length = sizeof(r_array) / sizeof(r_array[0]);
+    
+    RandomizeArray(r_array, length, UPPER_BOUND);
+    
+    for (i = 0; i < length; i++) 
+    {
+        int index = r_array[i];
+        histogram[index]++;
+    }
+\end{verbatim}
+%
+Wir initialisieren {\tt histogram}, indem wir dem ersten Element den
+Wert {\tt {0}} zuweisen. Alle nachfolgenden Elemente für die wir keinen
+Wert angegeben haben werden danach automatisch auf {\tt {0}} gesetzt.
+Jetzt können wir den ({\tt ++}) -Operator innerhalb der Schleife 
+dazu benutzen, das Vorkommen der Zufallszahlen zu zählen.
+Es wird oft vergessen, dass ein Zähler initialisiert werden muss, bevor
+er benutzt werden kann.
+
+\begin{description}
+\item [AUFGABE:] 
+Erstellen Sie aus den Programmzeilen des Beispiels eine eigene Funktion mit dem
+Namen {\tt Histogram()}. Die Funktion soll mindestens folgende Parameter besitzen:
+ein Array mit den zu durchsuchenden Werten, 
+den Suchbereich (in diesem Fall 0 bis 9) als zwei Parameter \texttt{min} und \texttt{max}, und
+ein zweites Array, welches groß genug ist das Histogram der Werte
+des ersten Arrays zu speichern.
+\end{description}
+
+\section{Zufällige Startwerte}
+\label{Random seeds}
+\index{Zufallszahlen!Startwert}
+\index{Zufallszahlen}
+
+Wenn wir die Programme aus diesem Kapitel mehrmals hintereinander
+ausführen fällt auf, dass wir bei jedem Programmstart die gleichen
+'zufälligen' Zahlenwerte angezeigt bekommen. Das ist nicht sehr
+zufällig!
+%If you have run the code in this chapter a few times, you might
+%have noticed that you are getting the same ``random'' values
+%every time.  That's not very random!
+
+Eine Eigenschaft der pseudozufälligen Zahlen besteht darin,
+dass der Algorithmus  für die Erzeugung der Zufallsfolge immer wieder die 
+gleichen Werte generiert, wenn er mit dem gleichen \textbf{Startwert} beginnt.
+Da wir keinen besonderen Startwert angegeben haben, erzeugt
+der Zufallszahlengenerator bei jedem Programmstart immer 
+wieder die gleiche Zahlenfolge.
+
+%One of the properties of pseudorandom number generators is that
+%if they start from the same place they will generate
+%the same sequence of values.  The starting place is called
+%a {\bf seed}; by default, C uses
+%the same seed every time you run the program.
+
+Während wir unser Programm entwickeln ist dieses Verhalten oft
+hilfreich, weil wir auf diese Weise die Ausgaben des Programms
+vor und nach einer Änderung miteinander vergleichen können. 
+%That way, when you make
+%a change to the program you can compare the output before and
+%after the change.
+In vielen Anwendungen, wie zum Beispiel Computerspielen, ist es 
+allerdings vorteilhaft, wenn unser Programm bei jedem Programmstart
+eine unterschiedliche Zufallssequenz verwendet. 
+
+Um dieses Verhalten zu erreichen, müssen wir einen unterschiedlichen
+Startwert für unsere Zufallsfunktion angeben. 
+Wir können dafür die {\tt srand()} Funktion benutzen.  Wir müssen der
+Funktion ein einziges Argument mitgeben, welches eine ganze Zahl
+zwischen 0 und {\tt RAND\_MAX} sein muss.
+
+Wo bekommen wir aber diesen einzigartigen Startwert her? 
+Ein verbreiteter Weg für die Erzeugung eines Startwerts
+besteht darin, die Bibliotheksfunktion {\tt time()} zu benutzen.
+Die Funktion liefert  einen Wert für die aktuelle Zeit auf
+dem Computersystem. Die genaue Interpretation dieses Werts ist
+für uns momentan nicht wichtig. Wir benutzen den Wert nur, um 
+unseren Zufallszahlengenerator mit einem veränderlichen Wert
+zu starten und können  dafür den  Befehl
+\begin{verbatim}
+    srand((unsigned) time(NULL));
+\end{verbatim}
+verwenden.
+%and unrepeatable, like the number of seconds since January
+%1970, and use that number as a seed.  The details
+%of how to do that depend on your development environment.
+
+\section{Glossar}
+
+\index{Array}
+\index{Element}
+\index{Index}
+\index{deterministisch}
+\index{Zufallszahlen}
+\index{pseudozufällig}
+\index{Zufallszahlen!Startwert}
+\index{Histogramm}
+\index{Inkrement}
+\index{Dekrement}
+\begin{description}
+%(engl: \emph{})
+\item[Array (engl: \emph{array}):]  Eine Ansammlung von mehreren Werten gleichen
+Typs unter einem gemeinsamen Namen. Die einzelnen Werte in einem Array 
+werden als Elemente bezeichnet und lasst sich über einen Index identifizieren.
+Ein Array ist ein Beispiel für eine Datenstruktur.
+% 
+%A named collection of values, where all the
+%values have the same type, and each value is identified by
+%an index.
+
+\item[Element (engl: \emph{element}):]  Ein einzelner Wert in einem Array.  Mit Hilfe des {\tt []}
+-Operators kann man auf die einzelnen Elemente eines Arrays zugreifen.
+
+\item[Index (engl: \emph{index}):]  Eine ganzzahliger Wert oder Variable die dazu
+benutzt wird auf ein bestimmtes Element in einem Array zuzugreifen.
+
+\item[deterministisch (engl: \emph{deterministic}):]  In einem Computerprogramm
+folgt auf eine Anweisung unter gleichen Voraussetzungen immer die gleiche
+nächste Anweisung und es wird für jeden Durchlauf ein reproduzierbares Ergebnis erzeugt.
+% that does the same thing every
+%time it is run.
+
+\item[pseudo-zufällig (engl: \emph{pseudorandom}):]  Eine Zahlenfolge die 
+für einen außenstehenden Betrachter nicht von einer wirklich zufälligen
+Zahlenfolge unterschieden werden kann, die aber durch deterministische
+Berechnungen erzeugt wurde.
+%  sequence of numbers that appear to be
+%random, but which are actually the product of a deterministic
+%computation.
+
+\item[Startwert (engl: \emph{seed}):]  Ein Wert der dazu benutzt wird den Algorithmus für
+die Erzeugung der Pseudozufallsfolge zu iniitialisieren.
+Wenn der gleiche Startwert verwendet wird produziert der Algorithmus die 
+gleiche Folge von pseudo-zufälligen Werten.
+
+\item[Inkrementieren/Heraufzählen (engl: \emph{increment}):]  Den Wert einer Variablen um 1 erhöhen.
+In C kann dazu der {\tt ++} Operator benutzt werden. 
+
+\item[Dekrementieren/Herunterzählen (engl: \emph{decrement}):]  Den Wert einer Variablen um 1 verringern.
+In C kann dazu der {\tt -}{\tt -} Operator benutzt werden.
+
+\item[Bottom-up Entwurf (engl: \emph{bottom-up design}):]  Eine Method der Softwareentwicklung bei
+der ausgehend von kleinen, nützlichen Funktionen durch deren Kombination ein komplexeres 
+Programm mit vergrößertem Funktionsumfang erstellt wird. Die alternative zum Bottom-up Entwurf ist der
+Top-down Entwurf bei dem zuerst ein Gesamtkonzept erstellt wird, ohne die Details der 
+programmtechnischen Umsetzung bereits zu kennen.
+
+\item[Histogramm (engl: \emph{histogram}):]  Die Erfassung der Häufigkeitsverteilung klassifizierbarer
+Merkmale. Ein Histogramm kann in C als Array von ganzen Zahlen dargestellt werden, bei der
+in den Elementen des Arrays die Häufigkeit des Auftretens eines bestimmten Merkmals gezählt wird.
+
+
+
+
+\end{description}
+
+%%
+\section{Übungsaufgaben}
+\setcounter{exercisenum}{0}
+
+\ifthenelse {\boolean{German}}{ \input{exercises/Exercise_7_german}}
+{\input{exercises/Exercise_7_english}}
+
+
