@@ -1,0 +1,283 @@
+\selectlanguage{ngerman}
+\chapter{Guter Programmierstil}
+\label{Coding Style}
+\section{Eine kurze Stilberatung für Programmierer}
+\index{Stil}
+\index{Programmierstil!guter}
+
+%
+%In den letzten üblicherweise
+%In the last few sections, I used the phrase ``by convention''
+%several times to indicate design decisions that are arbitrary
+%in the sense that there are no significant reasons to do things
+%one way or another, but dictated by convention.
+
+Während der Beschäftigung mit der Programmiersprache
+C werden Sie feststellen, dass es einige Regeln 
+gibt die Sie unbedingt beachten müssen, während andere
+Regeln und Designentscheidungen eher als 
+eine Art stille Übereinkunft zwischen Programmierern getroffen
+werden und als die 'übliche' Art und Weise der Programmierung
+angesehen werden.
+
+Viele diese Regeln sind willkürlich getroffen, trotzdem ist es sinnvoll
+und vorteilhaft diese Konventionen zu kennen und sich daran zu halten, weil 
+sie ihre Programme für Sie und andere einfacher lesbar machen
+und ihnen helfen Fehler zu vermeiden.
+Es können im wesentlichen drei Arten von Regeln unterschieden werden:
+
+
+%In these cases, it is to your advantage to be familiar with
+%convention and use it, since it will make your programs easier
+%for others to understand.  At the same time, it is important to
+%distinguish between (at least) three kinds of rules:
+
+\begin{description}
+
+\item[Naturgesetze:] Diese Art von Regeln beschreiben Prinzipien der Logik und der 
+Mathematik und gelten damit ebenfalls für Programmiersprachen
+wie C (oder andere formale Systems). So ist es zum Beispiel nicht
+möglich die Lage und Größe eines Rechtecks in einem Koordinatensystem
+durch weniger als vier Angaben genau zu beschreiben. Ein weiteres
+Beispiel besagt, dass die Addition von zwei natürlichen Zahlen dem
+Kommutativgesetz unterliegt. Dieser Zusammenhang ergibt sich 
+aus der Definition der Addition und hat nichts mit der Programmiersprache 
+C zu tun.
+
+\item[Regeln von C:]  
+Jede Programmiersprache definiert syntaktische und semantische
+Regeln die nicht verletzt werden dürfen, da sonst das Programm
+nicht korrekt übersetzt und ausgeführt werden kann. 
+Einige dieser Regeln sind willkürlich gewählt, wie zum Beispiel 
+das {\tt =} Symbol, dass den Zuweisungsoperator darstellt und
+ {\em nicht} die Gleichheit der Werte.  Andere Regeln widerspiegeln 
+ die zugrundeliegenden Beschränkungen des Vorgangs der Kompilation
+ und Ausführung des Programms.
+ So müssen zum Beispiel die Typen der Parameter von Funktionen
+ explizit spezifiziert werden.
+ 
+ %default typ int
+ 
+
+\item[Stil und Übereinkunft:] 
+Weiterhin existieren eine Reihe von Regeln die nicht durch den
+Compiler vorgegeben oder überprüft werden, die aber trotzdem
+wichtig dafür sind, dass Programme fehlerfrei erstellt
+werden, gut lesbar sind und durch Sie selbst und durch andere
+modifiziert, getestet und erweitert werden können. 
+Beispiele dafür sind Einrückungen und die Anordnung von 
+geschweiften Klammern, sowie Konventionen über die Benennung
+von Variablen, Funktionen und Typen.
+
+\end{description}
+
+In diesem Abschnitt werde ich kurz den Programmierstil zusammenfassen, 
+der in diesem Buch verwendet wird. Er lehnt sich lose an die "Nasa C Style Guide" 
+\footnote{www.scribd.com/doc/6878959/NASA-C-programming-guide}
+an und das Hauptaugenmerk ist dabei auf die gute Lesbarkeit des Codes
+gerichtet. Es kommt weniger darauf an Platz zu sparen oder
+den Tippaufwand zu minimieren.
+
+%/ref 
+Da C eine - für eine Programmiersprache - vergleichsweise lange Geschichte aufweist,
+haben sich mehrere verschiedene Programmierstile herausgebildet.
+Es ist wichtig, dass Sie diese Stile lesen und verstehen können und 
+dass Sie sich in ihrem eigenen Code auf einen Stil festlegen.
+Das macht den Programmcode viel zugänglicher, sollten es einmal notwendig 
+werden, dass Sie den Code mit anderen Programmierern austauschen
+oder auf Teile ihres Codes zugreifen wollen, den Sie selbst vor einigen Jahren
+geschrieben haben.
+
+\section{Konventionen für Namen und Regeln für die Groß- und Kleinschreibung}
+\label{Conventions for names}
+
+Als generelle Regel sollten Sie sich angewöhnen bedeutungsvolle Namen für ihre
+Variablen und Funktionen zu verwenden. Idealerweise können Sie durch die
+Verwendung so genannter \emph{sprechender Bezeichner} für Funktionen und
+Variablen bereits deren Verhalten und Verwendung erkennen. 
+
+\index{Sprechende Bezeichner}
+
+Auch wenn es vielleicht aufwändiger ist eine Funktion {\tt FindSubString()}
+anstatt {\tt FStr()} zu nennen, so ist doch der erste Name fast selbsterklärend
+und kann ihnen eine Menge Zeit bei der Fehlersuche und späteren Wiederverwendung
+des Programms sparen.   
+
+\textbf{Benutzen Sie keine Variablennamen die nur aus einem Buchstaben bestehen!}
+
+Ähnlich wie bei Funktionen sollten Sie die Namen ihrer Programmvariablen 
+für sich selbst sprechen lassen.
+Durch einen geeigneten Namen wird von selbst klar welche Werte
+in der Variable gespeichert werden.
+
+%Similarly to functions, you should give your variables names that
+%speak for themselves and make clear what values will be stored
+%by this variable.
+
+Wie zu jeder guten Regel gibt es auch hier einige Ausnahmen:
+Programmierer benutzen üblicherweise {\tt i}, {\tt j} und {\tt k} als Zählvariablen in Schleifen
+und für räumliche Koordinaten werden {\tt x}, {\tt y} und {\tt z} genutzt.
+
+Benutzen Sie diese Konventionen wenn Sie in ihr Programm passen.
+Versuchen Sie nicht eigene, neue Konventionen zu erfinden, die nur Sie
+selbst verstehen.
+
+Die folgenden Regeln zur Groß- und Kleinschreibung sollten Sie für
+die verschiedenen Elemente in ihrem Programm nutzen.
+Durch die einheitliche Verwendung eines Stils können Sie als
+Programmierer und Leser eines Programms sehr schnell die Bedeutung
+und Verwendung der verschiedenen Elemente bestimmen.
+%
+%The following capitalization style shold be used for the different elements in your
+%program. The consistent use of one style gives the programmer and the reader
+%of the source code a quick way to determine the meaning of different items
+%in your program:
+
+
+\begin{description}
+\item[variablenNamen: ]  Namen von Variablen werden immer klein geschrieben.
+Zusammengesetzte Namen werden dadurch gekennzeichnet, dass der erste Buchstabe
+des folgenden Worts groß geschrieben wird. 
+\item[KONSTANTEN: ] verwenden ausschließlich Großbuchstaben. Um Konflikte mit 
+bereits definierten Konstanten aus Bibliotheksfunktionen zu vermeiden kann es
+notwendig sein einen Prefix wie zum Beispiel {\tt MY\_CONSTANT} zu verwenden.
+\item[FunktionsNamen:] beginnen immer mit einem Großbuchstaben und sollten nach
+Möglichkeit ein Verb enthalten welches die Funktion beschreibt (z.B. {\tt SearchString()}). 
+Funktionsnamen für Testfunktionen sollten mit '{\tt Is}' oder '{\tt Are}' beginnen (z.B. {\tt IsNumber()}).  
+\item[NutzerDefinierteTypen\_t:] enden immer mit einem '{\tt \_t}'. Namen für Typen
+müssen groß geschrieben werden. Dadurch werden Konflikte mit bereits
+definierten POSIX Namen vermieden.
+\item[pointerNamen\_p:] um Pointer Variablen sichtbar von anderen Variablen
+zu unterscheiden sollten Sie Pointer mit einem '{\tt \_p}' enden lassen.
+\end{description}
+
+%%
+\section{Klammern und Einrückungen}
+
+Die größte Vielfalt der Stile finden sich in C bei der Positionierung von 
+Klammern und Einrückungen.
+Deren Hauptaufgabe besteht darin den Code optisch zu gliedern und
+funktionale Bereiche durch die konsistente Verwendung von 
+Einrückungen sichtbar voneinander abzugrenzen.
+
+Die einzelnen Stile unterscheiden sich hierbei in der Art und Weise
+wie die Klammern mit dem Rest des Kontrollblocks positioniert und eingerückt
+werden. In diesem Kurs wird der so genannte  \emph{BSD/Allman} Stil verwendet, weil 
+er den lesbarsten Code produziert.
+Bei diesem Stil nimmt der geschriebene Code mehr horizontalen Raum ein als bei 
+dem ebenfalls sehr weit verbreiteten K\&R Stil. 
+Der \emph{BSD/Allman} Stil macht es allerdings sehr viel einfacher 
+alle öffnenden und schließenden Klammern im Blick zu behalten. 
+
+Im folgenden sehen Sie ein Auflistung verschiedener gebräuchlicher Klammer- und
+Einrückungsstile. Die Einrückungen betragen immer vier Leerzeichen pro Level:
+
+\begin{verbatim}
+/*Whitesmiths Style*/
+   if (condition)            
+       {
+       statement1; 
+       statement2;
+       }
+\end{verbatim}
+
+Der Stil ist nach einem frühen kommerziellen C Compiler \emph{Whitesmiths C} benannt,
+welcher diesen Stil in seinen Programmbeispielen verwendet hat. 
+Die Klammern befinden sich auf dem äußerem Einrückungsniveau.
+
+\begin{verbatim}
+
+/*GNU Style*/
+   if (condition)
+     {
+       statement1;
+       statement2;
+     }
+\end{verbatim}
+
+Die Klammern befinden sich 
+in der Mitte zwischen inneren und äußerem Einrückungsniveau.
+
+\begin{verbatim}
+
+/*K&R/Kernel Style*/
+   if (condition) {
+       statement1;
+       statement2;
+   }
+\end{verbatim}
+
+Dieser Stil wurde nach den Programmierbeispielen des Buchs 
+\emph{The C Programming Language} von Brian W. Kernighan und 
+Dennis Ritchie (die C-Entwickler) benannt. 
+
+Der K\&R Stil ist am schwersten zu lesen. 
+Die öffnende Klammer befindet sich an der äußersten 
+rechten Seite der Kontrollanweisung
+und ist damit schwer zu finden. Die Klammern haben 
+unterschiedliche Einrückungstiefen.
+Trotzdem ist dieser Stil weit verbreitet und viele C-Programme 
+nutzen ihn. Sie sollten deshalb
+in der Lage sein diesen Code lesen zu können.
+
+\begin{verbatim}
+
+/*BSD/Allman Style*/
+   if (condition)
+   {
+       statement1;
+       statement2;
+   }
+\end{verbatim}
+
+Die Klammern befinden sich auf dem inneren Einrückungsniveau und sind damit leicht
+zu finden und zuzuordnen.
+Dieser Stil wird für alle Beispiele dieses Kurses verwendet.
+
+
+Wenn Sie Programme schreiben ist es am Wichtigsten sich auf einen Stil 
+festzulegen und diesen Stil dann konsequent beizubehalten.
+In größeren Softwareprojekten sollten sich alle Mitwirkenden auf einen
+gemeinsamen Stil einigen.
+Moderne Programmierumgebungen wie zum Beispiel Eclipse\footnote{http://www.eclipse.org} 
+und Code::Blocks\footnote{http://www.codeblocks.org/} machen es leicht durch automatische Einrückungen
+einen Stil durchzusetzen.
+
+
+
+\section{Layout}
+
+Kommentarblöcke können dazu genutzt werden die Funktion des Programms
+zu dokumentieren und zusätzliche Angaben zum Ersteller zu machen. 
+Sinnvollerweise werden diese Angaben als erste Angaben noch vor den
+Funktionsdeklarationen vorgenommen. 
+
+Einen ähnlichen Kommentarblock können Sie vor jeder Funktion verwenden
+um deren Funktion zu beschreiben.
+
+\begin{verbatim}
+
+/*
+ * File:     test.c
+ * Author:   Peter Programmer
+ * Date:     May, 29th, 2009
+ *
+ * Purpose: to demonstrate good programming
+ *          practise
+ * /
+
+#include <stdio.h>
+#include <stdlib.h>
+
+/*
+ * Main function, input: none, output: 'HelloWorld' 
+  */
+
+int main (void)
+{
+    printf("Hello World!\n");
+    return EXIT_SUCCESS;
+}
+ 
+\end{verbatim}
+\selectlanguage{english}

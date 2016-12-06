@@ -1,0 +1,6 @@
+.svn
+*.log
+*.out
+*.toc
+*.aux
+*.idx
