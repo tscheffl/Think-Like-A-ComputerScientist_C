@@ -421,15 +421,15 @@ Wie ich bereits angedeutet hatte, tendieren formale Sprachen dazu,
 strikte Syntaxregeln zu besitzen.
 So ist zum Beispiel $3+3=6$ ein syntaktisch korrekter mathematischer
 Ausdruck, $3=:6\$$ hingegen nicht.  $H_2O$ ist eine syntaktisch korrekte
-chemische Formel, $_2Zz$ ist es nicht.
+chemische Formel, $_2Z$ ist es nicht.
 
 Syntaxregeln betreffen zwei Bereiche der Sprache: deren Symbole und Struktur.
 Die Symbole stellen die Basiselemente einer Sprache bereit, dazu gehören
 die Wörter und Bezeichner, Zahlen und chemische Elemente.
 Eines der Probleme mit dem Ausdruck {\tt 3=:6\$} ist, dass {\tt \$} kein
 legales Symbol in der Mathematik darstellt (so weit ich weiß, jedenfalls ...).  
-Gleichfalls ist, $_2Zz$ nicht legal, weil es kein chemisches Element mit
-der Abkürzung $Zz$ gibt.
+Gleichfalls ist, $_2Z$ nicht legal, weil es kein chemisches Element mit
+der Abkürzung $Z$ gibt.
 
 Der zweite Fall für die Anwendung von Syntaxregeln betrifft die Struktur
 eines Ausdrucks, das heißt die Art und Weise, wie die Symbole der Sprache
@@ -442,17 +442,17 @@ In gleicher Weise werden in molekularen Formeln die Mengenverhältnisse
 eines Elements als tiefer gestellte Zahl nach dem Elementname angegeben
 und nicht davor.
 
-Wenn wir einen Satz in einer natürlichen Sprache wie Deutsch lesen, oder
+Wenn wir einen Satz in einer natürlichen Sprache lesen oder
  einen Ausdruck in einer formalen Sprache erfassen wollen, müssen
 wir seine Struktur herausfinden (bei natürlichen Sprachen macht unser
 Gehirn, das meistens ganz unbewußt von selbst). Diesen Prozess 
-bezeichnen wir als {\bf Parsen}.
+bezeichnen Informatiker als {\bf Parsen}.
 
 \index{parsen}
 
 Wenn wir zum Beispiel den Satz hören  ``Die Würfel sind gefallen.'' 
-verstehen wir,  ``Die Würfel'' ist das Subjekt und ``sind gefallen'' das
-Verb.  
+erkennen wir,  ``Die Würfel'' als das Subjekt und ``sind gefallen'' als das
+Prädikat.  
 Nachdem wir den Satz geparst haben, können wir herausfinden, was
 dieser Satz bedeutet. Wir können seine Bedeutung (seine Semantik)
 verstehen. Angenommen wir wissen,

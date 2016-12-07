@@ -29,7 +29,7 @@
 \label{Binary}
 
 
-\section{Operatoren für die Arbeit mit Bits}
+\section{Bits and Bytes}
 \index{binäre Darstellung von Werten}
 
 
@@ -249,6 +249,86 @@ die Bitfolgen zweier Operanden ODER-verknüpft werden:
 
 \end{picture}
 
+\pagebreak
+Darüber hinaus existiert ein Bitoperator, welcher keine  
+Entsprechung als logischer Operator hat. 
+Dabei handelt es sich um den \emph{Exklusiv-ODER} oder XOR Operator( \verb|^|).
+Er besitzt die folgende Wertetabelle: 
+
+%\noindent
+%$
+%\displaystyle
+\[
+\begin{array}{c|c|c}
+A & B & A \verb|^| B  \\\hline 
+ 0 & 0 & 0 \\
+ 1 & 0 & 1 \\
+ 0 & 1 & 1 \\
+ 1 & 1 & 0
+\end{array}
+\]
+%$
+
+Dieser Operator hat die interessante Eigenschaft, dass die zweimalige
+Ausführung einer XOR Operation mit dem gleichen Operanden wieder zum
+originalen Zustand zurückführt:
+
+\begin{picture}(80,41)
+
+\put(10,30){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,30){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,30){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,30){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,30){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,30){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,30){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,30){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(13,38.5){{\scriptsize \texttt{$2^7$}}}
+\put(20,38.5){{\scriptsize \texttt{$2^6$}}}
+\put(27,38.5){{\scriptsize \texttt{$2^5$}}}
+\put(34,38.5){{\scriptsize \texttt{$2^4$}}}
+\put(41,38.5){{\scriptsize \texttt{$2^3$}}}
+\put(48,38.5){{\scriptsize \texttt{$2^2$}}}
+\put(55,38.5){{\scriptsize \texttt{$2^1$}}}
+\put(62,38.5){{\scriptsize \texttt{$2^0$}}}
+
+\put(70,31.5){{\large \texttt{Byte \textbf{A}}}}
+
+\put(10,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(24,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,20){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(38,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(45,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,20){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(59,20){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,21.5){{\large \texttt{Byte \textbf{B}}}}
+
+\put(10,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(17,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(24,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(31,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(38,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,10){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,10){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,10){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,11.5){{\large \texttt{Byte \textbf{A \^{}} \textbf{B}}}}
+
+\put(10,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(17,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(24,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(31,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(38,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(45,0){\framebox(7,7){\textbf{\textsf{0}}}}
+\put(52,0){\framebox(7,7){\textbf{\textsf{1}}}}
+\put(59,0){\framebox(7,7){\textbf{\textsf{0}}}}
+
+\put(70,1.5){{\large \texttt{Byte \textbf{A \^{}} \textbf{B \^{}} \textbf{B}}}}
+
+\end{picture}
 
 
 
@@ -440,7 +520,7 @@ Bits ab:
 
 \end{picture}
 
-\pagebreak
+
 Wenn wir Byte A mit dem negierten Byte A ODER-verknüpfen
 ist die resultierende Bitfolge komplett auf 1 gesetzt.:
 
@@ -533,48 +613,158 @@ einzelner Bits gezielt setzen:
 
 \end{picture}
 
-Wir benötigen also immer eine Art Bitmaske um
-auf das betreffende Bit zuzugreifen. Diese Maske
-können wir entweder als konstanten Wert in
-unserem Programm speichern, oder wir erzeugen
-uns diese Maske in dem wir das benötigte Bitmuster
-durch die Verschiebung eines einzelnen Bits selbst erzeugen:
+\pagebreak
+\subsection{Variablen für Bitfolgen}
+\todo{Vorzeichen - unsigned}
+\todo{Hexadezimal und einfache Umwandlung}
+Binäre Operatoren lassen sich auf beliebige, ganzzahlige Werte anwenden.
+In der Regel werden wir dazu Variablen zu verwenden. 
+Daher stellt sich natürlich sofort die Frage, welchen Typ soll diese Variable
+haben?
 
+Diese Frage ist nicht ganz einfach zu beantworten. Ist die Bitfolge nur
+8 Bit lang, so verwenden viele Programmierer den Datentyp \texttt{unsigned char}.
+
+
+ACHTUNG: Der Datentyp \texttt{char} ist in C ein ganz normaler, ganzzahliger Datentyp der auf den
+allermeisten Rechnern 8 Bits enthält, es können aber auch mehr oder weniger Bit sein! 
+\hint 
+
+Typischerweise wird in C für ganzzahlige Werte das \emph{Most Significant Bit} (MSB)
+genutzt, um das Vorzeichen des Werts zu speichern. Das MSB ist das Bit mit der höchsten Wertigkeit
+und findet sich in unserer Bitfolge ganz links.
+Bitoperatoren wirken aber immer auf alle Bits der Folge gleichzeitig, was dazu führt, dass eine Änderung
+des MSB das Vorzeichen des gespeicherten Werts verändert.
+Da das in den allermeisten Fällen nicht sinnvoll ist, lassen sich mit dem Schlüsselwort \texttt{unsigned}
+vorzeichenlose Variablen definieren.  
+\index{MSB|see{Most Significant Bit}}
+\index{Most Significant Bit}
+\index{unsigned}
+
+Eine besondere Eigenart von C ist es, dass in der Sprache nicht genau
+festgelegt wurde wie viele Bit für eine Variable vom Typ \emph{int} 
+genutzt werden. 
+Es sind immer mindestens 16 Bit, je nach Rechnerarchitektur können es aber auch 32 oder 64 Bit sein.
+
+Diese Ungenauigkeiten in der Sprachbeschreibung haben dazu geführt, dass in neueren Versionen
+der Sprache (ab C99) ganzzahlige Datentypen mit fester Breite eingeführt wurden.
+
+In der Bibliothek \texttt{stdint.h} wurden eine Reihe neuer Datentypen mit exakter Bit-Anzahl definiert,
+die wir in unserem Programm verwenden können und die uns davor schützen, dass möglicherweise unser
+Programm auf einem Mikrocontroller zu Fehlern führt, obwohl es auf dem PC wunderbar funktioniert hat.
+In der folgenden Tabelle habe ich die wichtigsten Typen zusammengefasst:
+\index{<stdint.h>}
+\index{Header-Datei!stdint.h}
+\index{Bibliothek!stdint.h}
+
+\[
+\begin{array}{|c|c|c|}\hline \textbf{Länge} & \textbf{Typ mit Vorzeichen} & \textbf{Typ ohne Vorzeichen} \\
+\hline \textrm{8 Bit} & \texttt{int8\_t} & \texttt{uint8\_t} \\
+\hline \textrm{16 Bit} & \texttt{ int16\_t} & \texttt{uint16\_t} \\
+\hline \textrm{32 Bit} & \texttt{ int32\_t} & \texttt{uint32\_t} \\
+\hline \end{array}
+\]
+
+
+
+\subsection{Erstellung von Bitmasken}
+\index{Bitmasken}
+Um gezielt einzelne Bits an einer Speicherstelle verändern zu können, benötigen
+wir eine so genannte \emph{Bitmaske}. Das ist nichts weiter als eine Variable oder ein
+Wert, dessen Bits an den entsprechenden Stellen gesetzt sind, so dass wir damit
+gezielte Veränderungen einzelner Bits erreichen können.
+
+Diese Maske können wir entweder als konstanten Wert in
+unserem Programm speichern, oder bei Bedarf dynamisch erzeugen.
+Eine beliebte Methode ist es diese Maske durch die gezielte Verschiebung  
+einzelner Bits zu generieren.
+
+Wir hatten bereits das MSB kennen gelernt. Ein weiteres wichtiges Bit
+ist das  \emph{Least Significant Bit} (LSB). Das ist das am weitesten rechts
+stehende Bit einer Bitfolge. Es hat den Wert $2^{0}$ (dezimal 1) und ist damit das einzige Bit mit einem 
+ungeraden Wert.
+\index{LSB|see{Least Significant Bit}}
+\index{Least Significant Bit}
+
+Um die Bitmaske \texttt{my\_mask} zu erzeugen, in der das Bit $2^{5}$ gesetzt ist, können wir folgenden
+Code verwenden:
 \begin{verbatim}
-    unsigned int mask = mask | (1 << x);
+    uint8_t my_mask = (1 << 5);
 \end{verbatim}
 
-That will set bit x. Counting starts with 0! \hint
-
-Clearing a bit
-
-Use the bitwise AND operator (\&) to clear a bit.
+Um mehrere Bits in der Maske zu setzen, verwenden wir den bitweise-ODER Operator. So lassen
+sich zum Beispiel Bit $2^{3}$ und $2^{5}$ in einem Befehl setzen:
 
 \begin{verbatim}
-    number = number & ~(1 << x);
+    uint8_t my_mask2 = (1 << 3) | (1 << 5);
 \end{verbatim}
 
-That will clear bit x. You must invert the bit string with the bitwise NOT operator (~), then AND it.
-
-Toggling a bit
-
-The XOR operator (\^) can be used to toggle a bit.
+Eine weitere interessante Möglichkeit ergibt sich, wenn wir den C-Präprozessor benutzen,
+um für die Verschiebeoperation ein Makro zu definieren. Bisher haben wir  \texttt{\#define} nur
+dafür benutzt um konstante Werte zu definieren.
+Es ist aber auch möglich ein Makro mit Argumenten zu definieren:
+\index{\#define}
+\index{Makro}
+\index{Makro!mit Argumenten}
 
 \begin{verbatim}
-    number = number ^ (1 << x);
+   #define BIT(x) (1 << (x))
+\end{verbatim}
+Es wird   das Makro \texttt{BIT(x)} definiert, bei dem der Wert \texttt{x} von dem im Programm
+angegebenen Wert abhängt. 
+Dadurch können wird die Lesbarkeit unseres Programms sehr stark verbessern.
+So ist der Ausdruck:
+\begin{verbatim}
+    uint8_t my_mask = BIT(5);
 \end{verbatim}
 
-That will toggle bit x.
-
-Checking a bit
-
-To check a bit, AND it with the bit you want to check:
+identisch zu folgendem Code:
 
 \begin{verbatim}
-    bit = number & (1 << x);
+    uint8_t my_mask = (1 << 5);
 \end{verbatim}
 
-That will put the value of bit x into the variable bit.
+\subsection{Verwendung von Bitmasken}
+
+Um das Bit  $2^{5}$ wieder zu löschen, benutzen wir den 
+bitweisen UND-Operator (\texttt{\&}) gemeinsam mit dem 
+NOT-Operator (\texttt{\textasciitilde}).
+
+\begin{verbatim}
+    my_mask = my_mask & ~BIT(5);
+\end{verbatim}
+
+Dazu invertieren wir den zweiten Operanden mit dem bitweisen NOT-Operator, dass heißt es sind jetzt alle Bits gesetzt,
+außer $2^{5}$. Anschließend führen wir eine UND-Verknüpfung diese Bitfolge mit unserer  Maske durch,
+was dazu führt, dass Bit  $2^{5}$ gelöscht wird, während alle anderen Bits ihren aktuellen Wert beibehalten.
+
+
+Um ein Bit zwischen zwei Zuständen wechselweise umschalten zu lassen, benutzen
+ wir den XOR-Operator (\verb|^|).
+
+\begin{verbatim}
+    my_mask = my_mask ^ BIT(5);
+\end{verbatim}
+
+Bit $2^{5}$ wird dadurch invertiert. Hatte es vorher den Wert 1, so ist dieser jetzt 0 und umgekehrt.
+Damit kann man zum Beispiel auf einem Mikrocontroller eine einfache Blinkschaltung einer angeschlossenen
+LED realisieren.
+
+\pagebreak
+Mit dem UND-Operator lässt sich überprüfen, ob ein bestimmtes Bit gesetzt ist:
+
+\begin{verbatim}
+    if (my_maks & BIT(5))
+    {...}
+\end{verbatim}
+
+Dieser Ausdruck ist dann wahr, wenn Bit $2^{5}$ gesetzt ist, anderenfalls ist er falsch.
+
+ACHTUNG: Es ist wichtig sich daran zu erinnern, dass Informatiker beim Zählen immer mit der
+0 anfangen! Wenn wir das LSB verändern wollen, müssen wir 
+\texttt{BIT(0)} schreiben. Das ist aber eigentlich ganz logisch, denn dieses 
+Bit hat ja den Wert $2^{0}$.
+ \hint
 
 \section{Glossar}
 
@@ -583,7 +773,7 @@ That will put the value of bit x into the variable bit.
 \item[Bit (engl: \emph{bit}):]  Ein Bit (\emph{binary digit}) ist die kleinste Informationseinheit.
 Ein Bit kann zwei Zustände annehmen, die üblicherweise
 durch die Werte 0 und 1 dargestellt werden und die Grundlage
-des binären Zahlensystems bilden. In Computerprogrammen 
+des binären Zahlensystems bilden. In Computern 
 werden üblicherweise mehrere Bits gleichzeitig bearbeitet.
 
 \item[Byte (engl: \emph{byte}):] Ein Byte ist üblicherweise eine Folge von 8 Bit und

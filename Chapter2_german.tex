@@ -133,85 +133,59 @@ sind ein sinnvolles Mittel um ein Programm visuell zu strukturieren.
 Es wird dadurch für uns einfacher das Programm zu lesen und
 mögliche Fehler im Programm zu finden, beziehungsweise das
 Programm später zu ändern und anzupassen.
-Moderne Entwicklungsumgebungen können uns dabei die
-Arbeit erleichtern. Sie bieten vielfach die Möglichkeit den
-Quelltext automatisch zu formatieren.
+Moderne Entwicklungsumgebungen können dabei die
+Arbeit erleichtern. Sie bieten die Möglichkeit den
+Quelltext automatisch formatieren zu lassen.
 
-\section{Werte und Datentypen}
-\index{Wert}
-\index{Daten}
-\index{Datentyp}
-\index{Typ|see{Datentyp}}
-
-Computerprogramme arbeiten mit Daten, die im 
-Speicher des Computers abgelegt sind. 
-Daten besitzen einen \textbf{Wert}  -- eine konkrete Zahl oder einen Buchstaben -- 
-und sind eines der fundamentalen Dinge mit denen ein Computerprogramm
-arbeiten kann.  
-
-%Deshalb spricht man von elektronischer Datenverarbeitung
-Die einzigen Daten, mit denen wir bisher gearbeitet haben, waren 
-Zeichenketten wie {\tt ''Hello, world!''}, die auf dem Bildschirm ausgegeben wurden.  
-Wir  (und der Compiler) können diese Zeichenketten
-anhand der umschließenden Anführungszeichen erkennen.
-%constant values
-
-
-
-
-%
-%\begin{center}
-%\newcommand{\bitlabel}[2]{%
-%        \bitbox[]{#1}{%
-%          %\raisebox{0pt}[0pt][0pt]{%
-%            \fontsize{7}{7}\selectfont#2}}%
-%	 
-%%}
-%
-%\begin{bytefield}{8}
-% \bitlabel{1}{$2^7$} & \bitlabel{1}{$2^6$} &
-%   \bitlabel{1}{$2^5$} & \bitlabel{1}{$2^4$} &
-%   \bitlabel{1}{$2^3$} &  \bitlabel{1}{$2^2$}
-%   \bitlabel{1}{$2^1$} & \bitlabel{1}{$2^0$} \\
-%%\bitheader{2,7} \\
-%\bitbox[]{1}{\texttt{0x003FFFFF}0} & 
-%\bitbox{1}{0} & 
-%\bitbox{1}{0} &
-%\bitbox{1}{0} &
-%\bitbox{1}{0} &
-%\bitbox{1}{1} &
-%\bitbox{1}{0} &
-%\bitbox{1}{1} \\
-%\end{bytefield}
-%\end{center}
-
-
-Daten repräsentieren unterschiedliche Dinge wie zum Beispiel die 
-ganzen Zahlen, die reellen Zahlen und Buchstaben. Wir unterscheiden die Daten
-anhand ihres \textbf{Typs}.
-
-Es ist wichtig, dass ein Programm ganz genau weiß, um welche 
-Art von Daten es sich bei den gespeicherten Werten handelt, 
-denn nicht alle Manipulationen sind für jeden Datentyp sinnvoll.
-Wir können zwei Zahlen addieren, aber die Addition von \texttt{'a' + 'a'}
-ist nicht definiert.
-
-Ein weiterer Grund für die Unterscheidung der Datentypen liegt in
-den unterschiedlichen Anforderungen für die Speicherung der Daten
-im Computer. Daten werden als Bitfolgen gespeichert. Ein Bit ist die  
-kleinste mögliche Informationseinheit.
+\section{Bits und Bytes}
 \index{Bit}
+\index{Byte}
+\index{Computerspeicher}
+\index{Digitale Daten}
 
-Für die Speicherung von \emph{Buchstaben} reichen üblicherweise 7 oder 8 Bit.
-Ein einelnes Bit kann eine einfache Fallunterscheidung treffen 0 oder 1, an oder aus. Mit 8 Bit können wir
-256 Fälle unterscheiden -- mehr als genug für die Zeichen des Alphabets,
-der Ziffern und Satzzeichen. Für die Speicherung von 
-\emph{Zahlen} werden aber wesentlich mehr Bit benötigt. Wir wollen ja nicht nur
-von 0 bis 255 zählen können. 
+Computer sind digital, das weiß heute jedes Kind.
+Was aber genau bedeutet das eigentlich?
 
-Der Datentyp legt also fest, welche Bedeutung diese Bitfolgen haben: \emph{Buchstabe}, \emph{ganze Zahlen}, usw. 
+Mein Computer, auf dem ich dieses Buch tippe, kann
+Töne, Bilder, Texte und Videos erzeugen, abspielen und
+verändern. Wie können so unterschiedliche Aufgaben von einer
+Maschine geleistet werden?
 
+Das Rätsels Lösung ist darin zu finden wie diese Sachen
+gespeichert werden: als \textbf{digitale Daten}!
 
+Computer speichern Daten in Form von Bits. 
+Ein Bit ist die kleinste vorstellbare Informationsmenge.
+Es kennt nur 2 Zustände: \emph{an} oder \emph{aus}, \emph{0} oder \emph{1}, \emph{high} oder \emph{low}.
+Das ist scheinbar wenig, aber trotzdem schon recht nützlich: leuchtet die Fahrradlampe oder leuchtet sie nicht?
+Diese Tatsache lässt sich mit einem einzelnen Bit beschreiben.
+
+Für das Speichern von Fotos, Musik und Abschlussarbeiten benötigen wir natürlich sehr viel mehr Bits,
+aber das ist für moderne Computer schon lange kein Problem mehr. Das Grundprinzip jedenfalls ist immer
+noch gültig.
+
+Da es sehr unhandlich ist, mit einzelnen Bits zu hantieren, speichern Computer ihre Daten in 
+Gruppen von Bits. 
+Wie wir gesehen haben, trifft ein einzelnes Bit eine einfache Fallunterscheidung:  \emph{0} oder \emph{1}, \emph{an} oder \emph{aus}. Gruppieren wir die Bits, so lassen sich mehr Fälle unterscheiden. 
+Mit  8 Bit können wir bereits 256 Fälle unterscheiden -- mehr als genug für die Zeichen des lateinischen 
+Alphabets, der Ziffern und Satzzeichen. 
+%Für die Speicherung von \emph{Zeichen} reichen also üblicherweise 7 oder 8 Bit.
+
+Eine Gruppe von 8 Bit nennt man Byte und jedes Byte hat im Computer eine 
+eindeutige Adresse. Diese ist nötig, damit keine Daten verloren gehen und unser Programm immer ganz
+genau weiß, wo sich welche Daten befinden. 
+\index{Byte}
+\index{Adresse}
+
+Abbildung   \ref{Chapt2_Memory} zeigt uns einen Ausschnitt aus dem Speicher eines
+Computers. Wir sehen eine Matrix von Bits, die entweder den Wert 0 oder 1 besitzen und
+sind erst einmal verwirrt. Wie gelingt es hier die Übersicht zu behalten?
+
+Für die Interpretation der Bitfolgen kommen üblicherweise Codes zum Einsatz, wie zum Beispiel der
+im Anhang \ref{ASCII-Table} beschriebene ASCII Code. Dort ist festgelegt, dass die Bitfolge \texttt{00110101}
+das \textbf{Zeichen} \emph{5} beschreibt. Nicht zu verwechseln mit dem \textbf{Dezimalwert} \emph{5}, welche durch
+die Bitfolge \texttt{00000101} dargestellt wird.
+\index{ASCII}
 
 \def\bitfeldIntern(#1,#2,#3,#4,#5,#6,#7,#8) {
 \setcounter{collumn}{25}
@@ -291,11 +265,11 @@ Der Datentyp legt also fest, welche Bedeutung diese Bitfolgen haben: \emph{Buchs
 }
 \def\bitHeader#1{\bitHeaderIntern(#1)}
 
-
-
-
-
 \unitlength0.1cm
+
+\begin{figure}[H]
+  \centering
+
 \begin{picture}(120,45)%(0,-40)%shift origin eg: (0,-40)
 
 \initBitArray{7} %7 is the size of the box in mm
@@ -322,25 +296,122 @@ Der Datentyp legt also fest, welche Bedeutung diese Bitfolgen haben: \emph{Buchs
 \put(\theafter,\LenToUnit{\txtoffset}){{\large \texttt{\textbf{Dezimalwert 5}}}}
 
 \end{picture}
+  \caption{Ein hypothetischer Ausschnitt aus dem Speicher eines Computers}
+  \label{Chapt2_Memory}
+\end{figure}
 
 
-Computer speichern Daten in Gruppen einzelner
-Bits. Eine Gruppe von 8 Bit nennt man Byte und jedes Byte hat im Computer eine 
-eindeutige Adresse. Diese ist nötig, damit keine Daten verloren gehen und unser Programm immer ganz
-genau weiß, wo sich welche Daten befinden. 
-\index{Byte}
-\index{Adresse}
-Als Programmierer einer Hochsprache muss man die genaue numerische Adresse
-der Daten nicht kennen. Da wir uns als Menschen besser Namen 
-als lange Zahlenfolgen merken, werden wir im nächsten Abschnitt kennenlernen wie 
-wir \emph{Variablen} benutzen um Daten zu speichern und zu bearbeiten.
 
+
+Als Programmierer einer Hochsprache müssen sie die genaue numerische Adresse
+der Daten sowie die verwendete Code-Tabelle nicht auswendig lernen. 
+Da wir uns als Menschen besser Namen 
+als lange Zahlenfolgen merken, werden wir in den nächsten Abschnitten kennenlernen, wie 
+wir \emph{Datentypen} und \emph{Variablen} benutzen um Daten zu speichern und zu 
+bearbeiten. Die Übersetzung in die richtige Bitfolge übernimmt dann der Compiler für uns.
+
+
+\section{Werte und Datentypen}
+\index{Wert}
+\index{Daten}
+\index{Datentyp}
+\index{Typ|see{Datentyp}}
+
+Computerprogramme arbeiten mit Daten, die im 
+Speicher des Computers abgelegt sind. 
+Daten besitzen einen \textbf{Wert}  -- das heißt sie repräsentieren eine konkrete Zahl oder einen Buchstaben -- 
+und sind eines der fundamentalen Dinge mit denen ein Computerprogramm
+arbeiten kann.  
+
+
+
+
+
+
+%
+%\begin{center}
+%\newcommand{\bitlabel}[2]{%
+%        \bitbox[]{#1}{%
+%          %\raisebox{0pt}[0pt][0pt]{%
+%            \fontsize{7}{7}\selectfont#2}}%
+%	 
+%%}
+%
+%\begin{bytefield}{8}
+% \bitlabel{1}{$2^7$} & \bitlabel{1}{$2^6$} &
+%   \bitlabel{1}{$2^5$} & \bitlabel{1}{$2^4$} &
+%   \bitlabel{1}{$2^3$} &  \bitlabel{1}{$2^2$}
+%   \bitlabel{1}{$2^1$} & \bitlabel{1}{$2^0$} \\
+%%\bitheader{2,7} \\
+%\bitbox[]{1}{\texttt{0x003FFFFF}0} & 
+%\bitbox{1}{0} & 
+%\bitbox{1}{0} &
+%\bitbox{1}{0} &
+%\bitbox{1}{0} &
+%\bitbox{1}{1} &
+%\bitbox{1}{0} &
+%\bitbox{1}{1} \\
+%\end{bytefield}
+%\end{center}
+
+
+Daten repräsentieren so unterschiedliche Dinge wie die 
+ganzen Zahlen, die reellen Zahlen und Buchstaben. Man sagt die Daten
+haben einen bestimmten \textbf{Typ}.
+
+Es ist wichtig, dass ein Programm ganz genau weiß, um welche Art von
+Daten es sich handelt, da unterschiedlichen Anforderungen für die Speicherung der Daten
+im Computer existieren. 
+
+Wie wir gesehen haben, werden Daten als Bitfolgen gespeichert. 
+Für die Speicherung von  \emph{Buchstaben} des lateinischen Alphabets reichen üblicherweise 7 oder 8 Bit.
+Für die Speicherung von  \emph{Zahlen} werden dagegen wesentlich mehr Bit benötigt. Wir wollen ja nicht nur
+von 0 bis 255 zählen können. 
+
+Es macht für den Computer also einen Unterschied, ob wir den Zahlenraum der \emph{ganzen Zahlen} oder der \emph{reelle Zahlen} 
+nutzen. Denn obwohl  Computer mit hoher Geschwindigkeit rechnen 
+gibt es ein Problem: Zahlenbereiche in der Mathematik sind unendlich. Unser Computerspeicher
+aber ist es nicht. Daher müssen wir uns bewusst machen, dass es zu Einschränkungen
+im Wertebereich und der Genauigkeit kommen kann.
+
+Ein weiterer Grund für die Unterscheidung der Datentypen liegt darin begründet, dass
+nicht alle Operationen für jeden Datentyp sinnvoll sind.
+Wir können zwei Zahlen addieren, aber die Addition von Buchstaben \texttt{'a' + 'b'}
+ist nicht definiert. 
+Der Datentyp legt daher fest, welche Bedeutung die Bitfolgen im Speicher des Computers haben: \emph{Buchstabe}, \emph{ganze Zahlen}, usw. 
+
+%Deshalb spricht man von elektronischer Datenverarbeitung
+Die einzigen Daten, mit denen wir bisher gearbeitet haben, waren 
+Folgen von Buchstaben, auch Zeichenketten oder Strings genannt.
+\index{String}
+Wir haben zum Beispiel {\tt ''Hello, world!''} auf dem Bildschirm ausgegeben.  
+Wir  (und der Compiler) können diese Zeichenketten
+anhand der umschließenden Anführungszeichen erkennen.
+%constant values
 
 Die \emph{ganzen Zahlen} (beispielsweise 1 oder 17) werden in C als \emph{integer} 
-bezeichnet.  Wir können nicht nur Zeichenketten sondern auch 
-ganze Zahlen auf dem Bildschirm ausgeben
-lassen. Die Ausgabe sieht auf den ersten Blick nicht anders aus, wenn wir uns
-eine Zahl ausgeben lassen oder eine Zeichenkette.
+bezeichnet.  
+Unser Programm kann nicht nur Zeichenketten, sondern auch 
+ganze Zahlen auf dem Bildschirm ausgeben:
+\index{int|see{Ganze Zahlen}}
+\index{integer|see{Ganze Zahlen}}
+\index{Ganze Zahlen}
+
+\vskip 0.7em
+\begin{verbatim}
+   printf("%i\n", 16);
+\end{verbatim}
+\vskip 0.5em
+
+Die Ausgabe sieht auf den ersten Blick auch nicht anders aus, als wenn wir uns
+eine Zeichenkette ausgeben lassen:
+% Aufgabe: Vergleichen Sie die Ausgaben von 
+\vskip 0.7em
+\begin{verbatim}
+    printf("16\n");
+\end{verbatim}
+\vskip 0.5em
+
 Zahlen werden vom Computer aber anders behandelt als Zeichenketten, so kann man
 zum Beispiel mit Zahlen rechnen:
 
@@ -350,19 +421,12 @@ zum Beispiel mit Zahlen rechnen:
 \end{verbatim}
 \vskip 0.5em
 
-\index{int|see{Ganze Zahlen}}
-\index{integer|see{Ganze Zahlen}}
-\index{Ganze Zahlen}
-
-Wenn wir uns die  \texttt{printf()} Anweisung genau anschauen, fällt
-zwischen den Anführungszeichen ein \texttt{\%i} auf. Das ist ein 
+Schauen wir uns die  \texttt{printf()} Anweisung genau an, so fällt
+ein \texttt{\%i} zwischen den Anführungszeichen auf. Dabei handelt es sich um ein 
 Platzhalterzeichen, welches angibt das eine ganze Zahl ausgegeben werden
-soll. Es gibt eine Reihe solcher Platzhalter für unterschiedliche Datentypen.
+soll. Die auszugebene Zahl folgt erst hinter den Ausführungszeichen, durch Komma getrennt.
+Es gibt eine Reihe solcher Platzhalter für unterschiedliche Datentypen.
 Den Nächsten werden wir gleich kennenlernen.
-
-% Aufgabe: Vergleichen Sie die Ausgaben von 
-%    printf("%i\n", 16 + 1);
-%   und    printf("16 + 1\n");
 
 Der Datentyp \emph{character} repräsentiert einen Buchstaben, eine Ziffer
 oder ein Satzzeichen. 
@@ -374,8 +438,8 @@ ist es am Anfang einfacher erst einmal komplett auf \textit{ä},
 \textit{ö}, \textit{ü} und \textit{ß} zu verzichten
 und statt dessen \textit{ae}, \textit{oe}, \textit{ue} und \textit{ss} zu schreiben. 
 Ein \emph{character}-Wert in unserem Programm wird durch einfache 
-Anführungsstriche kenntlich gemacht, wie zum Beispiel {\tt 'a'} oder {\tt '5'}.
-Wir können Daten vom Typ \emph{character} auch ausgeben:
+Anführungsstriche kenntlich gemacht, wie zum Beispiel {\tt 'a'} oder {\tt '5'}:
+
 
 \vskip 0.7em
 \begin{verbatim}
@@ -383,7 +447,7 @@ Wir können Daten vom Typ \emph{character} auch ausgeben:
 \end{verbatim}
 \vskip 0.5em
 %
-Dafür benötigen wir das Platzhalterzeichen \texttt{\%c}.
+Für die Ausgabe von Daten vom Typ \emph{character} benötigen wir das Platzhalterzeichen \texttt{\%c}.
 Unser Beispiel gibt ein einzelnes Dollarzeichen in einer eigenen
 Bildschirmzeile aus. 
 
@@ -405,24 +469,36 @@ noch klarer werden.
 \index{Wert}
 
 Eine der mächtigsten Fähigkeiten einer Programmiersprache
-ist die Möglichkeit, Werte durch die Verwendung von {\bf Variablen} zu
-manipulieren.  
-In unseren bisherigen Versuchen waren alle Werte unserer Anweisungen
+ist die Möglichkeit digitale Daten zu speichern, wieder abzurufen und zu
+verändern.  
+In unseren bisherigen Versuchen waren alle verwendeten Werte
 durch die Angaben im Quelltext des Programms statisch festgelegt. 
-Ab jetzt werden wir oft Variablen benutzen um Werte zu speichern und zu
-verändern. Variablen könne wir uns wie die Speicherfunktion an
-einem Taschenrechner vorstellen, nur viel flexibler und mächtiger, weil wir 
-beliebig viele Variablen in unserem Programm anlegen können.  
+Ab jetzt werden wir oft \textbf{Variablen} benutzen um Werte dynamisch zu speichern und zu
+verändern. Variablen können wir uns wie die Memory-Taste an
+einem Taschenrechner vorstellen, nur etwa 1000x flexibler und mächtiger, weil unser 
+Programm beliebig viele Variablen nutzen und nicht nur Zahlen speichern kann.  
 
-Da die Variablen verschiedene Werte unserer Daten speichern sollen,
-müssen auch die Variablen verschiedene Typen unterstützten.
+Eine Variable ist aber gar nichts sonderlich Geheimnisvolles. Ich hatte
+ja bereits erwähnt, dass die Bytes im Speicher unseres Computers Adressen
+besitzen. Da wir als Menschen nicht sehr gut darin sind uns lange Zahlenfolgen
+zu merken, verwenden wir dafür besser einen sinnvollen, selbstgewählten Namen,
+den \textbf{Variablennamen}.
+\index{Variablenname} 
+
+Variablen sollen verschiedene Arten von Daten speichern können und
+müssen daher auch verschiedene Datentypen unterstützten.
 Es gibt einige Programmiersprachen, bei denen der Computer 
 selbstständig den Typ der Variable anhand des zu speichernden
-Werts erkennt. In C müssen wir den Typ immer selbst angeben.
-Wenn wir eine neue Variable erzeugen, müssen wir deren Typ deklarieren.
-So wird der Typ \emph{character} in C als {\tt char} angegeben.  
-Die folgende Anweisung erzeugt eine neue Variable 
+Werts erkennt. In C muss der Typ immer angeben werden.
+
+
+Wollen wir eine neue Variable verwenden, so müssen wir sie erst einmal \emph{deklarieren}, das heißt in
+unserem Programm bekannt machen.
+Um eine Variable zu deklarieren die ein Zeichen speichert, muss der Typ \emph{character} als dem Namen vorangestelltes {\tt char} angegeben werden.  
+Die folgende Anweisung, die man auch als {\bf Deklaration} bezeichnet, erzeugt eine neue Variable 
 mit dem Namen {\tt fred} vom  Typ \textit{character}:
+\index{Deklaration}
+\index{Anweisung!Deklaration}
 
 \vskip 0.7em
 \begin{verbatim}
@@ -431,17 +507,12 @@ mit dem Namen {\tt fred} vom  Typ \textit{character}:
 \vskip 0.5em
 %
 \index{Typ!char}
-Diese Art von Anweisungen heißt {\bf Deklaration}.
+%Diese Art von Anweisungen heißt {\bf Deklaration}.
 
 Der Typ einer Variable bestimmt, welche Werte gespeichert werden können.
 Eine {\tt char} Variable kann genau ein Zeichen speichern. Ganze 
-Zahlen können  hingegen in  {\tt int} Variablen gespeichert werden.
-
-
-\index{Deklaration}
-\index{Anweisung!Deklaration}
-
-Um eine einfache \emph {integer} Variable anzulegen, verwenden wir folgende
+Zahlen können als  {\tt int} Variablen gespeichert werden.
+Um eine einfache Variable vom Typ \emph {integer} anzulegen, verwenden wir folgende
 Syntax:
 
 \vskip 0.7em
@@ -452,11 +523,12 @@ Syntax:
 \index{Typ!int}
 %
 Dabei ist {\tt bob} ein beliebiger Name, den wir auswählen können um
-die Variable zu identifizieren. Es ist im allgemeinen eine gute
-Idee dabei Namen zu wählen, welche die Daten beschreiben,
-die in ihnen gespeichert werden sollen. Das erleichtert uns den
-Umgang mit einer Vielzahl von Variablen und macht ein Programm
-leichter lesbar.
+die Variable zu identifizieren. Es ist im Allgemeinen eine gute
+Idee  Namen zu wählen, welche die Daten beschreiben,
+die in ihnen gespeichert werden sollen. Das erleichtert  den
+Umgang mit Variablen und macht ein Programm
+leichter lesbar. Weiterhin sollten Sie sich bereits am Anfang mit den Regeln für
+die Namensverwendungen vertraut machen (siehe Anhang \ref{Conventions for names}).
 
 
 Schauen wir uns zum Beispiel die folgenden Variablendeklarationen
@@ -472,7 +544,7 @@ Wir können wahrscheinlich eine erste, zutreffende Vermutung
 äußern, welche Werte in diesen Variablen gespeichert werden.
 Dieses Beispiel zeigt auch, wie wir einfach mehrere Variablen des
 gleichen Typs deklarieren können: {\tt hour} und {\tt minute}
-sind beides ganze Zahlen ({\tt int} Typ).
+sind beides Variablen für ganze Zahlen ({\tt int} Typ).
 
 Für sehr große und komplexe Programme ist auch diese
 Form der Variablenbezeichnung noch zu unübersichtlich.
