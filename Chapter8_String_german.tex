@@ -490,7 +490,7 @@ eine spätere Zuweisung im Programm:\hint
 \begin{verbatim}
     int number = 5; 
     int *i_pointer = &number; /* Initialisierung des Pointers */
-    i_pointer = $number;      /* gleicher Effekt!  */
+    i_pointer = &number;      /* gleicher Effekt!  */
 \end{verbatim}
 
 
@@ -503,7 +503,7 @@ verändern:
 \end{verbatim}
 
 Unsere Variable {\tt number} hat jetzt den Wert {\tt 7} und wir fangen so langsam
-an zu verstehen wie es der {\tt LocateCharacter()} Funktion möglich ist 
+an zu verstehen, wie es der {\tt LocateCharacter()} Funktion möglich ist 
 auf die Werte unserer Stringvariablen mittels eines {\tt char} -Pointers
 zuzugreifen.
 
