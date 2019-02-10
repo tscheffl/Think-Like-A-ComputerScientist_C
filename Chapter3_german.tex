@@ -6,7 +6,8 @@
 \chapter{Funktionen}
 
 \section{Fließkommazahlen}
-\index{Fließkommazahlen}
+\index{Fließkommazahl}
+\index{Gleitkommazahl}
 \index{Typ!double}
 \index{Typ!float}
 \index{double (floating-point)}
@@ -16,15 +17,18 @@ Ergebnissen die keine ganzen Zahlen waren.
 Wir haben uns dadurch geholfen, dass wir keine Dezimalbrüche
 sondern Prozentwerte benutzt haben. 
 Eine bessere Lösung stellt die Verwendung des Datentyps
-der Fließkommazahlen dar. Fließkommazahlen können 
-auch den gebrochenen Anteil der Zahlen darstellen. 
+der Fließkommazahlen dar. Eine Fließkommazahl, auch als Gleitkommazahl bezeichnet, kann 
+auch gebrochene Anteile reeller Zahlen darstellen. 
 % more general solution is
 %to use floating-point numbers, which can represent fractions
 %as well as integers.  
+
 In C existieren zwei Arten der Darstellung von Fließkommazahlen,
 genannt {\tt float} und {\tt double}.  
 Für Computer ist es schwierig das mathematische Konzept der
-Unendlichkeit zu realisieren. Das Ergebnis der folgenden einfachen Division, $10 : 3 = 3,\overline{3}$ weist unendlich viele Nachkommastellen auf.
+Unendlichkeit zu realisieren, da der verfügbare Speicher begrenzt ist. 
+So weist das Ergebnis der folgenden einfachen Division, $10 : 3 = 3,\overline{3}$ unendlich viele Nachkommastellen auf.
+\todo{Wertebreich}
 Die Datentypen {\tt float} und {\tt double} unterscheiden sich darin, wie
 genau das Ergebnis dargestellt wird.
 In diesem Buch verwenden wir ausschließlich 
@@ -46,7 +50,7 @@ Wert zuzuweisen:
 
 \begin{verbatim}
     int x = 1;
-    char first_char = "a";
+    char first_char = 'a';
     double pi = 3.14159;
 \end{verbatim}
 %
@@ -67,9 +71,9 @@ auch zu Verwirrungen, weil es eine scheinbare
 Überschneidung zwischen ganzen Zahlen und 
 Fließkommazahlen gibt.
 Wenn wir uns zum Beispiel den Wert~{\tt 1} anschauen, ist 
-das eine Ganze Zahl, eine Fließkommazahl, oder beides?
+das eine ganze Zahl, eine Fließkommazahl, oder beides?
 
-Genaugenommen unterscheidet C zwischen dem Wert
+Genau genommen unterscheidet C zwischen dem Wert
 der ganzen Zahl {\tt 1} und dem Wert der Fließkommazahl {\tt 1.0}, 
 obwohl beide die gleiche Zahl repräsentieren. 
 Diese Werte gehören zu unterschiedlichen Datentypen 
@@ -106,14 +110,18 @@ Das Ergebnis des folgenden Programmcodes ist für Anfänger besonders verwunderlic
 Es wäre zu erwarten, dass der Variablen {\tt y} der Wert 
 {\tt 0.333333} zugewiesen wird, 
 %which is a legal floating-point value, 
-allerdings hat sie den Wert  {\tt 0.0}.  
-Der Grund dafür liegt in dem Ausdruck auf der rechten Seite der
-Zuweisung.
-Diesen Ausdruck wertet der Computer als Verhältnis zwischen
-zwei ganzen Zahlen und deshalb führt C eine Ganzzahldivision
-durch, welche den ganzzahligen Wert {\tt 0} als Ergebnis liefert.  
-Erst bei der Zuweisung wird dieser Wert in eine Fließkommazahl
-konvertiert und das Resultat beträgt  {\tt 0.0}.
+allerdings hat sie den Wert  {\tt 0.0}.\\
+Der Grund liegt in der Art und Weise, wie der Compiler
+die Anweisung auswertet und ausführt.
+Der Compiler untersucht zuerst den Ausdruck auf der rechten Seite der
+Zuweisung (rechts vom \texttt{=}).
+Dieser Ausdruck beschreibt ein Verhältnis zwischen
+zwei ganzen Zahlen. %und daher wird eine Ganzzahldivision durchgeführt.
+\index{Ganzzahldivision}
+\index{Division mit Rest|see{Ganzzahldivision}}
+Bei der Division ganzer Zahlen wird eine \emph{Division mit Rest} durchgeführt, welche den ganzzahligen Wert {\tt 0} zum Ergebnis hat.  
+Erst bei der darauf folgenden Zuweisung an die Variable, wird dieser Wert in eine Fließkommazahl
+konvertiert und das Resultat beträgt jetzt {\tt 0.0}.
 
 
 %
@@ -122,7 +130,7 @@ konvertiert und das Resultat beträgt  {\tt 0.0}.
 
 Eine Möglichkeit dieses Problem zu lösen (nachdem 
 wir die Ursache herausgefunden haben) besteht darin
-den Ausdruck auf der rechten Seite als Gleitkommazahl
+den Ausdruck auf der rechten Seite als Fließkommazahl
 darzustellen:
 
 \begin{verbatim}
@@ -175,8 +183,8 @@ einen anderen Wert geben:
 \end{verbatim}
 %
 
-Der zweite Wert hat wahrscheinlich nichts mehr mit der ursprünglich
- {\tt pi} genannten Speicherstelle in unserem Programm zu tun.
+Der zweite Wert hat nichts mehr mit dem ursprünglich
+ {\tt pi} genannten Wert in unserem Programm zu tun.
  Der Wert von $\pi$ ist konstant und ändert sich nicht im Laufe der Zeit.
  Wenn wir die Speicherstelle  {\tt pi} dazu benutzen auch beliebige andere
  Werte zu speichern, kann das zu schwer zu findenden Fehlern in unserem
@@ -191,6 +199,7 @@ ist es natürlich erforderlich auch den Datentyp der Konstanten
 anzugeben.
 %Definition/Deklaration/Initialisierung
 
+\todo{Konstanten in C besser über \#define}
  
 Der Wert der Konstanten muss zum Zeitpunkt der Deklaration
 festgelegt werden (Initialisierung). Im weiteren Ablauf des
@@ -980,7 +989,6 @@ Argumente müssen in Typ und Reihenfolge mit den Parametern der Funktion übereins
 
 \item[Aufruf (engl: \emph{call}):]  führt dazu, dass eine Funktion ausgeführt wird.
 
-\index{Gleitkommazahl}
 \index{Funktion}
 \index{Parameter}
 \index{Argument}
