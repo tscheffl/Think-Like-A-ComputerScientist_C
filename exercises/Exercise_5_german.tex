@@ -25,14 +25,14 @@ ein Dreieck formen lässt oder nicht.
 Der Sinn dieser Übung bestehet darin eine Funktion mit bedingten Abfragen
 zu schreiben, welche als Ergebnis einen Wert zurückgibt. 
 \end{exercise}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{exercise}
 \label{ex.isdiv}
-Schreiben Sie eine Funktion {\tt IsDivisible} welche zwei {\tt integer},  {\tt n} and {\tt m} als 
+Schreiben Sie eine Funktion {\tt IsDivisible} welche zwei {\tt integer} Werte,  {\tt n} and {\tt m} als 
 Argumente hat und {\tt TRUE} zurückgibt, wenn {\tt n} durch {\tt m} teilbar ist. 
 Ansonsten soll die Funktion {\tt FALSE} zurückgeben.
 \end{exercise}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{exercise}
 Der Sinn der folgenden Übung besteht darin
 das Verständnis für die Ausführung logischer Operatoren zu schärfen und
@@ -89,8 +89,7 @@ Wie lautet die Ausgabe des folgenden Programms?
   }
 \end{verbatim}
 \end{exercise}
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{exercise}
 Die Entfernung zwischen zwei Punkten  $(x_1, y_1)$ und $(x_2, y_2)$
@@ -271,13 +270,13 @@ Sie {\tt Distance} auch nicht auf!
 %\end{enumerate}
 %\end{exercise}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vskip 1em
 \begin{exercise}
 %\textbf{!! 1. ZUSATZAUFGABE !!}
-\begin{enumerate}
 
-
-\item Create a new program called {\tt Sum.c},
-and type in the following two functions.
+Erstellen Sie eine neue Programmdatei mit dem Namen {\tt Sum.c},
+und geben Sie die folgenden zwei Funktionen ein:
 
 \begin{verbatim}
   int FunctionOne (int m, int n) 
@@ -305,17 +304,31 @@ and type in the following two functions.
   }
 \end{verbatim}
 %
-\item Write a few lines in {\tt main} to test these functions.
-Invoke them a couple of times, with a few different values,
-and see what you get.  By some combination of testing and
-examination of the code, figure out what these functions do,
-and give them more meaningful names.  Add comments that
-describe their function abstractly.
+\begin{enumerate}
 
-\item Add a {\tt prinf} statement to the beginning of both
-functions so that they print their arguments each time they are
-invoked.  This is a useful technique for debugging recursive
-programs, since it demonstrates the flow of execution.
+\item Fügen Sie in den Funktionen eine {\tt prinf()}-Anweisung 
+hinzu, mit der Sie sofort nach dem Funktionsaufruf den aktuellen
+Wert der Funktionsparameter ausgeben. 
+Das ist eine nützliche Technik um rekursive Programme zu debuggen,
+da sich auf diese Weise die Abarbeitung eines Programms besser nachvollziehen
+lässt.
+%
+%functions so that they print their arguments each time they are
+%invoked.  This is a useful technique for debugging recursive
+%programs, since it demonstrates the flow of execution.
+
+
+\item Schreiben Sie in der {\tt main}-Funktion ihres Programms einige
+Zeilen um diese Funktionen zu testen (rufen Sie die Funktionen einige
+Male mit unterschiedlichen Argumenten auf und lassen Sie sich die Rückgabewerte
+ausgeben, um zu sehen, was die Funktionen machen.
+
+Nutzen Sie eine Kombination aus gezieltem Testen und der Inspektion
+des Quellcodes um herauszufinden, was diese Funktionen machen.
+Geben Sie den Funktionen einen neuen Namen, aus dem besser hervorgeht, was
+die Funktionen machen. Fügen Sie Kommentare zu den Funktionen hinzu um
+ihre Funktion allgemeinverständlich zu beschreiben.
+
 
 \end{enumerate}
 \end{exercise}
@@ -330,7 +343,7 @@ programs, since it demonstrates the flow of execution.
 %is 1.
 %\end{exercise}
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{exercise}
 %\textbf{!! 2. ZUSATZAUFGABE !!}
 

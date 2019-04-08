@@ -42,7 +42,7 @@ ich kann jetzt das Geheimnis lüften was das Besondere der Strings ist.
 \index{String!Begrenzungszeichen}
 \index{Typ!String}
 Strings werden in C  als Arrays von Zeichen gespeichert. Dabei wird das Ende der
-Zeichenkette in dem Array durch ein besonderes Zeichen (das Zeichen {\tt \textbackslash 0}) 
+Zeichenkette in dem Array durch ein besonderes Zeichen (das Zeichen {\tt '\textbackslash 0'}) 
 markiert, was dazu führt, dass das {\tt char}-Array immer mindestens 1 Zeichen länger sein
 muss als die zu speichernde Zeichenkette.
 
@@ -111,9 +111,9 @@ der Stringvariable auch selbst definieren. Ich erkläre gleich, was wir dabei bea
 \index{String!Begrenzungszeichen}
 Erinnern wir uns, was ich über den Aufbau eines Strings gesagt habe.
 Es ist ein Array vom Typ  {\tt char} in dem ein Begrenzungszeichen das Ende der
-Zeichenkette markiert: das Begrenzungszeichen {\tt \textbackslash 0}. Dieses Zeichen
+Zeichenkette markiert: das Begrenzungszeichen {\tt '\textbackslash 0'}. Dieses Zeichen
 darf nicht mit dem Zeichen {\tt 0} verwechselt werden. Das Zeichen  {\tt 0}  wird in der ASCII-Tabelle
-(siehe Anhang~\ref{ASCII-Table}) mit dem Wert 48 kodiert. Bei dem Zeichen {\tt \textbackslash 0}
+(siehe Anhang~\ref{ASCII-Table}) mit dem Wert 48 kodiert. Bei dem Zeichen {\tt '\textbackslash 0'}
 handelt es sich um den Wert 0 in der Tabelle.
 
 Normalerweise müssen wir das Begrenzungszeichen nicht selbst mit angeben.
@@ -785,7 +785,7 @@ einen neuen Wert zugewiesen.
 Allerdings müssen wir dabei wieder einige Einschränkungen beachten. 
 Die {\tt strncpy()} Funktion kopiert genau 13 Zeichen aus dem 
 zweiten String in den ersten String.  Was passiert dabei aber mit dem
-Begrenzungszeichen  {\tt \textbackslash 0}?
+Begrenzungszeichen  {\tt '\textbackslash 0'}?
 
 %\pagebreak[4]
 
@@ -917,7 +917,7 @@ um eine Ziffer oder ein Sonderzeichen handelt.
 C stellt auch dafür wieder eine Bibliothek von unterschiedlichen
 Funktionen bereit, welche eine solche Klassifizierung von Zeichen
 ermöglichen. Um diese Bibliotheksfunktionen in unserem Programm nutzen
-zu können müssen wir die Header-Datei {\tt ctype.h} in unser Programm
+zu können, müssen wir die Header-Datei {\tt ctype.h} in unser Programm
 aufnehmen.
 \index{<ctype.h>}
 \index{Header-Datei!ctype.h}
@@ -940,8 +940,8 @@ aufnehmen.
 %
 Der Rückgabewert der {\tt isalpha()} Funktion ist ein \texttt{int} 
 und besitzt den Wert \texttt{0} wenn das Funktionsargument kein
-Buchstabe ist und einen von Null verschiedenen Wert wenn
-die Funktion mit einem Buchstabe aufgerufen wurde.
+Buchstabe ist und einen von Null verschiedenen Wert, wenn
+die Funktion mit einem Buchstaben aufgerufen wurde.
 
 Wir können daher die Funktion direkt als Bedingung der \texttt{if} -Anweisung
 einsetzen, wie in unserem Beispiel zu sehen.
@@ -977,7 +977,7 @@ Bibliothek um zwei Funktionen mit den Namen {\tt StringToUpper()} und
 {\tt StringToLower()} zu schreiben. Beide Funktionen sollen einen
 einzelnen Parameter vom Typ String besitzen und diesen 
 String so modifizieren, dass im Anschluss alle Zeichen des Strings
-Groß- oder Kleinbuchstaben sind. Zeichen die keine Buchstaben sind
+Groß- oder Kleinbuchstaben sind. Zeichen die keine Buchstaben sind,
 sollen nicht verändert werden. Der Rückgabewert der Funktionen soll
 {\tt void} sein.
 \end{description}
@@ -995,7 +995,7 @@ sollen nicht verändert werden. Der Rückgabewert der Funktionen soll
 \index{Benutzereingabe}
 \index{Input!Keyboard}
 
-Die meisten Programme die wir bisher geschrieben haben verhalten
+Die meisten Programme die wir bisher geschrieben haben, verhalten
 sich sehr berechenbar. Sie führen bei jedem Programmstart die selben Anweisungen aus.
 Das liegt unter anderem daran, dass wir es bisher vermieden
 haben Eingaben vom Benutzer entgegenzunehmen und 
@@ -1070,20 +1070,22 @@ ob wirklich eine Zahl eingelesen werden konnte:
     }
 \end{verbatim}
 %
+
+\section{Tastaturpuffer leeren}
 Es gibt noch eine weitere Sache die wir bei der Verwendung der {\tt scanf()} Funktion
 beachten müssen.
-Wenn wir unbedingt eine bestimmte Benutzereingabe benötigen könnte man
-auf die Idee kommen das Programm folgendermaßen zu schreiben, um den Benutzer
+Wenn wir eine bestimmte Benutzereingabe für die Ausführung unseres Programms benötigen,  könnte man
+auf die Idee kommen den Code zu ändern, um den Benutzer
 immer wieder nach einer Eingabe zu fragen, bis diese vom Programm akzeptiert wird:
 
  \begin{verbatim}
     if (success != 1) 
     {
-          while (success != 1)                                      
-          { 
-               printf("That was not a number. Please try again:\n");
-               success = scanf("%i", &x);
-          }  
+        while (success != 1)                                      
+        { 
+             printf("That was not a number. Please try again:\n");
+             success = scanf("%i", &x);
+        }  
      }
 \end{verbatim}
 
@@ -1099,41 +1101,47 @@ Die Ein- und Ausgabefunktionen unseres Programms schreiben nicht selbst
 Zeichen auf den Bildschirm oder beobachten wie der Benutzer einzelne Tasten drückt.
 Sie benutzen dazu Funktionen des jeweiligen Betriebssystems des Computers.
 Die Tastatureingaben des Benutzers werden unserem Programm vom Betriebssystem
-in einem so genannten Tastatur- oder Eingabepuffer (engl: input buffer) bereitgestellt. 
+in einem so genannten Tastatur- oder Eingabepuffer (engl: \emph{input buffer}) bereitgestellt. 
 
-Die {\tt scanf()} liest dann die Zeichen aus dem Tastaturpuffer und wenn alles gut geht wird
+Die {\tt scanf()} Funktion liest die eingegebenen Zeichen aus dem Tastaturpuffer und wenn alles gut geht wird
 anschließend der Puffer gelöscht.
-Wenn allerdings, wie in unserem Beispiel die {\tt scanf()} Funktion keinen gültigen Wert
-lesen kann dann wird der Puffer nicht geleert. Wenn wir jetzt also {\tt scanf()} erneut aufrufen
-um einen neuen Wert zu lesen wird sogleich der noch gefüllte Puffer erneut gelesen - 
+Wenn allerdings, wie in unserem Beispiel, die {\tt scanf()} Funktion keinen gültigen Wert
+lesen kann, dann wird der Puffer nicht geleert. Bei jedem neuen Aufruf von  {\tt scanf()} 
+lesen wir also den zuvor eingegebenen Wert aus dem noch gefüllten Puffer 
+und natürlich schlägt damit die Überprüfung sofort fehl - 
 ist das Problem klar?
 
 Wir müssen daher nach einer missglückten Eingabe den Eingabepuffer löschen um
 ihn für die erneute Tastatureingabe des Benutzers bereit zu machen.
-Leider gibt es genau dafür keine Standardfunktion in C, das heißt wir müssen uns
+Leider gibt es genau dafür keine Standardfunktion in C, das heißt, wir müssen uns
 selbst eine schreiben. 
-Ich benutze dazu die {\tt getchar()} Funktion die einzelne Zeichen aus dem Puffer lesen
-kann. Die Funktion wird direkt in der Bedingung einer  {\tt while} -Schleife so oft aufgerufen 
-bis keine Zeichen mehr im Eingabepuffer vorhanden sind:
+Ich benutze dazu die {\tt getchar()} Funktion die einzelne Zeichen aus dem Puffer holen
+kann. Das mache ich so lange, bis entweder ein Zeilenumbruch erkannt wird (\texttt{'\textbackslash n'}), oder der Tastaturpuffer leer ist (\emph{EOF - End-Of-File}).
+Die Funktion wird direkt in der Bedingung einer  {\tt while} -Schleife so oft aufgerufen 
+bis keine Zeichen mehr im Eingabepuffer vorhanden sind. Danach sind wir bereit den
+Benutzer erneut um seine Eingabe zu bitten:
 
 \begin{verbatim}
-      while (success != 1)                                      
-      { 
-          char ch;   /* helper variable stores discarded chars*/
-          printf("That isn't a number. Please try again:\n");
+     if (success != 1) 
+    {
+        while (success != 1)                                      
+        { 
+            char ch;   /* helper variable stores discarded chars*/
+            printf("That isn't a number. Please try again:\n");
 
-          /* now we empty the input buffer*/
-          while ((ch = getchar()) != '\n' && ch != EOF);
-          success = scanf("%i", &x);
-      }    
+            /* now we empty the input buffer*/
+            while ((ch = getchar()) != '\n' && ch != EOF);
+            success = scanf("%i", &x);
+        }
+    }    
 \end{verbatim}
- 
+
+\vskip 1em
 
 Mit der {\tt scanf()} Funktion können wir auch Strings einlesen:
 
 \begin{verbatim}
-    char name[80] ;
-
+    char name[80];
     printf ("What is your name?");
     scanf ("%79s", name);
     printf ("%s", name);
@@ -1164,7 +1172,7 @@ so wird an dieser Stelle die Einleseoperation für das aktuelle Element beendet.
 Wenn Sie zum Beispiel im vorigen Beispiel Vor- und Nachname eingegeben haben, so
 wird nur das erste Wort dem String  {\tt s} zugewiesen. Der Rest der Eingabezeile
 wird im Puffer gespeichert und würde von der nächsten Eingabeanweisung ausgewertet werden. 
-Wenn Sie also das Programm so ausführen, würde immer nur ihr Vorname ausgegeben werden.
+Wenn Sie also das Programm wie angegeben ausführen, würde immer nur ihr Vorname ausgegeben werden.
 
 %Because of these problems (inability to handle errors and
 %funny behavior), I avoid using the {\tt >>} operator altogether,

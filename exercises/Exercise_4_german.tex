@@ -70,7 +70,10 @@ Zahl aus.
 Fermat's "Letzter Satz" besagt, dass es keine ganzen Zahlen
 $a$, $b$ und $c$ gibt, für die gilt
 
-\[a^n + b^n = c^n \]
+\begin{equation}
+%\[a^n + b^n = c^n \]
+a^n + b^n = c^n
+\end{equation}
 %
 außer für den Fall, dass $n=2$.
 
@@ -86,9 +89,9 @@ mathematischen Bibliothek. Diese Funktion übernimmt zwei {\tt double} als
 Argument. Das erste Argument stellt dabei die Basis und das zweite Argument den
 Exponenten der Potenz dar. Die Funktion liefert als Ergebnis wiederum ein {\tt double}.
 
-Um die Funktion in unserem Programm nutzen zu können müssen die Datentypen
+Um die Funktion in unserem Programm nutzen zu können, müssen die Datentypen
 angepasst werden (siehe Abschnitt \ref{typecasting}). Dabei wandelt C den Datentyp
- {\tt int}  automatisch in  {\tt double} um. Um einen  {\tt double}  Wert in  {\tt int} zu wandeln
+ {\tt int}  automatisch in  {\tt double} um. Um einen  {\tt double}  Wert in  {\tt int} zu wandeln,
  muss  der Typecast-Operator  {\tt (int)} verwendet werden.  
 
 Zum Beispiel:

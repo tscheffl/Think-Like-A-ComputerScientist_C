@@ -4,3 +4,9 @@
 *.toc
 *.aux
 *.idx
+
+.DS_Store
+
+*.eps
+
+*.fig

@@ -14,6 +14,7 @@ Vergleichen Sie ebenfalls die Lösung der Übungsaufgabe~\ref{ex.isdiv}.
 \end{exercise}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagebreak
 \begin{exercise}
 Schreiben Sie eine Funktion  {\tt void SetToZero(int[], int)}
 welche ein Array von  {\tt int} und die Länge dieses Arrays übernimmt und 
@@ -41,24 +42,28 @@ nicht in dem Array enthalten sein soll -1 zurückgegeben werden.
 \begin{exercise}
 %\textbf{Zusatzaufgabe!}
 
-One not-very-efficient way to sort the elements of an array
-is to find the largest element and swap it with the first
-element, then find the second-largest element and swap it with
-the second, and so on.
+Seit der Erfindung der Computer werden diese genutzt um Arrays 
+mit Daten zu sortieren. Unzählige Algorithmen wurden entworfen und
+hinsichtlich ihrer Effizienz verglichen. 
+
+Eine nicht-besonders-effizienter Algorithmus läuft folgendermaßen
+ab: Finde das größte Element im Array und tausche es mit dem ersten Element.
+Finde das zweit-größte Element im Array und tausche es mit dem zweiten Element,
+und so weiter...
 
 \begin{enumerate}
 
-\item Write a function called {\tt IndexOfMaxInRange()} that 
-takes an array of integers, finds the
-largest element in the given range, and returns {\em its index}.
+\item Schreiben Sie eine Funktion {\tt IndexOfMaxInRange()}, welche  
+ein Array von ganzen Zahlen (integers) übernimmt und das
+größte Element in einem bestimmten Bereich (range) des Arrays findet und seine Position als {\em index} zurückliefert.
 
-\item Write a function called {\tt SwapElement()} that takes an
-array of integers and two indices, and that swaps the elements
-at the given indices.
+\item Schreiben Sie eine Funktion {\tt SwapElement()}, welche ein
+Array von ganzen Zahlen und zwei Indexe übernimmt und anschließend die Werte der Elemente an
+den gegebenen Indexen vertauscht.
 
-\item Write a function called {\tt SortArray()} that takes an array of
-integers and that uses {\tt IndexOfMaxInRange()} and {\tt SwapElement()}
-to sort the array from largest to smallest.
+\item Schreiben Sie eine Funktion {\tt SortArray()}, welche ein Array von ganzen Zahlen
+übernimmt und die Funktionen {\tt IndexOfMaxInRange()} und {\tt SwapElement()} benutzt
+um das Array vom größten zum kleinsten Wert zu sortieren.
 
 \end{enumerate}
 \end{exercise}
